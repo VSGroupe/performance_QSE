@@ -4,6 +4,7 @@ import 'package:perfqse/Views/pilotage/entity/tableau_bord/widgets/data_table/ro
 import 'package:perfqse/models/pilotage/critereModel.dart';
 import '../../../../../../models/pilotage/indicateur_model.dart';
 import '../../../../controllers/tableau_controller.dart';
+import '../../controller_tableau_bord/controller_tableau_bord.dart';
 import '../utils_TB.dart';
 import 'row_critNormatif.dart';
 
@@ -28,8 +29,7 @@ class RowEnjeu extends StatefulWidget {
 
 class _RowEnjeuState extends State<RowEnjeu> {
 bool _press=false;
-final ControllerTbQSE _controllerTbQSE = Get.find();
-
+final ControllerTableauBord controllerTableauBord=Get.find();
   @override
   Widget build(BuildContext context) {
     return Column(

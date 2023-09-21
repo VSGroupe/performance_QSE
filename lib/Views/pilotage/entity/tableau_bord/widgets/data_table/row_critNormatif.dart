@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../../models/pilotage/indicateur_model.dart';
 import '../../../../controllers/tableau_controller.dart';
+import '../../controller_tableau_bord/controller_tableau_bord.dart';
 import '../utils_TB.dart';
 import 'row_indicateur.dart';
 final ControllerTbQSE _controllerTbQSE =  Get.find();
@@ -27,7 +28,7 @@ class RowCritereNormatif extends StatefulWidget {
 
 class _RowCritereNormatifState extends State<RowCritereNormatif> {
 bool _press=false;
-  //final TableauBordController tableauBordController = Get.find();
+final ControllerTableauBord controllerTableauBord=Get.find();
 late final IndicateurModel indicateur;
 
 @override

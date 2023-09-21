@@ -56,7 +56,7 @@ class _ScreenOverviewPilotageState extends State<ScreenOverviewPilotage> {
   void initState() {
     super.initState();
     loadScreen();
-    controllerTableauBord.getAllViewTableauBord();
+    controllerTableauBord.assemblyIndicateurWithDataIndicateur();
     _scrollController = ScrollController();
     _scrollController.addListener(_handleScroll);
   }

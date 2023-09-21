@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:perfqse/Views/pilotage/entity/tableau_bord/widgets/data_table/row_enjeu.dart';
 import '../../../../../../models/pilotage/enjeuModel.dart';
 import '../../../../controllers/tableau_controller.dart';
+import '../../controller_tableau_bord/controller_tableau_bord.dart';
 import '../utils_TB.dart';
 import '/models/pilotage/indicateur_model.dart';
 import 'row_critNormatif.dart';
@@ -20,8 +21,7 @@ class RowAxe extends StatefulWidget {
 }
 
 class _RowAxeState extends State<RowAxe> {
-  final ControllerTbQSE _controllerTbQSE=Get.find();
-
+  final ControllerTableauBord controllerTableauBord=Get.find();
   bool _press=false;
   var listIconData = {
    "axe1":Icons.manage_accounts, "axe2":Icons.money,
@@ -73,7 +73,7 @@ class _RowAxeState extends State<RowAxe> {
               visible: _press,//widget.dropDownState["value"],
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: getAxeSubWidget(widget.idAxe,_controllerTbQSE.enjeuSelect.value)
+                children: getAxeSubWidget(widget.idAxe,controllerTableauBord.)
               ),
             )
           ],

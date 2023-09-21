@@ -30,7 +30,7 @@ class _ScreenPilotagePerformState extends State<ScreenPilotagePerform> {
   void initState() {
     super.initState();
     loadScreen();
-    controllerTableauBord.getAllViewTableauBord();
+    controllerTableauBord.assemblyIndicateurWithDataIndicateur();
   }
 
   @override

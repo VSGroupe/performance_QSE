@@ -43,8 +43,7 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
   initState() {
     super.initState();
     loadScreen();
-
-    controllerTableauBord.assemblyIndicateurWithDataIndicateur(annee:annee,espace:);
+    controllerTableauBord.assemblyIndicateurWithDataIndicateur();
     _scrollController = ScrollController();
   }
 

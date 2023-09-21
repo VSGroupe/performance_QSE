@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
 import '../../controllers/tableau_controller.dart';
+import 'controller_tableau_bord/controller_tableau_bord.dart';
 
 class TableauBord extends StatefulWidget {
   const TableauBord({super.key});
@@ -15,7 +16,7 @@ class TableauBord extends StatefulWidget {
 
 class _TableauBordState extends State<TableauBord> {
   final storage =FlutterSecureStorage();
-  final ControllerTbQSE _controllerTbQSE=Get.find();
+  final ControllerTableauBord controllerTb =Get.find();
   final Location="/pilotage/espace/Bouafle/tableau-de-bord/transite-tableau-bord";
 
   Future<void> _showDialogNoAcces() async {
@@ -53,7 +54,7 @@ class _TableauBordState extends State<TableauBord> {
       ref =reference.split("\n");
     }
     if(ref.contains(centerTitle)) {
-      _controllerTbQSE.centerCicle.value = centerTitle;
+      controllerTb.centerCicle.value = centerTitle;
       context.go(Location);
     }else{
       _showDialogNoAcces();

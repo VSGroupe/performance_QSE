@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:perfqse/Views/pilotage/entity/tableau_bord/widgets/data_table/row_critNormatif.dart';
 import '../../../../../../models/pilotage/indicateur_model.dart';
 import '../../../../controllers/tableau_controller.dart';
+import '../../controller_tableau_bord/controller_tableau_bord.dart';
 import '../utils_TB.dart';
 import 'dashboard_utils.dart';
 
@@ -18,7 +19,7 @@ class RowIndicateur extends StatefulWidget {
 
 class _RowIndicateurState extends State<RowIndicateur> {
   bool isHovering = false;
-  final ControllerTbQSE _controllerTbQSE=Get.find();
+  final ControllerTableauBord controllerTableauBord=Get.find();
   bool? dataMoisValidation;
   bool? dataAnneeValidation;
   String? dataAnneeValue="";

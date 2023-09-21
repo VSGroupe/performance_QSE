@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:perfqse/models/pilotage/data_indicateur_row_model.dart';
 import 'package:perfqse/models/pilotage/indicateur_model.dart';
@@ -10,7 +11,9 @@ import '../../../../../models/pilotage/enjeuModel.dart';
 import '../../../../../models/pilotage/indicateur_row_model.dart';
 
 class ControllerTableauBord extends GetxController{
+  final storage =FlutterSecureStorage();
   final DataBaseController dbController= DataBaseController();
+  var centerCicle="".obs;
   List<IndicateurModel>indicateurs=<IndicateurModel>[].obs;
   List<AxeModel>axes=<AxeModel>[].obs;
   List<EnjeuModel>enjeux=<EnjeuModel>[].obs;
@@ -41,19 +44,21 @@ class ControllerTableauBord extends GetxController{
     dataIndicateurRow.addAll(await dbController.getAllDataRowIndicateur(espace,annee));
   }
   // Mettre au niveau de l'OverviewPage/l'SuiviPage/PerformancePage/
-  void assemblyIndicateurWithDataIndicateur({required annee,required espace})async{
-    indicateurRowTableauBord.addAll(await dbController.getIndicateurWithDataIndicateur(espace, annee));
+  void assemblyIndicateurWithDataIndicateur()async{
+    String?  espace=await storage.read(key:"espace");
+    int annee =DateTime.now().year;
+    indicateurRowTableauBord.addAll(await dbController.getIndicateurWithDataIndicateur(espace!, annee));
   }
   // Mettre au niveau de la commonMainPage/outils de renitialisation des paramettre du tableau de bord
-  void getAllViewTableauBord({required annee,required espace}){
-    assemblyIndicateurWithDataIndicateur(annee: annee,espace: espace);
+  void getAllViewTableauBord({required annee,required espace})async{
+    indicateurRowTableauBord.addAll(await dbController.getIndicateurWithDataIndicateur(espace, annee));
     getAxes();
     getCritere();
     getEnjeu();
   }
 
-  void doFilter({required annee,required espace,required mois,required axe,required critere,required enjeu}){
-    assemblyIndicateurWithDataIndicateur(annee: annee,espace: espace);
+  void doFilter({required annee,required espace,required mois,required axe,required critere,required enjeu})async{
+    indicateurRowTableauBord.addAll(await dbController.getIndicateurWithDataIndicateur(espace, annee));
     criteresTableauBord = criteres
         .where((element) => critere.contains(element.idCritere))
         .map((element) => CritereModel(idEnjeu:element.idEnjeu,idCritere: element.idCritere, libelle: element.libelle))

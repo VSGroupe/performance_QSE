@@ -6,6 +6,7 @@ import 'package:iconsax/iconsax.dart';
 
 import '../../../../api/api_indicateur.dart';
 import '../../controllers/tableau_controller.dart';
+import 'controller_tableau_bord/controller_tableau_bord.dart';
 
 class NewTableauBord extends StatefulWidget {
   const NewTableauBord({super.key});
@@ -16,7 +17,7 @@ class NewTableauBord extends StatefulWidget {
 
 class _NewTableauBordState extends State<NewTableauBord> {
 
-  final ControllerTbQSE _controllerTbQSE=Get.find();
+  final ControllerTableauBord _controllerTb=Get.find();
   final ApiTableau_Bord api_TB = ApiTableau_Bord();
 
   // void getIndicateur()async{
@@ -46,9 +47,9 @@ final Location="/pilotage/espace/Bouafle/tableau-de-bord/transite-tableau-bord/i
               RotatedBox(
                 quarterTurns: 2,
                 child: IconButton(onPressed:(){
-                  _controllerTbQSE.centerCicle.value ="";
+                  _controllerTb.centerCicle.value ="";
                   context.go("/pilotage/espace/Bouafle/tableau-de-bord");
-                }, 
+                },
                     icon: Icon(Icons.east_outlined,size: 30,)),
               ),
               SizedBox(width:40),
@@ -65,7 +66,7 @@ final Location="/pilotage/espace/Bouafle/tableau-de-bord/transite-tableau-bord/i
           width: double.infinity,
           height: 600,
           child: Obx(()
-            {  String centerCicle=_controllerTbQSE.centerCicle.value;
+            {  String centerCicle=_controllerTb.centerCicle.value;
               double size=280;
               return Stack(
               alignment: Alignment.bottomRight,
@@ -90,8 +91,8 @@ final Location="/pilotage/espace/Bouafle/tableau-de-bord/transite-tableau-bord/i
                         TextButton(
                           onPressed: () {
                             setState(() {
-                              _controllerTbQSE.axeSelect.value="axe1";
-                              _controllerTbQSE.nameAxeSelect.value="ALIGNEMENT STRATEGIQUE";
+                              // _controllerTb.axeSelect.value="axe1";
+                              // _controllerTb.nameAxeSelect.value="ALIGNEMENT STRATEGIQUE";
                               context.go(Location);
                             });
                           },
@@ -125,9 +126,9 @@ final Location="/pilotage/espace/Bouafle/tableau-de-bord/transite-tableau-bord/i
                                   ),
                                   TextButton(onPressed: () {
                                     setState(() {
-                                      _controllerTbQSE.axeSelect.value="axe1";
-                                      _controllerTbQSE.nameAxeSelect.value="ALIGNEMENT STRATEGIQUE";
-                                      _controllerTbQSE.enjeuSelect.value="enjeu1";
+                                      // _controllerTbQSE.axeSelect.value="axe1";
+                                      // _controllerTbQSE.nameAxeSelect.value="ALIGNEMENT STRATEGIQUE";
+                                      // _controllerTbQSE.enjeuSelect.value="enjeu1";
                                       context.go(Location);
                                     });
                                   },
@@ -157,9 +158,9 @@ final Location="/pilotage/espace/Bouafle/tableau-de-bord/transite-tableau-bord/i
                                   ),
                                   TextButton(onPressed: () {
                                     setState(() {
-                                      _controllerTbQSE.axeSelect.value="axe1";
-                                      _controllerTbQSE.nameAxeSelect.value="ALIGNEMENT STRATEGIQUE";
-                                      _controllerTbQSE.enjeuSelect.value="enjeu2";
+                                      // _controllerTbQSE.axeSelect.value="axe1";
+                                      // _controllerTbQSE.nameAxeSelect.value="ALIGNEMENT STRATEGIQUE";
+                                      // _controllerTbQSE.enjeuSelect.value="enjeu2";
                                       context.go(Location);
                                     });
                                   },
@@ -195,8 +196,8 @@ final Location="/pilotage/espace/Bouafle/tableau-de-bord/transite-tableau-bord/i
                         TextButton(
                           onPressed:() {
                             setState(() {
-                              _controllerTbQSE.axeSelect.value="axe3";
-                              _controllerTbQSE.nameAxeSelect.value="RESILIENCE DU SYSTEME";
+                              // _controllerTbQSE.axeSelect.value="axe3";
+                              // _controllerTbQSE.nameAxeSelect.value="RESILIENCE DU SYSTEME";
                               context.go(Location);
                             });
                           },
@@ -230,9 +231,9 @@ final Location="/pilotage/espace/Bouafle/tableau-de-bord/transite-tableau-bord/i
                               SizedBox(width: 5,),
                               TextButton(onPressed: () {
                                 setState(() {
-                                  _controllerTbQSE.axeSelect.value="axe3";
-                                  _controllerTbQSE.nameAxeSelect.value="RESILIENCE DU SYSTEME";
-                                  _controllerTbQSE.enjeuSelect.value="enjeu9";
+                                  // _controllerTbQSE.axeSelect.value="axe3";
+                                  // _controllerTbQSE.nameAxeSelect.value="RESILIENCE DU SYSTEME";
+                                  // _controllerTbQSE.enjeuSelect.value="enjeu9";
                                   context.go(Location);
                                 });
                               },
@@ -270,8 +271,8 @@ final Location="/pilotage/espace/Bouafle/tableau-de-bord/transite-tableau-bord/i
                             width:200,height: 100,
                             child: TextButton(
                               onPressed: () {
-                                _controllerTbQSE.axeSelect.value="axe4";
-                                _controllerTbQSE.nameAxeSelect.value="PERFORMANCE & INTEGRITE DU SYSTEME";
+                                // _controllerTbQSE.axeSelect.value="axe4";
+                                // _controllerTbQSE.nameAxeSelect.value="PERFORMANCE & INTEGRITE DU SYSTEME";
                                 context.go(Location);
                               },
                               child: Text("PERFORMANCE & INTEGRITE DU SYSTEME",maxLines:3,style: TextStyle(
@@ -345,8 +346,8 @@ final Location="/pilotage/espace/Bouafle/tableau-de-bord/transite-tableau-bord/i
                           child: TextButton(
                             onPressed:size==280? () {
                               setState(() {
-                                _controllerTbQSE.axeSelect.value="axe2";
-                                _controllerTbQSE.nameAxeSelect.value="MAITRISE OPERATIONNELLE";
+                                // _controllerTbQSE.axeSelect.value="axe2";
+                                // _controllerTbQSE.nameAxeSelect.value="MAITRISE OPERATIONNELLE";
                                 context.go(Location);
                               });
                             }:null,
@@ -379,9 +380,9 @@ final Location="/pilotage/espace/Bouafle/tableau-de-bord/transite-tableau-bord/i
                               ),
                               TextButton(onPressed: () {
                                 setState(() {
-                                  _controllerTbQSE.axeSelect.value="axe2";
-                                  _controllerTbQSE.nameAxeSelect.value="MAITRISE OPERATIONNELLE";
-                                  _controllerTbQSE.enjeuSelect.value="enjeu3";
+                                  // _controllerTbQSE.axeSelect.value="axe2";
+                                  // _controllerTbQSE.nameAxeSelect.value="MAITRISE OPERATIONNELLE";
+                                  // _controllerTbQSE.enjeuSelect.value="enjeu3";
                                   context.go(Location);
                                 });
                               },
@@ -414,9 +415,9 @@ final Location="/pilotage/espace/Bouafle/tableau-de-bord/transite-tableau-bord/i
                                   child:
                                   TextButton(onPressed: () {
                                     setState(() {
-                                      _controllerTbQSE.axeSelect.value="axe2";
-                                      _controllerTbQSE.nameAxeSelect.value="MAITRISE OPERATIONNELLE";
-                                      _controllerTbQSE.enjeuSelect.value="enjeu4";
+                                      // _controllerTbQSE.axeSelect.value="axe2";
+                                      // _controllerTbQSE.nameAxeSelect.value="MAITRISE OPERATIONNELLE";
+                                      // _controllerTbQSE.enjeuSelect.value="enjeu4";
                                       context.go(Location);
                                     });
                                   },
@@ -446,9 +447,9 @@ final Location="/pilotage/espace/Bouafle/tableau-de-bord/transite-tableau-bord/i
                               ),
                               TextButton(onPressed: () {
                                 setState(() {
-                                  _controllerTbQSE.axeSelect.value="axe2";
-                                  _controllerTbQSE.nameAxeSelect.value="MAITRISE OPERATIONNELLE";
-                                  _controllerTbQSE.enjeuSelect.value="enjeu5";
+                                  // _controllerTbQSE.axeSelect.value="axe2";
+                                  // _controllerTbQSE.nameAxeSelect.value="MAITRISE OPERATIONNELLE";
+                                  // _controllerTbQSE.enjeuSelect.value="enjeu5";
                                   context.go(Location);
                                 });
                               },
@@ -478,9 +479,9 @@ final Location="/pilotage/espace/Bouafle/tableau-de-bord/transite-tableau-bord/i
                               ),
                               TextButton(onPressed: () {
                                 setState(() {
-                                  _controllerTbQSE.axeSelect.value="axe2";
-                                  _controllerTbQSE.nameAxeSelect.value="MAITRISE OPERATIONNELLE";
-                                  _controllerTbQSE.enjeuSelect.value="enjeu6";
+                                  // _controllerTbQSE.axeSelect.value="axe2";
+                                  // _controllerTbQSE.nameAxeSelect.value="MAITRISE OPERATIONNELLE";
+                                  // _controllerTbQSE.enjeuSelect.value="enjeu6";
                                   context.go(Location);
                                 });
                               },
@@ -510,9 +511,9 @@ final Location="/pilotage/espace/Bouafle/tableau-de-bord/transite-tableau-bord/i
                               ),
                               TextButton(onPressed: () {
                                 setState(() {
-                                  _controllerTbQSE.axeSelect.value="axe2";
-                                  _controllerTbQSE.nameAxeSelect.value="MAITRISE OPERATIONNELLE";
-                                  _controllerTbQSE.enjeuSelect.value="enjeu7";
+                                  // _controllerTbQSE.axeSelect.value="axe2";
+                                  // _controllerTbQSE.nameAxeSelect.value="MAITRISE OPERATIONNELLE";
+                                  // _controllerTbQSE.enjeuSelect.value="enjeu7";
                                   context.go(Location);
                                 });
                               },
@@ -544,9 +545,9 @@ final Location="/pilotage/espace/Bouafle/tableau-de-bord/transite-tableau-bord/i
                                   width:360,height: 30,
                                   child:TextButton(onPressed: () {
                                     setState(() {
-                                      _controllerTbQSE.axeSelect.value="axe2";
-                                      _controllerTbQSE.nameAxeSelect.value="MAITRISE OPERATIONNELLE";
-                                      _controllerTbQSE.enjeuSelect.value="enjeu8";
+                                      // _controllerTbQSE.axeSelect.value="axe2";
+                                      // _controllerTbQSE.nameAxeSelect.value="MAITRISE OPERATIONNELLE";
+                                      // _controllerTbQSE.enjeuSelect.value="enjeu8";
                                       context.go(Location);
                                     });
                                   },

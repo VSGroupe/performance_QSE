@@ -29,7 +29,7 @@ class _ScreenPilotageSuiviState extends State<ScreenPilotageSuivi> {
   void initState() {
     super.initState();
     loadScreen();
-    controllerTableauBord.getAllViewTableauBord();
+    controllerTableauBord.assemblyIndicateurWithDataIndicateur();
     _scrollController = ScrollController();
   }
 
