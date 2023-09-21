@@ -117,7 +117,7 @@ class _DrawerMenuPilotageState extends State<DrawerMenuPilotage> {
                 height: 5,
               ),
               CustomMenuButton(
-                  pathMenu: '/d',
+                  pathMenu:'/',
                   icon: Icons.arrow_circle_left_sharp,
                   label: "Accueil Pilotage",
                   image: "assets/icons/back.png",

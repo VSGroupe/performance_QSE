@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../../../api/supabase.dart';
 import '../../../../../helpers/helper_methods.dart';
 import '../../../../../models/common/user_model.dart';
@@ -12,7 +14,9 @@ import '../../../../../widgets/customtext.dart';
 class PasswordPilote extends StatefulWidget {
   final UserModel userModel;
   final AccesPilotageModel accesPilotageModel;
-  const PasswordPilote({Key? key, required this.userModel, required this.accesPilotageModel}) : super(key: key);
+  const PasswordPilote(
+      {Key? key, required this.userModel, required this.accesPilotageModel})
+      : super(key: key);
 
   @override
   State<PasswordPilote> createState() => _PasswordPiloteState();
@@ -22,21 +26,24 @@ class PasswordPilote extends StatefulWidget {
 
 class _PasswordPiloteState extends State<PasswordPilote> {
 
-  late TextEditingController currentPasswordTextEditingController;
-  late TextEditingController newPasswordTextEditingController;
-  late TextEditingController checkNewPasswordTextEditingController;
+  late TextEditingController currentPassordTextEditingController;
+  late TextEditingController newPassordTextEditingController;
+  late TextEditingController checkNewPassordTextEditingController;
   final DataBaseController dbController = DataBaseController();
-  final storage = const FlutterSecureStorage();
+  final storage = FlutterSecureStorage();
   final RegExp regex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$');
   final _formKey = GlobalKey<FormState>();
   bool containUpperCase = false;
   bool containLowerCase = false;
   bool containDigit = false;
+  bool obscureTextNewPassword=false;
+  bool obscureTextCheckPassword=false;
+  bool obscureTextcurrentPassword=false;
 
-  void updatePassword(context) async {
-    final lastPassword = currentPasswordTextEditingController.text;
-    final newPassword = newPasswordTextEditingController.text;
-    final checkPassword = checkNewPasswordTextEditingController.text;
+  updatePassword(context) async {
+    final lastPassword = currentPassordTextEditingController.text;
+    final newPassword = newPassordTextEditingController.text;
+    final checkPassword = checkNewPassordTextEditingController.text;
     final email = await storage.read(key: "email");
     try {
       await Supabase.instance.client.auth.signInWithPassword(
@@ -47,9 +54,9 @@ class _PasswordPiloteState extends State<PasswordPilote> {
         final result = await dbController.updatePasswordUser(
             email: email!, checkPassWord: checkPassword);
         if (result) {
-          currentPasswordTextEditingController.text = "";
-          newPasswordTextEditingController.text = "";
-          checkNewPasswordTextEditingController.text = "";
+          currentPassordTextEditingController.text = "";
+          newPassordTextEditingController.text = "";
+          checkNewPassordTextEditingController.text = "";
           ScaffoldMessenger.of(context).showSnackBar(showSnackBar(
               "Succès", "Modification éffectué avec succès", Colors.green));
         } else {
@@ -68,9 +75,9 @@ class _PasswordPiloteState extends State<PasswordPilote> {
 
   @override
   void initState() {
-    currentPasswordTextEditingController = TextEditingController();
-    newPasswordTextEditingController = TextEditingController();
-    checkNewPasswordTextEditingController = TextEditingController();
+    currentPassordTextEditingController = TextEditingController();
+    newPassordTextEditingController = TextEditingController();
+    checkNewPassordTextEditingController = TextEditingController();
     super.initState();
   }
 
@@ -90,144 +97,185 @@ class _PasswordPiloteState extends State<PasswordPilote> {
               width: double.infinity,
               child: Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: MediaQuery.of(context).size.width > 900
-                      ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const CustomText(
-                                text: "Mot de passe actuel",
-                                size: 15,
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              CustomTextFormField(
-                                controller: currentPasswordTextEditingController,
-                                validator: (value) {
-                                  if (!regex.hasMatch(value!)) {
-                                    return 'Svp  votre mot de passe doit contenir 8 chiffres,des majuscules et des minuscules';
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ],
-                          )),
-                      const SizedBox(
-                        width: 10,
+                    padding: const EdgeInsets.only(top:20.0,bottom: 20.0,left: 8,right: 8),
+                    child:
+                    Center(
+                      child: Wrap(
+                        spacing:5,
+                        children: [
+                          Expanded(
+                              child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const CustomText(
+                                    text: "Mot de passe actuel",
+                                    size: 15,
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  CustomTextFormField(
+                                    width: 330,
+                                    obscureText:obscureTextcurrentPassword,
+                                    controller: currentPassordTextEditingController,
+                                    validator: (value) {
+                                      if (!regex.hasMatch(value!)) {
+                                        return 'Svp  votre mot de passe doit contenir 8 chiffres,\n'
+                                            'des majuscules et des minuscules';
+                                      }
+                                      return null;
+                                    },
+                                    decoration: InputDecoration(
+                                        suffixIcon: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              obscureTextcurrentPassword =
+                                              !obscureTextcurrentPassword;
+                                            });
+                                          },
+                                          child: Icon(obscureTextcurrentPassword
+                                              ? Icons.visibility
+                                              : Icons
+                                              .visibility_off),
+                                        ),
+                                        hintText: "Mot de passe",
+                                        prefixIcon: Icon(
+                                            Icons.vpn_key_sharp),
+                                        contentPadding:
+                                        const EdgeInsets.only(
+                                            left: 20.0,
+                                            right: 20.0),
+                                        border:
+                                        const OutlineInputBorder(),
+                                        focusedBorder:
+                                        OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Theme.of(
+                                                    context)
+                                                    .primaryColor,
+                                                width: 2))),
+                                  ),
+                                ],
+                              )),
+
+                          const SizedBox(
+                            width: 10,
+                          ),
+
+                          Expanded(
+                              child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CustomText(
+                                    text: "Nouveau mot de passe",
+                                    size: 15,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  CustomTextFormField(
+                                    width: 330,
+                                    obscureText:obscureTextNewPassword,
+                                    controller: newPassordTextEditingController,
+                                    validator: (value) {
+                                      if (!regex.hasMatch(value!)) {
+                                        return 'Svp  votre mot de passe doit contenir 8 chiffres,\n'
+                                            'des majuscules et des minuscules';
+                                      }
+                                      return null;
+                                    },
+                                    decoration: InputDecoration(
+                                        suffixIcon: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              obscureTextNewPassword =
+                                              !obscureTextNewPassword;
+                                            });
+                                          },
+                                          child: Icon(obscureTextNewPassword
+                                              ? Icons.visibility
+                                              : Icons
+                                              .visibility_off),
+                                        ),
+                                        hintText: "Mot de passe",
+                                        prefixIcon: Icon(
+                                            Icons.vpn_key_sharp),
+                                        contentPadding:
+                                        const EdgeInsets.only(
+                                            left: 20.0,
+                                            right: 20.0),
+                                        border:
+                                        const OutlineInputBorder(),
+                                        focusedBorder:
+                                        OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Theme.of(
+                                                    context)
+                                                    .primaryColor,
+                                                width: 2))),
+                                  ),
+                                ],
+                              )),
+
+                          const SizedBox(
+                            width: 10,
+                          ),
+
+                          Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CustomText(
+                                    text: "Vérification du mot de passe",
+                                    size: 15,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  CustomTextFormField(
+                                    width: 330,
+                                    obscureText:obscureTextCheckPassword,
+                                    controller: checkNewPassordTextEditingController,
+                                    validator: (value) {
+                                      if (!regex.hasMatch(value!)) {
+                                        return 'Svp  votre mot de passe doit contenir 8 chiffres,\n'
+                                            'des majuscules et des minuscules';
+                                      }
+                                      return null;
+                                    },
+                                    decoration: InputDecoration(
+                                        suffixIcon: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              obscureTextCheckPassword =
+                                              !obscureTextCheckPassword;
+                                            });
+                                          },
+                                          child: Icon(obscureTextCheckPassword
+                                              ? Icons.visibility
+                                              : Icons
+                                              .visibility_off),
+                                        ),
+                                        hintText: "Mot de passe",
+                                        prefixIcon: Icon(
+                                            Icons.vpn_key_sharp),
+                                        contentPadding:
+                                        const EdgeInsets.only(
+                                            left: 20.0,
+                                            right: 20.0),
+                                        border:
+                                        const OutlineInputBorder(),
+                                        focusedBorder:
+                                        OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Theme.of(
+                                                    context)
+                                                    .primaryColor,
+                                                width: 2))),
+                                  ),
+                                ],
+                              ))
+                        ],
                       ),
-                      Expanded(
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CustomText(
-                                text: "Nouveau mot de passe",
-                                size: 15,
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              CustomTextFormField(
-                                controller: newPasswordTextEditingController,
-                                validator: (value) {
-                                  if (!regex.hasMatch(value!)) {
-                                    return 'Svp  votre mot de passe doit contenir 8 chiffres,des majuscules et des minuscules';
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ],
-                          )),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CustomText(
-                                text: "Vérification du mot de passe",
-                                size: 15,
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              CustomTextFormField(
-                                controller:checkNewPasswordTextEditingController,
-                                validator: (value) {
-                                  if (!regex.hasMatch(value!)) {
-                                    return 'Svp  votre mot de passe doit contenir 8 chiffres,des majuscules et des minuscules';
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ],
-                          ))
-                    ],
-                  )
-                      : Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomText(
-                          text: "Mot de passe actuel",
-                          size: 15,
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        CustomTextFormField(
-                          controller: currentPasswordTextEditingController,
-                          validator: (value) {
-                            if (!regex.hasMatch(value!)) {
-                              return 'Svp  votre mot de passe doit contenir 8 chiffres,des majuscules et des minuscules';
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        CustomText(
-                          text: "Nouveau mot de passe",
-                          size: 15,
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        CustomTextFormField(
-                            controller: newPasswordTextEditingController,
-                            validator: (value) {
-                              if (!regex.hasMatch(value!)) {
-                                return 'Svp  votre mot de passe doit contenir 8 chiffres,des majuscules et des minuscules';
-                              }
-                              return null;
-                            }
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        CustomText(
-                          text: "Vérification du mot de passe",
-                          size: 15,
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        CustomTextFormField(
-                          controller: checkNewPasswordTextEditingController,
-                          validator: (value) {
-                            if (!regex.hasMatch(value!)) {
-                              return 'Svp  votre mot de passe doit contenir 8 chiffres,des majuscules et des minuscules';
-                            }
-                            return null;
-                          },
-                        )
-                      ],
-                    ),
-                  ),
+                    )
                 ),
               ),
             ),

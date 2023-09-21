@@ -8,7 +8,6 @@ import 'package:switcher/core/switcher_size.dart';
 import 'package:switcher/switcher.dart';
 import '../../../../constants/colors.dart';
 import '../../controllers/side_menu_controller.dart';
-import 'get_info_espace.dart';
 
 class MenuNavPilotage extends StatefulWidget {
   final String responsive;
@@ -21,6 +20,7 @@ class MenuNavPilotage extends StatefulWidget {
 class _MenuNavPilotageState extends State<MenuNavPilotage> {
 
   final SideMenuController sideMenuController = Get.find();
+  //String espace = InfoEspace().getNameEspace();
 
   @override
   Widget build(BuildContext context) {
@@ -127,6 +127,13 @@ class _MenuNavPilotageState extends State<MenuNavPilotage> {
           SizedBox(
             height: 5,
           ),
+          CustomMenuButton(
+              pathMenu: '/support-client',
+              image: "",
+              icon: Icons.headset_mic_rounded,
+              isFullPath:false,
+              label: "Support Client",
+              isExtended: isExtended),
           Divider(),
           SizedBox(
             height: 5,
@@ -198,7 +205,6 @@ class CustomMenuButton extends StatefulWidget {
 
 class _CustomMenuButtonState extends State<CustomMenuButton> {
   final storage=  FlutterSecureStorage() ;
-  String espace = InfoEspace().getNameEspace();
 
   bool _isHovering = false;
   bool isSelected = false;
@@ -207,7 +213,7 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
   final SideMenuController sideMenuController = Get.find();
 
   bool calculateSelectedIndex(BuildContext context) {
-     _rootLocation = "/pilotage/espace/${espace}";
+     _rootLocation = "/pilotage/espace/Bouafle";
     final String location = GoRouterState.of(context).location;
     if (location.endsWith(widget.pathMenu)) {
       return true;
@@ -217,7 +223,7 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
 
   @override
   Widget build(BuildContext context) {
-    _rootLocation = "/pilotage/espace/${espace}}";
+    _rootLocation = "/pilotage/espace/Bouafle";
     isSelected = calculateSelectedIndex(context);
     return widget.isExtended ? InkWell(
       overlayColor: MaterialStateProperty.all(Colors.transparent),

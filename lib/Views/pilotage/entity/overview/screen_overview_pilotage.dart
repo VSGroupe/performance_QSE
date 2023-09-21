@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import '../../../../helpers/helper_methods.dart';
+import '../tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
 import '../widgets/privacy_widget.dart';
 import 'overview_pilotage.dart';
 
@@ -13,6 +16,7 @@ class ScreenOverviewPilotage extends StatefulWidget {
 }
 
 class _ScreenOverviewPilotageState extends State<ScreenOverviewPilotage> {
+  final ControllerTableauBord controllerTableauBord=Get.find();
   bool _isLoaded = false;
   late ScrollController _scrollController;
 
@@ -52,13 +56,14 @@ class _ScreenOverviewPilotageState extends State<ScreenOverviewPilotage> {
   void initState() {
     super.initState();
     loadScreen();
+    controllerTableauBord.getAllViewTableauBord();
     _scrollController = ScrollController();
     _scrollController.addListener(_handleScroll);
   }
 
   @override
   Widget build(BuildContext context) {
-    int width = MediaQuery.of(context).size.width as int;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(top: 16,left: 10),

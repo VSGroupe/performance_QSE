@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 class UserModel {
   String email;
-  dynamic nom;
+  String? nom;
   String? titre;
   String? prenom;
   String? accesPilotage;
@@ -10,7 +12,8 @@ class UserModel {
   String? fonction;
   String? entreprise;
   String? langue;
-  String? addresse;
+  String? adresse;
+  List<dynamic>? ref;
   String? ville;
   String? pays;
   String? numero;
@@ -28,8 +31,9 @@ class UserModel {
     this.titre,
     this.entreprise,
     this.langue,
-    this.addresse,
+    this.adresse,
     this.ville,
+    this.ref,
     this.pays,
     this.numero,
     this.photoProfil,
@@ -41,7 +45,6 @@ class UserModel {
 
   factory UserModel.fromRawJson(String str) => UserModel.fromJson(json.decode(str));
 
-  String toRawJson() => json.encode(toJson());
 
   factory UserModel.fromJson(Map<dynamic, dynamic> json) => UserModel(
     email: json["email"],
@@ -53,31 +56,13 @@ class UserModel {
     fonction: json["fonction"],
     entreprise: json["entreprise"],
     langue: json["langue"],
-    addresse: json["addresse"],
+    adresse: json["adresse"],
     ville: json["ville"],
     pays: json["pays"],
     numero: json["numero"],
     photoProfil: json["photo_profil"],
     tokenCode: json["token_code"],
     expirationTime: json["expiration_time"],
+    ref:List<dynamic>.from(json["reference"].map((x) => x)),
   );
-
-  Map<dynamic, dynamic> toJson() => {
-    "email": email,
-    "nom": nom,
-    "titre":titre,
-    "prenom": prenom,
-    "acces_pilotage": accesPilotage,
-    "acces_evaluation": accesEvaluation,
-    "fonction": fonction,
-    "entreprise": entreprise,
-    "langue": langue,
-    "addresse": addresse,
-    "ville": ville,
-    "pays": pays,
-    "numero": numero,
-    "photo_profil": photoProfil,
-    "token_code": tokenCode,
-    "expiration_time": expirationTime?.toIso8601String(),
-  };
 }

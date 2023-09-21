@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+
 import '../../../../../api/supabase.dart';
 import '../../../../../helpers/helper_methods.dart';
 import '../../../../../models/common/user_model.dart';
 import '../../../../../models/pilotage/acces_pilotage_model.dart';
-import '../../../../../module/styled_scrollview.dart';
 import '../../../../../widgets/customtext.dart';
 import '../../../../../widgets/menu_deroulant.dart';
 import '../controller/profil_pilotage_controller.dart';
@@ -25,8 +25,9 @@ class _InfosCompteState extends State<InfosCompte> {
   final DataBaseController dbController = DataBaseController();
   final ProfilPilotageController userController = Get.find();
   String? dropDownLangue = "fr";
+  double widthTextForm = 350;
 
-  void updateLanguage(langue) async {
+  updateLanguage(langue) async {
     final result = await dbController.updateUserLanguage(
         email: widget.userModel.email, langue: langue);
     if (result) {
@@ -41,180 +42,114 @@ class _InfosCompteState extends State<InfosCompte> {
 
   @override
   Widget build(BuildContext context) {
-    return StyledScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 10,
-          ),
-          Card(
-            child: Padding(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 10,
+        ),
+        Card(
+          child: Padding(
               padding: const EdgeInsets.all(20.0),
-              child: MediaQuery.of(context).size.width > 900
-                  ? Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomText(
-                            text: "Email utilisateur",
-                            size: 15,
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          textNonModifiable(
-                              "${widget.accesPilotageModel.email}"),
-                        ],
-                      )),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomText(
-                            text: "Type d'accès",
-                            size: 15,
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          textNonModifiable(
-                              getAccesType(widget.accesPilotageModel)),
-                        ],
-                      )),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomText(
-                            text: "Langue",
-                            size: 15,
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          MenuDeroulant(
-                            indication: "",
-                            initValue: widget.userModel.langue == "fr"
-                                ? "Française"
-                                : widget.userModel.langue == "en"
-                                ? "English"
-                                : "",
-                            width: double.maxFinite,
-                            height: 50,
-                            items: ["Française", "English"],
-                            onChanged: (value) {
-                              dropDownLangue = value!;
-                            },
-                          )
-                        ],
-                      )),
-                ],
-              )
-                  : Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              child: Center(
+                child: Wrap(
+                  direction: Axis.horizontal,
+                  spacing: 10,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomText(
-                          text: "Email utilisateur",
-                          size: 15,
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        textNonModifiable(
-                            "${widget.accesPilotageModel.email}"),
-                      ],
-                    ),
+                    Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomText(
+                              text: "Email utilisateur",
+                              size: 15,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            textNonModifiable("${widget.accesPilotageModel.email}"),
+                          ],
+                        )),
                     SizedBox(
-                      height: 10,
+                      width: 10,
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomText(
-                          text: "Type d'accès",
-                          size: 15,
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        textNonModifiable(
-                            getAccesType(widget.accesPilotageModel)),
-                      ],
-                    ),
+                    Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomText(
+                              text: "Type d'accès",
+                              size: 15,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            textNonModifiable(
+                                getAccesType(widget.accesPilotageModel)),
+                          ],
+                        )),
                     SizedBox(
-                      height: 10,
+                      width: 10,
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomText(
-                          text: "Langue",
-                          size: 15,
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        MenuDeroulant(
-                          indication: "",
-                          initValue: widget.userModel.langue == "fr"
-                              ? "Française"
-                              : dropDownLangue == "en"
-                              ? "English"
-                              : "",
-                          width: double.maxFinite,
-                          height: 50,
-                          items: ["Française", "English", " "],
-                        )
-                      ],
-                    ),
+                    Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomText(
+                              text: "Langue",
+                              size: 15,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            MenuDeroulant(
+                              indication: "",
+                              initValue: widget.userModel.langue == "fr"
+                                  ? "Française"
+                                  : widget.userModel.langue == "en"
+                                  ? "English"
+                                  : "",
+                              width: widthTextForm,
+                              height: 50,
+                              items: ["Française", "English"],
+                              onChanged: (value) {
+                                dropDownLangue = value!;
+                              },
+                            )
+                          ],
+                        )),
                   ],
                 ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Center(
-            child: InkWell(
-              onTap: () {
-                updateLanguage(dropDownLangue ?? "Française");
-              },
-              child: Container(
-                height: 50,
-                width: 200,
-                decoration: BoxDecoration(
+              )),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Center(
+          child: InkWell(
+            onTap: () {
+              updateLanguage(dropDownLangue ?? "Française");
+            },
+            child: Container(
+              height: 50,
+              width: 200,
+              decoration: BoxDecoration(
+                  color: Colors.amber,
+                  border: Border.all(
                     color: Colors.amber,
-                    border: Border.all(
-                      color: Colors.amber,
-                    ),
-                    borderRadius: BorderRadius.all(Radius.circular(40))),
-                child: Center(
-                    child: CustomText(
-                      text: "Enregistrer",
-                      size: 20,
-                      weight: FontWeight.bold,
-                      color: Colors.white,
-                    )),
-              ),
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(40))),
+              child: Center(
+                  child: CustomText(
+                    text: "Enregistrer",
+                    size: 20,
+                    weight: FontWeight.bold,
+                    color: Colors.white,
+                  )),
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 
@@ -238,7 +173,7 @@ class _InfosCompteState extends State<InfosCompte> {
     return Container(
         height: 50,
         alignment: Alignment.centerLeft,
-        width: double.maxFinite,
+        width: widthTextForm,
         decoration: const BoxDecoration(
             color: Color(0xFFF2F4F5),
             borderRadius: BorderRadius.all(Radius.circular(10))),

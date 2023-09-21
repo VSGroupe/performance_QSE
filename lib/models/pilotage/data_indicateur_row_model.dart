@@ -5,7 +5,7 @@ class DataIndicateurRowModel {
   final String entite;
   final int annee;
   final int numeroIndicateur;
-  final String referenceIndicateur;
+  List<String> processus;
   final DataCellModel realise;
   final DataCellModel janvier;
   final DataCellModel fevrier;
@@ -24,8 +24,8 @@ class DataIndicateurRowModel {
     required this.id,
     required this.entite,
     required this.annee,
+    required this.processus,
     required this.numeroIndicateur,
-    required this.referenceIndicateur,
     required this.realise,
     required this.janvier,
     required this.fevrier,
@@ -50,7 +50,7 @@ class DataIndicateurRowModel {
     entite: json["entite"],
     annee: json["annee"],
     numeroIndicateur: json["numero_indicateur"],
-    referenceIndicateur: json["reference_indicateur"],
+    processus: List<String>.from(json["processus"].map((x) => x)),
     realise: DataCellModel.fromJson(json["realise"]),
     janvier: DataCellModel.fromJson(json["janvier"]),
     fevrier: DataCellModel.fromJson(json["fevrier"]),
@@ -71,7 +71,6 @@ class DataIndicateurRowModel {
     "entite": entite,
     "annee": annee,
     "numero_indicateur": numeroIndicateur,
-    "reference_indicateur": referenceIndicateur,
     "realise": realise.toJson(),
     "janvier": janvier.toJson(),
     "fevrier": fevrier.toJson(),
@@ -85,6 +84,7 @@ class DataIndicateurRowModel {
     "octobre": octobre.toJson(),
     "novembre": novembre.toJson(),
     "decembre": decembre.toJson(),
+    "processus":List<dynamic>.from(processus.map((x) => x)),
   };
 }
 

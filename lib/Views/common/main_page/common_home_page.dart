@@ -120,75 +120,39 @@ class _MainPageState extends State<MainPage> {
         }
         final data = snapshot.data!;
     return Scaffold(
-      body: SelectionArea(
-        child: SingleChildScrollView(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: 695.3,
-            child: Column(
-              children: [
-                    HeaderMainPage(title: "Général",mainPageData: data,),
-                Expanded(
-                  flex:8,
-                  child: Container(
-                    //height: 200,
-                    //padding: const EdgeInsets.all(5.0),
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage(
-                                "assets/images/background_image.jpg"),
-                            fit: BoxFit.fitWidth)),
-                    child: Stack(
+      body: Column(
+        children: [
+              HeaderMainPage(title: "Général",mainPageData: data,),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Container(
+                height: 670,
+                padding: const EdgeInsets.all(5.0),
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage(
+                            "assets/images/background_image.jpg"),
+                        fit: BoxFit.fitWidth)),
+                child: Stack(
+                  children: [
+                    Column(
                       children: [
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Center(
-                                  child: SizedBox(
-                                    width: 450,
-                                    height: 30,
-                                    child: MarqueeText(
-                                      text: const TextSpan(
-                                          text: "Bienvenue dans ",
-                                          style: TextStyle(
-                                              fontSize: 27,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black),
-                                          children: <TextSpan>[
-                                            TextSpan(
-                                                text: "Performance ",
-                                                style: TextStyle(
-                                                    color: Color(0xFF2A9836))),
-                                            TextSpan(
-                                                text: "QSE",
-                                                style: TextStyle(
-                                                    color: Colors.red)),
-                                          ]),
-                                      textDirection: TextDirection.ltr,
-                                      marqueeDirection: MarqueeDirection.rtl,
-                                      alwaysScroll: true,
-                                      style: TextStyle(
-                                        fontSize: 24,
-                                        color: Colors.black,
-                                      ),
-                                      speed: 18,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                RichText(
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Center(
+                              child: SizedBox(
+                                width: 450,
+                                height: 30,
+                                child: MarqueeText(
                                   text: const TextSpan(
-                                      text: " Avec ",
+                                      text: "Bienvenue dans ",
                                       style: TextStyle(
-                                          fontSize: 18,
+                                          fontSize: 27,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black),
                                       children: <TextSpan>[
@@ -198,113 +162,149 @@ class _MainPageState extends State<MainPage> {
                                                 color: Color(0xFF2A9836))),
                                         TextSpan(
                                             text: "QSE",
-                                            style:
-                                                TextStyle(color: Colors.red)),
-                                        TextSpan(
-                                            text:
-                                                " bâtissons ensemble un avenir d'excellence, où la qualité, la sécurité "
-                                                "et l'environnement sont les fondements de notre succès",
-                                            style:
-                                                TextStyle(color: Colors.black)),
+                                            style: TextStyle(
+                                                color: Colors.red)),
                                       ]),
+                                  textDirection: TextDirection.ltr,
+                                  marqueeDirection: MarqueeDirection.rtl,
+                                  alwaysScroll: true,
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    color: Colors.black,
+                                  ),
+                                  speed: 18,
                                 ),
-                              ],
+                              ),
                             ),
-                            const SizedBox(
-                              height: 20,
+                            SizedBox(
+                              height: 10,
                             ),
-                            Banniere(),
-                            const SizedBox(
-                              height: 5,
+                            RichText(
+                              text: const TextSpan(
+                                  text: " Piloter ",
+                                  style: TextStyle(
+                                      fontSize: 23,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                        text:
+                                        "éfficacement votre ",
+                                        style:
+                                        TextStyle(color: Colors.black,fontSize: 23,)),
+                                    TextSpan(
+                                        text: "Performance ",
+                                        style: TextStyle(
+                                            color: Color(0xFF2A9836),fontSize: 23,)),
+                                    TextSpan(
+                                        text: "globale ",
+                                        style: TextStyle(
+                                            color: Color(0xFF2A9836),fontSize: 23,)),
+                                    TextSpan(
+                                        text: "QSE ",
+                                        style:
+                                            TextStyle(color: Colors.red,fontSize: 23),),
+                                    TextSpan(
+                                        text: "avec simplicité ",
+                                        style: TextStyle(
+                                            color: Color(0xFF2A9836),fontSize: 23,)),
+                                  ]),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                CustomCadre(
-                                  onTap: () async {
-                                    checkAccesEvaluation(
-                                        "${data["user"]["email"]}");
-                                  },
-                                  imagePath: "assets/images/audit.jpg",
-                                  titreCadre: "Evaluation",
-                                ),
-                                CustomCadre(
-                                  onTap: () {
-                                    checkAccesPilotage(
-                                        "${data["user"]["email"]}");
-                                  },
-                                  imagePath: "assets/images/pilotage_rse.jpg",
-                                  titreCadre: "Pilotage",
-                                ),
-                                CustomCadre(
-                                  onTap: () {
-                                    _showMyDialog();
-                                  },
-                                  imagePath: "assets/images/reporting_qse.png",
-                                  titreCadre: "Reporting",
-                                ),
-                              ],
-                            )
                           ],
                         ),
-                        Positioned(
-                          bottom: 9,
-                          child: RotatedBox(
-                            quarterTurns: 2,
-                            child: IconButton(
-                                onPressed: () async {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text(
-                                            "Voulez-vous quitter l'application ?"),
-                                        content: const SizedBox(
-                                            width: 200,
-                                            child: Text(
-                                                'Cliquez sur Oui pour vous déconnecter.')),
-                                        actionsAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        actions: <Widget>[
-                                          OutlinedButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text('Non'),
-                                          ),
-                                          OutlinedButton(
-                                            onPressed: () async {
-                                              await storage.write(
-                                                  key: 'logged', value: "");
-                                              await storage.write(
-                                                  key: 'userEmail', value: "");
-                                              context.go('/account/login');
-                                            },
-                                            child: Text('Oui'),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                                tooltip: "Se Deconnecter",
-                                icon: Icon(
-                                  Icons.output_rounded,
-                                  color: Colors.red,
-                                  size: 40,
-                                )),
-                          ),
+                        const SizedBox(
+                          height: 10,
                         ),
+                        Banniere(),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CustomCadre(
+                              onTap: () async {
+                                checkAccesEvaluation(
+                                    "${data["user"]["email"]}");
+                              },
+                              imagePath: "assets/images/audit.jpg",
+                              titreCadre: "Audit",
+                            ),
+                            CustomCadre(
+                              onTap: () {
+                                checkAccesPilotage(
+                                    "${data["user"]["email"]}");
+                              },
+                              imagePath: "assets/images/pilotage_rse.jpg",
+                              titreCadre: "Pilotage",
+                            ),
+                            CustomCadre(
+                              onTap: () {
+                                _showMyDialog();
+                              },
+                              imagePath: "assets/images/reporting_qse.png",
+                              titreCadre: "Reporting",
+                            ),
+                          ],
+                        )
                       ],
                     ),
-                  ),
+                    Positioned(
+                      bottom: 9,
+                      child: RotatedBox(
+                        quarterTurns: 2,
+                        child: IconButton(
+                            onPressed: () async {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text(
+                                        "Voulez-vous quitter l'application ?"),
+                                    content: const SizedBox(
+                                        width: 200,
+                                        child: Text(
+                                            'Cliquez sur Oui pour vous déconnecter.')),
+                                    actionsAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    actions: <Widget>[
+                                      OutlinedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text('Non'),
+                                      ),
+                                      OutlinedButton(
+                                        onPressed: () async {
+                                          await storage.write(
+                                              key: 'logged', value: "");
+                                          await storage.write(
+                                              key: 'userEmail', value: "");
+                                          context.go('/account/login');
+                                        },
+                                        child: Text('Oui'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            tooltip: "Se Deconnecter",
+                            icon: Icon(
+                              Icons.output_rounded,
+                              color: Colors.red,
+                              size: 40,
+                            )),
+                      ),
+                    ),
+                  ],
                 ),
-                const CopyRight()
-              ],
+              ),
             ),
           ),
-        ),
+          const CopyRight()
+        ],
       ),
     );
   },

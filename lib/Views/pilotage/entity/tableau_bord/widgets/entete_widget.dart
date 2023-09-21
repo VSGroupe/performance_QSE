@@ -1,8 +1,5 @@
-import 'package:path/path.dart' as path;
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:easy_container/easy_container.dart';
-import 'package:excel_kit/excel_kit.dart';
-import 'package:excel_kit/sheet.dart';
 import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,9 +20,7 @@ import '../../../../../models/pilotage/enjeuModel.dart';
 import '../../../../../widgets/customtext.dart';
 import '../../../../../widgets/unimpleted_widget.dart';
 import '../../../controllers/tableau_controller.dart';
-import '../../widgets/get_info_espace.dart';
 import 'data_table/row_axe.dart';
-import 'data_table/row_critNormatif.dart';
 
 class EnteteTableauBord extends StatefulWidget {
   const EnteteTableauBord({Key? key}) : super(key: key);
@@ -35,7 +30,7 @@ class EnteteTableauBord extends StatefulWidget {
 }
 
 class _EntityWidgetWidgetState extends State<EnteteTableauBord> {
-  String espace = InfoEspace().getNameEspace();
+  //String espace = InfoEspace().getNameEspace();
   int year = DateTime.now().year;
   String? selectedValueYear;
   String? selectedValueMonth;
@@ -74,9 +69,9 @@ void getAxe(){
       await api_TB.getAxe();
       await api_TB.getEnjeu();
       await api_TB.getCritere();
-      await api_TB.getIndicateur(reference: "Q",
-          annee: _controllerTbQSE.dropdownAnnee.value,
-          entity:espace);
+      //await api_TB.getIndicateur(reference: "Q",
+          //annee: _controllerTbQSE.dropdownAnnee.value,
+         // entity:espace);
       dialog1.show();
       await Future.delayed(Duration(seconds: 2));
       dialog1.dismiss();

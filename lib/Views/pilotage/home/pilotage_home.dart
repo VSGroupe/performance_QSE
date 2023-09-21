@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
 import 'package:perfqse/helpers/helper_methods.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../utils/pilotage_utils.dart';
 import '../../../widgets/copyright.dart';
+import '../entity/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
 import 'widgets/appbar_pilotage_home.dart';
 import 'widgets/content_pilotage_home.dart';
 import 'widgets/header_pilotage_home.dart';
@@ -18,6 +21,7 @@ class PilotageHome extends StatefulWidget {
 
 class _PilotageHomeState extends State<PilotageHome> {
   final storage = FlutterSecureStorage();
+  final ControllerTableauBord controllerTableauBord=Get.put(ControllerTableauBord());
   final supabase = Supabase.instance.client;
   late Future<Map> pilotageHomeData;
 
@@ -74,7 +78,7 @@ class _PilotageHomeState extends State<PilotageHome> {
                       children: [
                         SingleChildScrollView(
                           child: Container(
-                            height: 700,
+                            height: 630,
                             child: Column(
                               children: const [
                                 const SizedBox(height: 10,),

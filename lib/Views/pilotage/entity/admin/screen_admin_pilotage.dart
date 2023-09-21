@@ -30,6 +30,7 @@ class _ScreenPilotageAdminState extends State<ScreenPilotageAdmin> {
   @override
   void initState() {
     super.initState();
+    userAdminController.initialisation();
     loadScreen();
   }
 

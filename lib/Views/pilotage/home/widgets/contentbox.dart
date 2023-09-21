@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:perfqse/module/styled_scrollview.dart';
 
 class ContentBox extends StatefulWidget {
   final Widget? title;
@@ -31,36 +32,36 @@ class _ContentBoxState extends State<ContentBox> {
       )
         //color:Colors.red,
       ),
-      child:Scrollbar(
-        isAlwaysShown: true,
-        thickness: 4.0,
-        child: SingleChildScrollView(
-          child: Column(
-              children:[
-               Container(
-                    height:40,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        color:Colors.red,
-                        borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(20),
-                            topLeft: Radius.circular(20)
-                        )
-                    ),
-                  child: Center(
-                    child: widget.title,
-                  ),
+      child:Column(
+          children:[
+           Container(
+                height:40,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    color:Colors.red,
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(20),
+                        topLeft: Radius.circular(20)
+                    )
                 ),
-                const SizedBox(height: 5,),
-                Center(
+              child: Center(
+                child: widget.title,
+              ),
+            ),
+            const SizedBox(height: 5,),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                height: widget.height-60,
+                child: StyledScrollView(
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: widget.children
                     ),
                 ),
-              ]
-          ),
-        ),
+              ),
+            ),
+          ]
       )
     );
   }

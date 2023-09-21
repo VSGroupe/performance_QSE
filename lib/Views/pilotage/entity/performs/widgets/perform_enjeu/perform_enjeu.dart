@@ -1,4 +1,4 @@
-import 'dart:html';
+//import 'dart:html';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ class PerformanceEnjeu extends StatefulWidget {
 }
 
 class _PerformanceEnjeuState extends State<PerformanceEnjeu> {
-  final IFrameElement _iFrameElement = IFrameElement();
+  //final IFrameElement _iFrameElement = IFrameElement();
   bool _isLoaded = false ;
 
   void initialisation() async {
@@ -24,16 +24,16 @@ class _PerformanceEnjeuState extends State<PerformanceEnjeu> {
   @override
   void initState() {
     initialisation();
-    _iFrameElement.style.height = '100%';
-    _iFrameElement.style.width = '100%';
-    _iFrameElement.src = 'http://test.visionstrategie.com/radar/index.html';
-    _iFrameElement.style.border = 'none';
-
-// ignore: undefined_prefixed_name
-    ui.platformViewRegistry.registerViewFactory(
-      'iframeElement',
-      (int viewId) => _iFrameElement,
-    );
+//     _iFrameElement.style.height = '100%';
+//     _iFrameElement.style.width = '100%';
+//     _iFrameElement.src = 'http://test.visionstrategie.com/radar/index.html';
+//     _iFrameElement.style.border = 'none';
+//
+// // ignore: undefined_prefixed_name
+//     ui.platformViewRegistry.registerViewFactory(
+//       'iframeElement',
+//       (int viewId) => _iFrameElement,
+//     );
     super.initState();
   }
 

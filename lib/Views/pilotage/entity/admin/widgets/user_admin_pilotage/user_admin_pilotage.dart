@@ -1,4 +1,7 @@
 
+import 'dart:core';
+import 'dart:core';
+
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,7 +28,7 @@ class _UserAdminState extends State<UserAdmin> {
   final UserAdminController userAdminController=Get.find();
   @override
   void initState() {
-    
+    userAdminController.initialisation();
     super.initState();
   }
   
@@ -62,14 +65,15 @@ class _UserAdminState extends State<UserAdmin> {
                               columns: const [
                                 DataColumn2(label: Text("Logo"),fixedWidth: 50),
                                 DataColumn2(label: Text("Nom"),fixedWidth: 100),
-                                DataColumn2(label: Text("Prénom(s)"),fixedWidth: 150),
-                                DataColumn2(label: Text("Email"),fixedWidth: 200),
+                                DataColumn2(label: Text("Prénom(s)"),fixedWidth: 200),
+                                DataColumn2(label: Text("Email"),fixedWidth: 250),
                                 DataColumn2(label: Text("Filiale"), size: ColumnSize.S,fixedWidth: 150),
-                                DataColumn2(label: Text("Entités"),fixedWidth: 150),
-                                DataColumn2(label: Text("Niveau d'acces"),fixedWidth: 200),
-                                DataColumn2(label: Text("Bolqué"),fixedWidth: 100),
-                                DataColumn2(label: Text("Fonction"),fixedWidth: 150),
-                                DataColumn2(label: Text("Adresse"),fixedWidth: 200),
+                                DataColumn2(label: Text("Espaces"),fixedWidth: 150),
+                                DataColumn2(label: Text("Niveau d'acces"),fixedWidth: 150),
+                                DataColumn2(label: Text("Bolqué"),fixedWidth:70),
+                                DataColumn2(label: Text("Fonction"),fixedWidth: 100),
+                                DataColumn2(label: Text("Adresse"),fixedWidth: 100),
+                                DataColumn2(label: Text("Ref"),fixedWidth: 50),
                                 DataColumn(label: Text("Created")),
                                 DataColumn(label: Text("Last Signed")),
                               ],
@@ -108,19 +112,24 @@ class _UserAdminState extends State<UserAdmin> {
 
   DataRow userViewModel(UserModel userModel) {
     List<AccesPilotageModel> acces=userAdminController.accesPilotage.where((userAcces) =>userAcces.email==userModel.email.trim() ).toList();
+    String? espace=acces[0].espace?.join("\n");
+    String? ref=userModel.ref?.join("\n");
     return DataRow(cells: [
       DataCell(CircleAvatar(
-        child: FlutterLogo(),
+        child: CircleAvatar(radius: 17,child:Text("${userModel.prenom?[0].capitalize}${userModel.nom?[0].capitalize}",style:TextStyle(
+          fontSize: 18,color: Colors.black,fontWeight: FontWeight.bold
+        ))),
       )),
       DataCell(Text("${userModel.nom}")),
       DataCell(Text("${userModel.prenom}")),
       DataCell(Text(userModel.email)),
       DataCell(Text("${userModel.entreprise}")),
-      DataCell(Text("${acces[0].entite}")),
+      DataCell(Text(espace??"aucun")),
       DataCell(Text(checkAccesType(acces[0])??"aucun")),
-      DataCell(Text("${acces[0].estBloque}")),
+      DataCell(Text(acces[0].estBloque==null?"aucun":"${acces[0].estBloque}")),
       DataCell(Text("${userModel.fonction??""}")),
-      DataCell(Text("${userModel.addresse??""}")),
+      DataCell(Text("${userModel.adresse??""}")),
+      DataCell(Text("${ref}")),
       DataCell(Text("")),
       DataCell(Text("")),
     ]);
@@ -128,11 +137,10 @@ class _UserAdminState extends State<UserAdmin> {
 
   String? checkAccesType(AccesPilotageModel acces){
       String?levelAcces="";
-      if(acces.estAdmin!) levelAcces+="Administarteur";
-      if(acces.estCollecteur!) levelAcces+="Collecteur";
-      if(acces.estSpectateur!) levelAcces+="Spectateur";
-      if(acces.estValidateur!) levelAcces+="Validateur";
-
+      if(acces.estAdmin!) {return "Administarteur";}
+      if(acces.estCollecteur!){return "Collecteur";}
+      if(acces.estSpectateur!) {return "Spectateur";}
+      if(acces.estValidateur!) {return "Validateur";}
       return levelAcces;
   }
 

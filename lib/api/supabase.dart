@@ -1,9 +1,13 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:http/http.dart' as http;
+import '../models/pilotage/axeModel.dart';
+import '../models/pilotage/critereModel.dart';
 import '../models/pilotage/data_indicateur_row_model.dart';
+import '../models/pilotage/enjeuModel.dart';
 import '../models/pilotage/indicateur_model.dart';
 import '../models/pilotage/acces_pilotage_model.dart';
 import '../models/common/user_model.dart';
+import '../models/pilotage/indicateur_row_model.dart';
 
 class DataBaseController {
   final supabase = Supabase.instance.client;
@@ -23,16 +27,50 @@ class DataBaseController {
   }
 
   Future<List<IndicateurModel>> getAllIndicateur() async{
-    final List<Map<String,dynamic>> docs = await supabase.from('Indicateurs').select();
+    final List<Map<String,dynamic>> docs = await supabase.from('Indicateur').select();
     final indicateurs = docs.map((json) => IndicateurModel.fromJson(json)).toList();
     return indicateurs;
   }
-
-  Future<List<DataIndicateurRowModel>> getAllDataRowIndicateur(String entite,int annee) async{
-    final List<dynamic> dataRows = await supabase.from('DataIndicateur').select().eq("entite", entite).lte("annee", annee);
-    List<DataIndicateurRowModel> dataEntiteRowList = dataRows.map((json) => DataIndicateurRowModel.fromJson(json)).toList();
-    return dataEntiteRowList;
+  Future<List<AxeModel>> getAllAxe() async{
+    final List<Map<String,dynamic>> docs = await supabase.from('Axe').select();
+    final axes = docs.map((json) => AxeModel.fromJson(json)).toList();
+    return axes;
   }
+  Future<List<CritereModel>> getAllCritere() async{
+    final List<Map<String,dynamic>> docs = await supabase.from('Critere').select();
+    final criteres = docs.map((json) => CritereModel.fromJson(json)).toList();
+    return criteres;
+  }
+  Future<List<EnjeuModel>> getAllEnjeu() async{
+    final List<Map<String,dynamic>> docs = await supabase.from('Enjeu').select();
+    final enjeux = docs.map((json) => EnjeuModel.fromJson(json)).toList();
+    return enjeux;
+  }
+
+  Future<List<DataIndicateurRowModel>> getAllDataRowIndicateur(String espace,int annee) async{
+    final List<dynamic> dataRows = await supabase.from('DataIndicateur').select().eq("entite", espace).lte("annee", annee);
+    List<DataIndicateurRowModel> dataEspaceRowList = dataRows.map((json) => DataIndicateurRowModel.fromJson(json)).toList();
+    return dataEspaceRowList;
+  }
+
+  Future<List<IndicateurRowTableauBordModel>> getIndicateurWithDataIndicateur(String espace,int annee) async{
+    dynamic dataAssembly=[];
+    dynamic data;
+    final List<dynamic> dataRowIndicateur = await supabase.from('DataIndicateur').select().eq("entite", espace).lte("annee", annee);
+    final List<Map<String,dynamic>> indicateurs = await supabase.from('Indicateur').select();
+    indicateurs.forEach((indicateur) {
+      data.addAll(indicateur);
+      dataRowIndicateur.forEach((dataRowIndicateur) {
+        if(indicateur["numero"]==dataRowIndicateur["numeroIndicateur"]){
+          data.addAll(dataRowIndicateur);
+          dataAssembly.add(data);
+        }
+      });
+    });
+    List<IndicateurRowTableauBordModel>indicateurRowTableauBord=dataAssembly.map((rowTableauBord)=>IndicateurRowTableauBordModel.fromJson(rowTableauBord));
+    return indicateurRowTableauBord;
+  }
+
 
   Future<bool> updateDataIndicateur({required String id,required String field,required Map<String,dynamic> data}) async {
     try {
@@ -76,7 +114,7 @@ class DataBaseController {
   Future<bool> updateUser({required String email,required String nom,required String prenom,required String titre,required String ville,required String adresse,required String fonction,required String numero,required String pays}) async {
     try {
       await Supabase.instance.client.from('Users')
-          .update({'nom': nom,'prenom': prenom,'titre': titre,'ville': ville,'addresse': adresse,'fonction': fonction,'numero': numero,'pays': pays}).eq('email',email);
+          .update({'nom': nom,'prenom': prenom,'titre': titre,'ville': ville,'adresse': adresse,'fonction': fonction,'numero': numero,'pays': pays}).eq('email',email);
       return true;
 
     }catch(e) {

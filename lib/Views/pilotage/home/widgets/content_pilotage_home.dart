@@ -9,6 +9,7 @@ import 'package:perfqse/Views/pilotage/home/widgets/expand_element.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../module/styled_scrollview.dart';
 import '../../../../widgets/customtext.dart';
+import '../../entity/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
 import 'contentbox.dart';
 import 'listefilliale.dart';
 import 'overview_card.dart';
@@ -214,9 +215,10 @@ class EspaceTextButton extends StatefulWidget {
 }
 
 class _EspaceTextButtonState extends State<EspaceTextButton> {
-
+  final ControllerTableauBord controllerTableauBord=Get.find();
   final supabase = Supabase.instance.client;
   final storage = FlutterSecureStorage();
+  final int annee = DateTime.now().year;
 
   Future<void> _showMyDialog() async {
     return showDialog<void>(
@@ -263,6 +265,9 @@ class _EspaceTextButtonState extends State<EspaceTextButton> {
     if (verfication && checkEntite) {
       EasyLoading.dismiss();
       await storage.write(key: 'espace',value:widget.espaceID);
+
+      controllerTableauBord.getAllViewTableauBord(annee: annee, espace: widget.espaceID);
+
       String espaceWithoutSpecialCaratere=widget.espaceID.replaceAll("é","e").replaceAll("è","e");
       final path = "/pilotage/espace/${espaceWithoutSpecialCaratere}/accueil";
       await Future.delayed(Duration(milliseconds: 100));

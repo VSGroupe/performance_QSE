@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:easy_container/easy_container.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:perfqse/Views/pilotage/entity/tableau_bord/strategy_card.dart';
-import 'package:perfqse/Views/pilotage/entity/tableau_bord/widgets/utils_TB.dart';
-
+import 'package:go_router/go_router.dart';
 import '../../controllers/tableau_controller.dart';
-import '../widgets/privacy_widget.dart';
 
 class TableauBord extends StatefulWidget {
   const TableauBord({super.key});
@@ -15,65 +14,159 @@ class TableauBord extends StatefulWidget {
 }
 
 class _TableauBordState extends State<TableauBord> {
-  late ScrollController _scrollController;
+  final storage =FlutterSecureStorage();
   final ControllerTbQSE _controllerTbQSE=Get.find();
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
+  final Location="/pilotage/espace/Bouafle/tableau-de-bord/transite-tableau-bord";
+
+  Future<void> _showDialogNoAcces() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Accès refusé'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text("Vous n'avez pas la référence d'accès à cet espace."),
+                SizedBox(
+                  height: 20,
+                ),
+                Image.asset(
+                  "assets/images/forbidden.png",
+                  width: 50,
+                  height: 50,
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
+
+
+  void getAccess(String centerTitle)async{
+    String? reference = await storage.read(key:"ref");
+    List<String> ref=[""];
+    if (reference!=null){
+      ref =reference.split("\n");
+    }
+    if(ref.contains(centerTitle)) {
+      _controllerTbQSE.centerCicle.value = centerTitle;
+      context.go(Location);
+    }else{
+      _showDialogNoAcces();
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 16,left: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text("Tableau de bord",style: TextStyle(fontSize: 24,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
-            Spacer(flex:4),
-              ElevatedButton(onPressed: (){
-                _controllerTbQSE.InitValue();
-              },style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-            ) ,child: Text("Generale",style:TextStyle(
-              color:Colors.white,
-              fontWeight: FontWeight.bold
-            ),)),
-              SizedBox(width: 20,)
-            ],
-          ),
-          SizedBox(height: 5,),
-          Expanded(child: Theme(
-            data: Theme.of(context).copyWith(scrollbarTheme: ScrollbarThemeData(
-              trackColor:  MaterialStateProperty.all(Colors.black12),
-              trackBorderColor: MaterialStateProperty.all(Colors.black38),
-              thumbColor: MaterialStateProperty.all(Color(0xFF80868B)),
-              interactive: true,
+      height: 630,
+      width: 1000,
+      child: Stack(children: [
+        Positioned(
+            top: 160,
+            right: 385,
+            child: SizedBox(
+              height: 250,
+              width: 250,
+              child: InkWell(
+                  onTap: (){
+                    setState(() {
+                      getAccess("QSE");
+                    });
+                  },
+                  mouseCursor: SystemMouseCursors.click,
+                  child: Image.asset("assets/images/qse.png", fit: BoxFit.contain)),
             )),
-            child: Scrollbar(
-              controller: _scrollController,
-              thumbVisibility: true,
-              thickness: 8,
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                physics: const BouncingScrollPhysics(),
-                child: Center(
-                  child: const Padding(
-                    padding: EdgeInsets.only(right: 15),
-                    child: //QSE(),
-                    NewTableauBord(),
-                  ),
-                ),
-              ),
-            ),
-          )),
-          SizedBox(height: 5,),
-          PrivacyWidget(),
-          SizedBox(height: 10,)
-        ],
-      ),
+        Positioned(
+            top: 0,
+            right: 350,
+            child: SizedBox(
+              height: 160,
+              width: 300,
+              child: InkWell(
+                  onTap: (){
+                    setState(() {
+                      getAccess("QS");
+                    });
+                  },
+                  mouseCursor: SystemMouseCursors.click,child: Image.asset("assets/images/qs.png", fit: BoxFit.contain)),
+            )),
+        Positioned(
+            bottom:0,
+            right: 350,
+            child: SizedBox(
+            height: 200,
+            width: 300,
+            child: InkWell(
+                onTap: (){
+                  setState(() {
+                    getAccess("E");
+                  });
+                },
+                mouseCursor: SystemMouseCursors.click,child: Image.asset("assets/images/e.png", fit: BoxFit.contain)),
+            )),
+        Positioned(
+            top: 140,
+            left: 60,
+            child: SizedBox(
+            height: 160,
+            width: 300,
+            child: InkWell(
+              onTap: (){
+                setState(() {
+                  getAccess("Q");
+                });
+              },
+                mouseCursor: SystemMouseCursors.click,child: Image.asset("assets/images/q.png", fit: BoxFit.contain)),
+            )),
+        Positioned(
+            top: 140,
+            right: 60,
+            child: SizedBox(
+            height: 160,
+            width: 300,
+            child: InkWell(
+                onTap: (){
+                  setState(() {
+                    getAccess("S");
+                  });
+                },
+                mouseCursor: SystemMouseCursors.click,child: Image.asset("assets/images/s.png", fit: BoxFit.contain)),
+            )),
+        Positioned(
+            top: 340,
+            right: 100,
+            child: SizedBox(
+            height: 200,
+            width: 250,
+            child: InkWell(
+                onTap: (){
+                  setState(() {
+                    getAccess("SE");
+                  });
+                },
+                mouseCursor: SystemMouseCursors.click,child: Image.asset("assets/images/se.png", fit: BoxFit.contain)),
+            )),
+        Positioned(
+            top: 340,
+            left: 100,
+            child: SizedBox(
+            height: 200,
+            width: 250,
+            child: InkWell(
+                onTap: (){
+                  setState(() {
+                    getAccess("QE");
+                  });
+                },
+                mouseCursor: SystemMouseCursors.click,child: Image.asset("assets/images/qe.png", fit: BoxFit.contain)),
+            )),
+      ]),
     );
   }
 }

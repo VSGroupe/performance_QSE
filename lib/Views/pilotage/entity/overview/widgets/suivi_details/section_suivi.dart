@@ -217,7 +217,7 @@ class _SectionSuiviState extends State<SectionSuivi> with TickerProviderStateMix
   }
   Widget _buildAnimatedItem(
       BuildContext context,
-      int index,
+      index,
       Animation<double> animation,
       ) =>
       FadeTransition(
@@ -230,18 +230,18 @@ class _SectionSuiviState extends State<SectionSuivi> with TickerProviderStateMix
             begin: Offset(0, -0.1),
             end: Offset.zero,
           ).animate(animation),
-          child: _buildCard(index),
+          child: _buildCard(2),
         ),
       );
 
-  Widget _buildCard(dynamic index) => Builder(
+  Widget _buildCard(index) => Builder(
     builder: (context) => BoxAxe(firsttitle:AxeInfos[index]["firsttitle"],
       secondtitle:AxeInfos[index]["secondtitle"],
       subtitle: AxeInfos[index]["subtitle"],
       color:AxeInfos[index]["color"],
       colorChartSectionFull: Colors.lightGreen,
       colorChartSectionEmpty: Colors.orange,
-      numChartSectionFull: AxeInfos[index]["numfull"],
-      width_1:AxeInfos[index]["width_1"], width_2: AxeInfos[index]["width_2"],),
+      numChartSectionFull: AxeInfos[index]["numfull"].toDouble(),
+      width_1:AxeInfos[index]["width_1"].toDouble(), width_2: AxeInfos[index]["width_2"].toDouble(),),
   );
 }

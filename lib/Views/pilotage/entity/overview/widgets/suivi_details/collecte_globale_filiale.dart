@@ -19,44 +19,44 @@ class _CollecteGlobaleState extends State<CollecteGlobale> {
   dynamic ProcessInfos = [
     {
       "nom":"PC ACHATS",
-      "2022":65,
-      "2023":78
+      "2022":65.0,
+      "2023":78.0
     },
     {
       "nom":"PC CONDITIONNEMENT",
-      "2022":25,
-      "2023":68
+      "2022":25.0,
+      "2023":68.0
     },
     {
       "nom":"PC CONTROLE QUALITE",
-      "2022":70,
-      "2023":45
+      "2022":70.0,
+      "2023":45.0
     },
     {
       "nom":"PC FABRICATION",
-      "2022":69,
-      "2023":80
+      "2022":69.0,
+      "2023":80.0
     },
 
     {
       "nom":"PC LOG",
-      "2022":69,
-      "2023":80
+      "2022":69.0,
+      "2023":80.0
     },
     {
       "nom":"PC MAINTENANCE",
-      "2022":69,
-      "2023":80
+      "2022":69.0,
+      "2023":80.0
     },
     {
       "nom":"PC QSE",
-      "2022":69,
-      "2023":80
+      "2022":69.0,
+      "2023":80.0
     },
     {
       "nom":"PC RH",
-      "2022":69,
-      "2023":80
+      "2022":69.0,
+      "2023":80.0
     },
   ];
 
@@ -93,7 +93,7 @@ class _CollecteGlobaleState extends State<CollecteGlobale> {
     );
   }
   Widget _buildAnimatedItem(BuildContext context,
-      int index,
+      index,
       Animation<double> animation,) =>
       FadeTransition(
         opacity: Tween<double>(
@@ -109,11 +109,14 @@ class _CollecteGlobaleState extends State<CollecteGlobale> {
         ),
       );
 
-  Widget _buildCard(dynamic index) =>
-      Builder(
+  Widget _buildCard(index) {
+
+    return Builder(
         builder: (context) =>
-            BoxProcess(firstvalue:ProcessInfos[index]["2022"],
-                secondvalue: ProcessInfos[index]["2023"], process: ProcessInfos[index]["nom"]));
+            BoxProcess(firstvalue: ProcessInfos[index]["2022"].toDouble(),
+                secondvalue: ProcessInfos[index]["2023"].toDouble(),
+                process: ProcessInfos[index]["nom"]));
+  }
 
 
   DataRow dataRow(Map entityInfo) {

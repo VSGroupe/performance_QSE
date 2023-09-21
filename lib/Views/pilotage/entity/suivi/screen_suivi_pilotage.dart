@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import '../../../../helpers/helper_methods.dart';
+import '../tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
 import '../widgets/privacy_widget.dart';
 import 'monitoring_pilotage.dart';
 
@@ -14,7 +17,7 @@ class ScreenPilotageSuivi extends StatefulWidget {
 class _ScreenPilotageSuiviState extends State<ScreenPilotageSuivi> {
   bool _isLoaded = false;
   late ScrollController _scrollController;
-
+  final ControllerTableauBord controllerTableauBord=Get.find();
   void loadScreen() async {
     await Future.delayed(Duration(seconds: 2));
     setState(() {
@@ -26,6 +29,7 @@ class _ScreenPilotageSuiviState extends State<ScreenPilotageSuivi> {
   void initState() {
     super.initState();
     loadScreen();
+    controllerTableauBord.getAllViewTableauBord();
     _scrollController = ScrollController();
   }
 

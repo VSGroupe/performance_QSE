@@ -19,6 +19,7 @@ import '../Views/pilotage/entity/suivi/screen_suivi_pilotage.dart';
 import '../Views/pilotage/entity/support_client/screen_support_client.dart';
 import '../Views/pilotage/entity/tableau_bord/indicateur_screen.dart';
 import '../Views/pilotage/entity/tableau_bord/screen_tableau_bord_pilotage.dart';
+import '../Views/pilotage/entity/tableau_bord/transite_tableau_bord.dart';
 import '../Views/pilotage/entity/widgets/get_info_espace.dart';
 import '../Views/pilotage/home/pilotage_home.dart';
 import '../helpers/helper_methods.dart';
@@ -89,11 +90,16 @@ class RouteClass {
                             child: const ScreenOverviewPilotage()
                         ),
                       ),
+                      GoRoute(path: 'tableau-de-bord',
+                          pageBuilder: (context, state) => NoTransitionPage<void>(
+                              key: state.pageKey,
+                              child: const ScreenTableauBordPilotage(),),
+                      routes:[
                       GoRoute(
-                        path: 'tableau-de-bord',
+                        path: 'transite-tableau-bord',
                         pageBuilder: (context, state) => NoTransitionPage<void>(
                             key: state.pageKey,
-                            child: const ScreenTableauBordPilotage()
+                            child:  NewTableauBord()
                         ),
                         routes: [
                           GoRoute(
@@ -104,7 +110,7 @@ class RouteClass {
                               ),
                           )
                         ]
-                      ),
+                      ),]),
                       GoRoute(
                         path: 'profil',
                         pageBuilder: (context, state) => NoTransitionPage<void>(

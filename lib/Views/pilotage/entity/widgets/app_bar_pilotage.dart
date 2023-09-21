@@ -19,7 +19,7 @@ class AppBarPilotage extends StatefulWidget {
 class _AppBarPilotageState extends State<AppBarPilotage> {
 
   final SideMenuController sideMenuController = Get.find();
-  String espace = InfoEspace().getNameEspace();
+  //String espace = InfoEspace().getNameEspace();
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +46,8 @@ class _AppBarPilotageState extends State<AppBarPilotage> {
                 sideMenuController.controlMenuCas4();
               }else {
                 sideMenuController.controlMenu();
-              }
-            },
+               }
+             },
             splashRadius: 20,
             padding: EdgeInsets.zero,
             icon: const Icon(
@@ -58,13 +58,17 @@ class _AppBarPilotageState extends State<AppBarPilotage> {
             hoverColor: Color(0xFFEEEEEE),
           ),
           SizedBox(
-            width: responsive == "cas-0" ? 10 : 20,
+            width: //responsive == "cas-0" ? 10 :
+            20,
           ),
-          responsive == "cas-0" ? Container() :Text("",style: TextStyle(fontSize: 18,color:Colors.red,fontWeight: FontWeight.bold),),
+          //responsive == "cas-0" ? Container() :
+          Text("Bouafle",style: TextStyle(fontSize: 18,color:Colors.red,fontWeight: FontWeight.bold),),
           SizedBox(
-            width: responsive == "cas-0" ? 10 : 20,
+            width: //responsive == "cas-0" ? 10 :
+            20,
           ),
-          responsive == "cas-0" ? Text("${espace}",style: TextStyle(fontSize: 18),) : const EntityWidget(),
+          //responsive == "cas-0" ? Text("Bouafle",style: TextStyle(fontSize: 18),) :
+          const EntityWidget(),
           Expanded(child: Container()),
           const Icon(
             Icons.notifications_none_outlined,
@@ -72,15 +76,16 @@ class _AppBarPilotageState extends State<AppBarPilotage> {
             color: Colors.black,
           ),
           SizedBox(
-            width: responsive == "cas-0" ? 10 : 20,
+            width: //responsive == "cas-0" ? 10 :
+            20,
           ),
           InkWell(
             onTap: (){
-              context.go("/pilotage/espace/${espace}/profil");
+              context.go("/pilotage/espace/Bouafle/profil");
             },
             radius: 20,
               child: CircleAvatar( backgroundColor: Colors.red,
-                child: Center(child: CustomText(text: "${widget.shortName}",color: Colors.black,weight: FontWeight.bold,),)),
+                child: Center(child: CustomText(text:widget.shortName ,color: Colors.black,weight: FontWeight.bold,),)),
             ),//Image.asset("assets/images/person1.png", height: 50,width: 50, fit: BoxFit.fitWidth)),
         ],
       ),

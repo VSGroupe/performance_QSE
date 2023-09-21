@@ -13,7 +13,7 @@ class EntityWidget extends StatefulWidget {
 }
 
 class _EntityWidgetState extends State<EntityWidget> {
-  String espace = InfoEspace().getNameEspace();
+  //String espace = InfoEspace().getNameEspace();
 
   bool _isHovering = false;
   @override
@@ -31,7 +31,7 @@ class _EntityWidgetState extends State<EntityWidget> {
         child: Row(
           children: [
             Text(
-              espace,
+              "Bouaflé",
               style: TextStyle(
                   fontSize: 20,
                   color: _isHovering ? Colors.red : Colors.black),

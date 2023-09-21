@@ -27,60 +27,64 @@ class _ScreenSupportClientState extends State<ScreenSupportClient> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.only(top: 16,left: 10),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Support client",style: TextStyle(fontSize: 24,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
-              SizedBox(height: 5,),
-              Card(
-                elevation: 3,
-                child: Container(
-                  width: 1000,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 5,),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
-                        child: Text("Ouvrir un nouveau ticket",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.only(top: 16,left: 10),
+          child: Center(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Support client",style: TextStyle(fontSize: 24,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
+                  SizedBox(height: 5,),
+                  Card(
+                    elevation: 3,
+                    child: Container(
+                      width: 1000,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 5,),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+                            child: Text("Ouvrir un nouveau ticket",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
+                          ),
+                          SizedBox(height: 5,),
+                          Divider(),
+                          SizedBox(height: 5,),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Sujet",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
+                                SizedBox(height: 10),
+                                sujetWidget(),
+                                SizedBox(height: 20),
+                                Text("Votre requête",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
+                                SizedBox(height: 20),
+                                requestWidget(),
+                                SizedBox(height: 20),
+                                Text("Joindre un document",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
+                                SizedBox(height: 10),
+                                filePickerWidget(),
+                                SizedBox(height: 20),
+                                buttonEnvoyer(),
+                                SizedBox(height: 20),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(height: 5,),
-                      Divider(),
-                      SizedBox(height: 5,),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Sujet",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
-                            SizedBox(height: 10),
-                            sujetWidget(),
-                            SizedBox(height: 20),
-                            Text("Votre requête",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
-                            SizedBox(height: 20),
-                            requestWidget(),
-                            SizedBox(height: 20),
-                            Text("Joindre un document",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
-                            SizedBox(height: 10),
-                            filePickerWidget(),
-                            SizedBox(height: 20),
-                            buttonEnvoyer(),
-                            SizedBox(height: 20),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            ],
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
         ),
       ),

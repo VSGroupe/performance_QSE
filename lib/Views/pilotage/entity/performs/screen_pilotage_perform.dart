@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import '../../../../helpers/helper_methods.dart';
+import '../tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
 import '../widgets/privacy_widget.dart';
 import 'perform_pilotage.dart';
 import 'widgets/entete_performance.dart';
@@ -15,8 +18,7 @@ class ScreenPilotagePerform extends StatefulWidget {
 
 class _ScreenPilotagePerformState extends State<ScreenPilotagePerform> {
   bool _isLoaded = false;
-
-
+  final ControllerTableauBord controllerTableauBord=Get.find();
   void loadScreen() async {
     await Future.delayed(Duration(seconds: 2));
     setState(() {
@@ -28,6 +30,7 @@ class _ScreenPilotagePerformState extends State<ScreenPilotagePerform> {
   void initState() {
     super.initState();
     loadScreen();
+    controllerTableauBord.getAllViewTableauBord();
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'customtext.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
@@ -102,7 +103,7 @@ class _CopyRightState extends State<CopyRight> {
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: RichText(
                 text: TextSpan(
-                  text: "Status : ",
+                  text: "Statut : ",
                   children: [
                     TextSpan(
                         text: isConnected ? "Connecté" : "Aucune connection internet" ,
@@ -126,26 +127,28 @@ class _CopyRightState extends State<CopyRight> {
                 borderRadius: BorderRadius.circular(30),
               ),
               child:Container(
-                height: 350,
-                width: 300,
+                height: 450,
+                width: 350,
                 child:Column(
                   children: [
                     Center(
-                      child: Icon(Icons.wifi_off_sharp,size: 60,),
+                      child: Icon(Icons.wifi_off_sharp,size: 150,),
                     ),
                     SizedBox(height: 10,),
-                    Text("Vérifié votre connection et réssayer",style: TextStyle(fontSize:20,color:Colors.black),),
-                    SizedBox(height: 10,),
+                    Text("Vérifié votre connection et réssayer",textAlign: TextAlign.center,style: TextStyle(fontSize:30,color:Colors.black),),
+                    SizedBox(height:80,),
                     SizedBox(
-                      height: 150,
-                      width: 200,
+                      height: 90,
+                      width: 300,
                       child: OutlinedButton(onPressed:(){
+                          Navigator.pop(context);
                       }, style:OutlinedButton.styleFrom(
+                        backgroundColor: Colors.green,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40)
+                          borderRadius: BorderRadius.circular(20)
                         )
                       ),
-                          child:Text("Réssayer",style: TextStyle(fontSize:17,color:Colors.black),)),
+                          child:Text("Réssayer",style: TextStyle(fontSize:20,color:Colors.white),)),
                     )
                   ],
                 )
@@ -169,7 +172,7 @@ class _CopyRightState extends State<CopyRight> {
       } catch (e){
         setState(() {
           print(e.toString());
-          _showDialog();
+         _showDialog();
           isConnected = false;
         });
       }
