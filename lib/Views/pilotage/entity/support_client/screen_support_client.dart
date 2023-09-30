@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../../../../widgets/customtext.dart';
+import '../tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
 
 
 class ScreenSupportClient extends StatefulWidget {
@@ -14,6 +17,7 @@ class ScreenSupportClient extends StatefulWidget {
 class _ScreenSupportClientState extends State<ScreenSupportClient> {
 
   final _formKey = GlobalKey<FormState>();
+  final ControllerTableauBord controllerTableauBord=Get.find();
   late final TextEditingController _sujetController;
   late final TextEditingController _requestController;
 
@@ -21,6 +25,7 @@ class _ScreenSupportClientState extends State<ScreenSupportClient> {
   void initState() {
     _sujetController = TextEditingController();
     _requestController = TextEditingController();
+    controllerTableauBord.assemblyIndicateurWithDataIndicateur();
     super.initState();
   }
 

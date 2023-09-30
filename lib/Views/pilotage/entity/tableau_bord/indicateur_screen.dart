@@ -54,14 +54,11 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _controllerTbQSE.Size.value==400?Text("Tableau de bord",style: TextStyle(fontSize: 24,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),)
-            :Row(
+          Row(
             children: [
               Text("Tableau de bord",style: TextStyle(fontSize: 24,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
               Spacer(flex:4),
               ElevatedButton(onPressed: (){
-                _controllerTbQSE.Size.value=280;
-                _controllerTbQSE.enjeuSelect.value="";
                 context.go("/pilotage/espace/Bouafle/tableau-de-bord/transite-tableau-bord");
               },style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
@@ -120,9 +117,9 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
               )
             ),
           )),
-          SizedBox(height: 20,),
+          SizedBox(height: 10,),
           PrivacyWidget(),
-          SizedBox(height: 20,)
+          SizedBox(height: 5,)
         ],
       ),
     );

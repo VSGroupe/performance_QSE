@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class DataIndicateurRowModel {
-  final String id;
+  final int id;
   final String entite;
   final int annee;
   final int numeroIndicateur;
@@ -46,10 +46,10 @@ class DataIndicateurRowModel {
   String toRawJson() => json.encode(toJson());
 
   factory DataIndicateurRowModel.fromJson(Map<String, dynamic> json) => DataIndicateurRowModel(
-    id: json["_id"],
+    id: json["id"],
     entite: json["entite"],
     annee: json["annee"],
-    numeroIndicateur: json["numero_indicateur"],
+    numeroIndicateur: json["numeroIndicateur"],
     processus: List<String>.from(json["processus"].map((x) => x)),
     realise: DataCellModel.fromJson(json["realise"]),
     janvier: DataCellModel.fromJson(json["janvier"]),
@@ -67,10 +67,10 @@ class DataIndicateurRowModel {
   );
 
   Map<String, dynamic> toJson() => {
-    "_id": id,
+    "id": id,
     "entite": entite,
     "annee": annee,
-    "numero_indicateur": numeroIndicateur,
+    "numeroIndicateur": numeroIndicateur,
     "realise": realise.toJson(),
     "janvier": janvier.toJson(),
     "fevrier": fevrier.toJson(),

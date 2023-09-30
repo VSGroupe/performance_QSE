@@ -76,7 +76,7 @@ class _CollecteGlobaleState extends State<CollecteGlobale> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children:[
               Container(
-                height: 800,
+                height: 400,
                 width:400,
                 child: LiveList(
                   showItemInterval: Duration(milliseconds: 500),

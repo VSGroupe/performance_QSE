@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import '../../../../constants/colors.dart';
+import '../../../../models/pilotage/indicateur_row_model.dart';
 import 'widgets/suivi_details/collecte_globale_filiale.dart';
 import 'widgets/suivi_details/section_suivi.dart';
 import 'widgets/contributeur/liste_contributeur.dart';
-import 'widgets/suivi_details/suivi_details.dart';
 
 class OverviewPilotage extends StatelessWidget {
-  const OverviewPilotage({super.key});
+  final List<IndicateurRowTableauBordModel> indicateurRowTableauBord;
+  const OverviewPilotage({super.key, required this.indicateurRowTableauBord});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-         SectionSuivi(),
+         SectionSuivi(indicateurRowTableauBord:indicateurRowTableauBord),
         const SizedBox(height: defaultPadding),
              Row(
              children: [

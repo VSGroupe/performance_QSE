@@ -75,9 +75,11 @@ final ControllerTableauBord controllerTableauBord=Get.find();
         ),
         Visibility(
           visible: _press,
-          child: Column(
-              children: getCritereNormatifWidget(widget.idEnjeu)
-          ),
+          child:Obx(()
+            =>Column(
+                  children: getCritereNormatifWidget(widget.idEnjeu,controllerTableauBord.criteresTableauBord.toList())
+              ),
+          )
         )
       ],
     );
@@ -85,13 +87,7 @@ final ControllerTableauBord controllerTableauBord=Get.find();
 }
 
 
-List<Widget> getCritereNormatifWidget(String idEnjeu ){
-  List<CritereModel>containCritere=[];
-  for(int i=0;i<DataCritere.length;i++){
-    print(DataCritere[i]);
-    if(DataCritere[i].idEnjeu==idEnjeu){
-      containCritere.add(DataCritere[i]);
-    }
-  }
-  return containCritere.map((critere) =>RowCritereNormatif(idEnjeu:critere.idEnjeu,idCritNormatif:critere.idCritere,CritNormatifTitle:critere.libelle,color: Colors.lightBlue,), ).toList();
+List<Widget> getCritereNormatifWidget(String idEnjeu,List<CritereModel>criteres){
+List<CritereModel> critereContainer=criteres.where((element) =>element.idEnjeu==idEnjeu).toList();
+return critereContainer.map((critere) => RowCritereNormatif(idEnjeu:critere.idEnjeu,numero: critere.idCritere.length==8?critere.idCritere.substring(7, 8):critere.idCritere.substring(7, 9),idCritNormatif:critere.idCritere,CritNormatifTitle:critere.libelle,color: Colors.lightBlue,)).toList();
 }

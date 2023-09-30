@@ -27,71 +27,84 @@ class DataBaseController {
   }
 
   Future<List<IndicateurModel>> getAllIndicateur() async{
-    final List<Map<String,dynamic>> docs = await supabase.from('Indicateur').select();
+    final List<Map<String,dynamic>> docs = await supabase.from('IndicateurTable').select();
     final indicateurs = docs.map((json) => IndicateurModel.fromJson(json)).toList();
     return indicateurs;
   }
   Future<List<AxeModel>> getAllAxe() async{
-    final List<Map<String,dynamic>> docs = await supabase.from('Axe').select();
+    final List<Map<String,dynamic>> docs = await supabase.from('AxeTable').select();
     final axes = docs.map((json) => AxeModel.fromJson(json)).toList();
     return axes;
   }
   Future<List<CritereModel>> getAllCritere() async{
-    final List<Map<String,dynamic>> docs = await supabase.from('Critere').select();
+    final List<Map<String,dynamic>> docs = await supabase.from('CritereTable').select();
     final criteres = docs.map((json) => CritereModel.fromJson(json)).toList();
     return criteres;
   }
   Future<List<EnjeuModel>> getAllEnjeu() async{
-    final List<Map<String,dynamic>> docs = await supabase.from('Enjeu').select();
-    final enjeux = docs.map((json) => EnjeuModel.fromJson(json)).toList();
+    final List<Map<String,dynamic>> docs = await supabase.from('EnjeuTable').select();
+    List<EnjeuModel> enjeux = docs.map((json) => EnjeuModel.fromJson(json)).toList();
     return enjeux;
   }
 
   Future<List<DataIndicateurRowModel>> getAllDataRowIndicateur(String espace,int annee) async{
-    final List<dynamic> dataRows = await supabase.from('DataIndicateur').select().eq("entite", espace).lte("annee", annee);
-    List<DataIndicateurRowModel> dataEspaceRowList = dataRows.map((json) => DataIndicateurRowModel.fromJson(json)).toList();
-    return dataEspaceRowList;
+    final List<dynamic> dataRows = await supabase.from('DataIndicateurTable').select().eq("entite", espace).eq("annee", annee);
+    List<DataIndicateurRowModel> dataRowIndicateur = dataRows.map((json) => DataIndicateurRowModel.fromJson(json)).toList();
+    return dataRowIndicateur;
   }
 
   Future<List<IndicateurRowTableauBordModel>> getIndicateurWithDataIndicateur(String espace,int annee) async{
-    dynamic dataAssembly=[];
-    dynamic data;
-    final List<dynamic> dataRowIndicateur = await supabase.from('DataIndicateur').select().eq("entite", espace).lte("annee", annee);
-    final List<Map<String,dynamic>> indicateurs = await supabase.from('Indicateur').select();
+    List<IndicateurRowTableauBordModel>indicateurRowTableauBord=[];
+    Map<String, dynamic> dataInd={};
+    Map<String, dynamic> Ind={};
+    final List<dynamic> dataRowIndicateur = await supabase.from('DataIndicateurTable').select().eq("entite", espace).eq("annee", annee);
+    final List<Map<String,dynamic>> indicateurs = await supabase.from('IndicateurTable').select();
     indicateurs.forEach((indicateur) {
-      data.addAll(indicateur);
+      //data.add(indicateur);
       dataRowIndicateur.forEach((dataRowIndicateur) {
         if(indicateur["numero"]==dataRowIndicateur["numeroIndicateur"]){
-          data.addAll(dataRowIndicateur);
-          dataAssembly.add(data);
+          dataInd=dataRowIndicateur;
+          Ind=indicateur;
+          Ind.addAll(dataInd);
+          indicateurRowTableauBord.add(IndicateurRowTableauBordModel.fromJson(Ind));
+          print(indicateurRowTableauBord);
         }
       });
     });
-    List<IndicateurRowTableauBordModel>indicateurRowTableauBord=dataAssembly.map((rowTableauBord)=>IndicateurRowTableauBordModel.fromJson(rowTableauBord));
     return indicateurRowTableauBord;
   }
 
-
-  Future<bool> updateDataIndicateur({required String id,required String field,required Map<String,dynamic> data}) async {
+  Future<bool> updateDataIndicateur(IndicateurRowTableauBordModel dataIndicateur ) async {
+    int idIndicator=dataIndicateur.idIndicateur;
+    Map<String, dynamic> jsonDataIndicateur=dataIndicateur.toJson();
     try {
-      await Supabase.instance.client.from('DataIndicateur')
-          .update({'${field}': data}).eq('_id', id);
+      await Supabase.instance.client.from('DataIndicateurTable') .update(jsonDataIndicateur).eq('numeroIndicateur',idIndicator);
       return true;
-
     }catch(e) {
-      return false;
+      throw(e);
     }
   }
 
-  Future<bool> validerDataIndicateur({required String id,required String field,required Map<String,dynamic> data}) async {
-    try {
-      await Supabase.instance.client.from('DataIndicateur').update({'${field}': data}).eq('_id', id);
-      return true;
-
-    }catch(e) {
-      return false;
-    }
-  }
+  // Future<bool> updateDataIndicateur({required String id,required String field,required Map<String,dynamic> data}) async {
+  //   try {
+  //     await Supabase.instance.client.from('DataIndicateur')
+  //         .update({'${field}': data}).eq('_id', id);
+  //     return true;
+  //
+  //   }catch(e) {
+  //     return false;
+  //   }
+  // }
+  //
+  // Future<bool> validerDataIndicateur({required String id,required String field,required Map<String,dynamic> data}) async {
+  //   try {
+  //     await Supabase.instance.client.from('DataIndicateur').update({'${field}': data}).eq('_id', id);
+  //     return true;
+  //
+  //   }catch(e) {
+  //     return false;
+  //   }
+  // }
 
 // Users 
   Future<List<UserModel>> getAllUser() async{

@@ -47,19 +47,17 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                           onPressed: () {
 
                           },
-                          child: Text(
+                          child: const Text(
                             "Démarer une évaluation",
                             style: TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
                           )),
                     ),
                     SizedBox(height: 13,),
-                    Text(
-                      "Menu Principal",
+                    const Text("Menu Principal",
                       textAlign:TextAlign.center,
                       style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
-                    ),
+                          fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),),
                   ],
                 ),
               ),
@@ -138,23 +136,6 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                 label: "Accueil Général",
               ),
               SizedBox(height: 18),
-
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.start,
-              //   children: [
-              //     SwitcherButton(
-              //       value: true,
-              //       onChange: (value) {
-              //         print(value);
-              //       },
-              //     ),
-
-              //     SizedBox(width: 7,),
-              //     Text("Mode Nuit", style: TextStyle(fontSize: 18, color: Colors.black))
-
-              // ],
-
-              // ),
             ],
           ),
         ),

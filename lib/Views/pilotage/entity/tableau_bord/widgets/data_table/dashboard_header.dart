@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:perfqse/Views/pilotage/entity/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
 
 import '../../../../controllers/tableau_controller.dart';
 
@@ -11,7 +12,7 @@ class DashBoardHeader extends StatefulWidget {
 }
 
 class _DashBoardHeaderState extends State<DashBoardHeader> {
-  final ControllerTbQSE _controllerTbQSE=Get.find();
+  final ControllerTableauBord controllerTb=Get.find();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,8 +33,8 @@ class _DashBoardHeaderState extends State<DashBoardHeader> {
             DashBoardHeaderTitle(color: Colors.brown, size: 70,title: "Type",),
             DashBoardHeaderTitle(color: Colors.brown, size: 80,title: "Unite",),
             DashBoardHeaderTitle(color: Colors.brown, size: 100,title: "Processus",),
-            DashBoardHeaderTitle(color: Colors.brown, size: 170,title: "Réalisé 2023",),
-            Obx(() =>  MonthHeader(color: Colors.brown, size: 150,title: "${_controllerTbQSE.dropdownMois.value}",),
+            Obx(() => DashBoardHeaderTitle(color: Colors.brown, size: 170,title: "Réalisé ${controllerTb.anneeSelectFiltre.value}",)),
+            Obx(() =>  MonthHeader(color: Colors.brown, size: 150,title: "${controllerTb.moisSelectFiltre.value}",),
             ),
             DashBoardHeaderTitle(color: Colors.brown, size: 100,title: "Cible",),
             DashBoardHeaderTitle(color: Colors.brown, size: 104,title: "Ecart",),

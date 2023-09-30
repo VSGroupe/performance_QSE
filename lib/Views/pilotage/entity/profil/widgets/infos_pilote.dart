@@ -4,6 +4,7 @@ import '../../../../../api/supabase.dart';
 import '../../../../../helpers/helper_methods.dart';
 import '../../../../../models/common/user_model.dart';
 import '../../../../../models/pilotage/acces_pilotage_model.dart';
+import '../../../../../module/styled_scrollview.dart';
 import '../../../../../widgets/custom_text_form_field.dart';
 import '../../../../../widgets/customtext.dart';
 import '../../../../../widgets/menu_deroulant.dart';
@@ -76,29 +77,32 @@ class _InfosPiloteState extends State<InfosPilote> {
           height: 10,
         ),
         Expanded(
-            child: Container(
-              height: 700,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  headerPilote(),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                          flex: 1,
-                          child: Container(
-                            height: 400,
-                            child: piloteInfoPilote(),
-                          )),
-                      Expanded(
-                          flex: 3,
-                          child: Container(height: 400, child: contactPilote())),
-                    ],
-                  )
-                ],
+            child: StyledScrollView(
+              child: Container(
+                height: 500,
+                width: 1100,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    headerPilote(),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                            flex: 1,
+                            child: Container(
+                              height: 400,
+                              child: piloteInfoPilote(),
+                            )),
+                        Expanded(
+                            flex: 3,
+                            child: Container(height: 400, child: contactPilote())),
+                      ],
+                    )
+                  ],
+                ),
               ),
             )),
         Container(

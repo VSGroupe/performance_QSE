@@ -1,7 +1,9 @@
 import 'dart:convert';
 class IndicateurRowTableauBordModel {
   int idIndicateur;
+  int idTb;
   var axe;
+  final String entite;
   var enjeu;
   var critereNormatif;
   var intitule;
@@ -29,6 +31,8 @@ class IndicateurRowTableauBordModel {
 
   IndicateurRowTableauBordModel({
     required this.idIndicateur,
+    required this.idTb,
+    required this.entite,
     required this.axe,
     required this.annee,
     required this.enjeu,
@@ -62,6 +66,8 @@ class IndicateurRowTableauBordModel {
 
   factory IndicateurRowTableauBordModel.fromJson(Map<String, dynamic> json) => IndicateurRowTableauBordModel(
     idIndicateur: json["numero"],
+    idTb: json["id"],
+    entite:json["entite"],
     axe: json["id_axe"],
     annee: json["annee"],
     enjeu: json["enjeu"],
@@ -89,20 +95,22 @@ class IndicateurRowTableauBordModel {
     decembre: Aout.fromJson(json["decembre"]),
   );
 
-  Map<String, dynamic> toJson() => {
-    "numero": idIndicateur,
-    "id_axe": axe,
-    "id_axe": annee,
-    "enjeu": enjeu,
-    "critereNormatif": critereNormatif,
-    "intitule": intitule,
+   Map<String, dynamic> toJson() => {
+    "numeroIndicateur": idIndicateur,
+    "id":idTb,
+    "entite":entite,
+    //"id_axe": axe,
+    "annee": annee,
+    //"enjeu": enjeu,
+    //"critereNormatif": critereNormatif,
+    //"intitule": intitule,
     "processus": List<dynamic>.from(processus.map((x) => x)),
-    "unite": unite,
-    "type": type,
-    "definition": definition,
-    "valRef": valRef,
-    "cible": cible,
-    "ecart": ecart,
+    //"unite": unite,
+    //"type": type,
+    //"definition": definition,
+    //"valRef": valRef,
+    //"cible": cible,
+    //"ecart": ecart,
     "realisee": realisee.toJson(),
     "janvier": janvier.toJson(),
     "fevrier": fevrier.toJson(),

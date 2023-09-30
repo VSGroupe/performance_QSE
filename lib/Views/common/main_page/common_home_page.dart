@@ -8,11 +8,9 @@ import 'package:marquee_text/marquee_text.dart';
 import 'package:perfqse/Views/common/main_page/widget/banniere.dart';
 import 'package:perfqse/Views/common/main_page/widget/custom_cadre.dart';
 import 'package:perfqse/Views/common/main_page/widget/header_main_page.dart';
-import 'package:perfqse/Views/evaluation/overview/screen_overview_evaluation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../widgets/copyright.dart';
 import '../../../helpers/helper_methods.dart';
-import '../../evaluation/evaluation_main_page.dart';
 import '../../pilotage/home/pilotage_home.dart';
 
 class MainPage extends StatefulWidget {
@@ -88,6 +86,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   Future<bool> checkAccesEvaluation(String email) async {
+    var data;
     final result = await supabase.from("AccesAudit").select().eq("email", email);
     final acces = result[0];
     if (acces["est_bloque"]) {
@@ -98,7 +97,7 @@ class _MainPageState extends State<MainPage> {
         acces["est_collecteur"] ||
         acces["est_validateur"] ||
         acces["est_admin"]) {
-      context.go("/audit/accueil");
+      context.go("/audit/transite");
       return true;
     }
     _showMyDialog();
@@ -119,6 +118,7 @@ class _MainPageState extends State<MainPage> {
           );
         }
         final data = snapshot.data!;
+
     return Scaffold(
       body: Column(
         children: [

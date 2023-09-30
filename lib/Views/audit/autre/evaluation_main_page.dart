@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../helpers/helper_methods.dart';
+import '../../../helpers/helper_methods.dart';
 import 'widgets/drawer_audit.dart';
 import 'widgets/evaluation_utils.dart';
 import 'widgets/app_bar_audit.dart';

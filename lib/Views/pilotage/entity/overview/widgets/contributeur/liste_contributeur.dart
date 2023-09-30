@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../../../../../constants/colors.dart';
 import '../../../../../../helpers/responsive.dart';
+import 'Chart.dart';
 import 'contributeur_model.dart';
 
 class ListeContributeur extends StatefulWidget {
@@ -53,74 +54,79 @@ class _ListeContributeurState extends State<ListeContributeur> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Container(
-        width: double.infinity,
-        height: 800,
-        //padding:  EdgeInsets.all(defaultPadding),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 12,),
-              Row(
-                children: [
-                  const SizedBox(width: 20,),
-                  Text(
-                    "Liste des contributeurs",
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  Spacer(flex: 6,),
-                  ElevatedButton.icon(
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: defaultPadding * 1.5,
-                        vertical:
-                        defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
-                      ),
-                    ),
-                    onPressed: () {},
-                    icon: Icon(Icons.add,color: Colors.white,),
-                    label: Text("Ajouter",style: TextStyle(color: Colors.white),),
-                  ),
-                  const SizedBox(width: 20,),
-                ],
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: DataTable(
-                    columnSpacing: 12,
-                    horizontalMargin: 12,
-                    columns: const [
-                      DataColumn(
-                        label: Text("Nom",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-                      ),
-                      DataColumn(
-                        label: Text("Filiale",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),
-                      ),
-                      DataColumn(
-                        label: Text("Accès",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),
-                      ),
-                    ],
-                    rows: List.generate(
-                      demoContributeurs.length,
-                          (index) => contributeursDataRow(demoContributeurs[index]),
-                    )
-                ),
-              )
-            ],
+      child: Card(
+        elevation: 5,
+        child: Container(
+          width: double.infinity,
+          height: 440,
+          //padding:  EdgeInsets.all(defaultPadding),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
-        ),
+          child:const ChartConso() ,
 
+        ),
       ),
     );
   }
 
+
+  // SingleChildScrollView(
+  // controller: _scrollController,
+  // child: Column(
+  // crossAxisAlignment: CrossAxisAlignment.start,
+  // children: [
+  // SizedBox(height: 12,),
+  // Row(
+  // children: [
+  // const SizedBox(width: 20,),
+  // Text(
+  // "Liste des contributeurs",
+  // style: Theme.of(context).textTheme.titleMedium,
+  // ),
+  // Spacer(flex: 6,),
+  // ElevatedButton.icon(
+  // style: TextButton.styleFrom(
+  // backgroundColor: Colors.red,
+  // padding: EdgeInsets.symmetric(
+  // horizontal: defaultPadding * 1.5,
+  // vertical:
+  // defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
+  // ),
+  // ),
+  // onPressed: () {},
+  // icon: Icon(Icons.add,color: Colors.white,),
+  // label: Text("Ajouter",style: TextStyle(color: Colors.white),),
+  // ),
+  // const SizedBox(width: 20,),
+  // ],
+  // ),
+  // SizedBox(
+  // width: double.infinity,
+  // child: DataTable(
+  // columnSpacing: 12,
+  // horizontalMargin: 12,
+  // columns: const [
+  // DataColumn(
+  // label: Text("Nom",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+  // ),
+  // DataColumn(
+  // label: Text("Filiale",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),
+  // ),
+  // DataColumn(
+  // label: Text("Accès",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),
+  // ),
+  // ],
+  // rows: List.generate(
+  // demoContributeurs.length,
+  // (index) => contributeursDataRow(demoContributeurs[index]),
+  // )
+  // ),
+  // )
+  // ],
+  // ),
+  // )
   DataRow contributeursDataRow(ContributeurModel fileInfo) {
     return DataRow(
       cells: [

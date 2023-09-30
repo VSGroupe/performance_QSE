@@ -7,6 +7,7 @@ import '../../../../helpers/helper_methods.dart';
 import '../../../../models/common/user_model.dart';
 import '../../../../models/pilotage/acces_pilotage_model.dart';
 import '../../../../utils/pilotage_utils.dart';
+import '../tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
 import 'controller/profil_pilotage_controller.dart';
 import 'profil_pilotage.dart';
 
@@ -23,6 +24,7 @@ class _ScreenPilotageProfilState extends State<ScreenPilotageProfil> {
 
   final storage = FlutterSecureStorage();
   final ProfilPilotageController userController= Get.put(ProfilPilotageController());
+  final ControllerTableauBord controllerTableauBord=Get.find();
   final supabase = Supabase.instance.client;
   late Future<Map> pilotageEntiteData;
 
@@ -44,6 +46,7 @@ class _ScreenPilotageProfilState extends State<ScreenPilotageProfil> {
   @override
   void initState(){
     pilotageEntiteData = chekUserAccesPilotage();
+    controllerTableauBord.assemblyIndicateurWithDataIndicateur();
     super.initState();
   }
 

@@ -2,8 +2,10 @@ import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:easy_container/easy_container.dart';
 import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:perfqse/Views/pilotage/entity/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
 import 'package:perfqse/Views/pilotage/entity/tableau_bord/widgets/processus.dart';
 import 'package:selector_wheel/selector_wheel/models/selector_wheel_value.dart';
 import 'package:selector_wheel/selector_wheel/selector_wheel.dart';
@@ -30,12 +32,10 @@ class EnteteTableauBord extends StatefulWidget {
 }
 
 class _EntityWidgetWidgetState extends State<EnteteTableauBord> {
-  //String espace = InfoEspace().getNameEspace();
+  final storage =FlutterSecureStorage();
+  final Location="/pilotage/espace/Bouafle/tableau-de-bord/transite-tableau-bord/indicateurs";
   int year = DateTime.now().year;
-  String? selectedValueYear;
-  String? selectedValueMonth;
-  final ControllerTbQSE _controllerTbQSE=Get.find();
-  final ApiTableau_Bord api_TB = ApiTableau_Bord();
+  final ControllerTableauBord controllerTb=Get.find();
   late TextEditingController mois_controller = TextEditingController();
   List<ProcessM>ProcessEntity=
   [
@@ -50,39 +50,8 @@ class _EntityWidgetWidgetState extends State<EnteteTableauBord> {
   ];
 
 
-void getAxe(){
-  var id_axe=_controllerTbQSE.axeSelect.value;
-  var name_axe=_controllerTbQSE.nameAxeSelect.value;
-  RowAxe(idAxe: "${id_axe}",title: "${name_axe}",color: Colors.brown);
-}
 
-  void getCritInd()async {
-    try {
-      StylishDialog dialog1 = StylishDialog(
-        context: context,
-        alertType: StylishDialogType.PROGRESS,
-        style: DefaultStyle(),
-        controller: _controller,
-        title: Text('Traitement...'),
-      );
-      //show stylish dialog
-      await api_TB.getAxe();
-      await api_TB.getEnjeu();
-      await api_TB.getCritere();
-      //await api_TB.getIndicateur(reference: "Q",
-          //annee: _controllerTbQSE.dropdownAnnee.value,
-         // entity:espace);
-      dialog1.show();
-      await Future.delayed(Duration(seconds: 2));
-      dialog1.dismiss();
-      ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Succès","Indicateurs Chargés avec succès",Colors.green));
-    }on Exception catch (e) {
-      final message = e.toString().split("Exception: ").join("");
-      ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Echec",message,Colors.red));
-    }
-  }
-
-  void updateIndic()async{
+  void updateIndic(BuildContext context)async{
     try{
       StylishDialog dialog1 = StylishDialog(
         context: context,
@@ -93,9 +62,9 @@ void getAxe(){
       );
       //show stylish dialog
       dialog1.show();
+      controllerTb.updateDataBase(controllerTb.containerUpdateIndicateurRow);
       await Future.delayed(Duration(seconds: 2));
       dialog1.dismiss();
-      await api_TB.updateIndicateur(reference:"Q", annee: _controllerTbQSE.dropdownAnnee.value, containIndic: containIndModifer,  );
     }on Exception catch (e){
       final message = e.toString().split("Exception: ").join("");
       await Future.delayed(Duration(seconds: 2));
@@ -114,17 +83,6 @@ void getAxe(){
     },
   );
 
-
-  @override
-  void initState() {
-    mois_controller=TextEditingController();
-    super.initState();
-  }
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
   List<String> tb_elem=[
     "Critères","Enjeux","Axes"
   ];
@@ -133,22 +91,33 @@ void getAxe(){
   List<AxeModel>? selectedAxeList = [];
   List<ProcessM>? selectedProcessList = [];
 
-  List<EnjeuModel>DataEnj=DataEnjeu;
-  List<CritereModel>DataCrit=DataCritere;
-  List<AxeModel>DataAx=DataAxe;
-
+  late List<EnjeuModel>DataEnj;
+  late List<CritereModel>DataCrit;
+  late List<AxeModel>DataAx;
 
   @override
+  void initState() {
+    mois_controller=TextEditingController();
+    DataAx=controllerTb.axes;
+    DataCrit=controllerTb.criteres;
+    DataEnj=controllerTb.enjeux;
+    super.initState();
+  }
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
-    void _openTabbedDialog(BuildContext context) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return TabbedDialog();
-        },
-      );
-    }
-    selectedValueYear="${year}";
+    // void _openTabbedDialog(BuildContext context) {
+    //   showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       return TabbedDialog();
+    //     },
+    //   );
+    // }
     return  Container(
         alignment: Alignment.bottomRight,
         child: Row(
@@ -163,71 +132,102 @@ void getAxe(){
                     fontSize: 18
                 )),
                 SizedBox(height:2,),
-                EasyContainer(
-                  onTap:(){
-                    showDialog(
-                      context:context,
-                      builder:(BuildContext context){
-                        return AlertDialog(
-                          title:Text("Selectionner l'année"),
-                          content:Container(
-                            height: 170,
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  width:200,
-                                  height: 150,
-                                  child: SelectorWheel(
-                                    width:double.infinity,
-                                    childCount: 10,
-                                    selectedItemIndex:1,
-                                    convertIndexToValue: (int index) {
-                                      return SelectorWheelValue(
-                                        label: "${year-index}",
-                                        value: year-index,
-                                        index:year-index,
-                                      );
-                                    },
-                                    onValueChanged: (SelectorWheelValue<int> value) {
-                                      setState(() {
-                                        _controllerTbQSE.dropdownAnnee_last.value="${value.value}";
-                                      });
-                                    },
-                                  ),
-                                ),
-
-                              ],
-                            ),
-                          ),
-                            actions:[
-                              OutlinedButton(onPressed:(){
-                                Navigator.pop(context);
-                              }, child: Text("Annuler")),
-                              OutlinedButton(onPressed:(){
-                                setState(() {
-                                  _controllerTbQSE.dropdownAnnee.value=_controllerTbQSE.dropdownAnnee_last.value;
-                                  Navigator.of(context).pop();
-                                  getCritInd();
-                                });
-                              }, child: Text("Sauvegarder"))
-                            ]
-
-                        );
-                      }
-                    );
-                  },
-                  mouseCursor: SystemMouseCursors.click,
-                  width: 120,
-                    height: 50,
-                    showBorder:true,
-                    color: Colors.white,
-                    customBorderRadius:BorderRadius.circular(10),
-                    child: Center(child: Obx(()=>Text("${ _controllerTbQSE.dropdownAnnee.value}",style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),),
-                    ))
-                )
+                PopupMenuButton(
+                    itemBuilder:(context){
+                      return [
+                        PopupMenuItem(
+                            onTap: ()async{
+                              setState(() {
+                                controllerTb.anneeSelectFiltre.value=year-2;
+                              });
+                              final storage=FlutterSecureStorage();
+                              final String? espace=await storage.read(key:"espace");
+                                controllerTb.getAllViewTableauBord(annee:controllerTb.anneeSelectFiltre.value , espace: espace);
+                                if(controllerTb.indicateurRowTableauBord.isEmpty){
+                                  ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Erreur"
+                                      ,"Les données n'existes pas", Colors.red));
+                                }else{
+                                  ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Succès"
+                                      ,"Chargement effectué", Colors.green));
+                                }
+                              },
+                            child:Text("${year-2}")),
+                        PopupMenuItem(
+                            onTap: () async {
+                              setState(() {
+                                controllerTb.anneeSelectFiltre.value=year-1;
+                              });
+                              final storage=FlutterSecureStorage();
+                              final String? espace=await storage.read(key:"espace");
+                              try{
+                                controllerTb.getAllViewTableauBord(annee: controllerTb.anneeSelectFiltre.value, espace:espace);
+                              }on Exception catch(e){
+                                ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Erreur"
+                                    ,"Un Problème est survenue lors du chargement des données", Colors.green));
+                              }
+                              },
+                            child:Text("${year-1}")),
+                        PopupMenuItem(
+                            onTap: () async {
+                              setState(() {
+                                controllerTb.anneeSelectFiltre.value=year;
+                              });
+                              final storage=FlutterSecureStorage();
+                              final String? espace=await storage.read(key:"espace");
+                              try{
+                                controllerTb.getAllViewTableauBord(annee: controllerTb.anneeSelectFiltre.value, espace: espace);
+                              }on Exception catch(e){
+                                ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Erreur"
+                                    ,"Un Problème est survenue lors du chargement des données", Colors.green));
+                              }
+                              },
+                            child:Text("${year}")),
+                        PopupMenuItem(
+                            onTap: () async {
+                              setState(() {
+                                controllerTb.anneeSelectFiltre.value=year+1;
+                              });
+                              final storage=FlutterSecureStorage();
+                              final String? espace=await storage.read(key:"espace");
+                              try{
+                                controllerTb.getAllViewTableauBord(annee: controllerTb.anneeSelectFiltre.value, espace:espace);
+                              }on Exception catch(e){
+                                ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Erreur"
+                                    ,"Un Problème est survenue lors du chargement des données", Colors.green));
+                              }
+                              },
+                            child:Text("${year+1}")),
+                        PopupMenuItem(
+                            onTap: ()async{
+                              setState(() {
+                                controllerTb.anneeSelectFiltre.value=year+2;
+                              });
+                              final storage=FlutterSecureStorage();
+                              final String? espace=await storage.read(key:"espace");
+                              try{
+                                controllerTb.getAllViewTableauBord(annee: controllerTb.anneeSelectFiltre.value, espace: espace);
+                              }on Exception catch(e){
+                                ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Erreur"
+                                    ,"Un Problème est survenue lors du chargement des données", Colors.green));
+                              }
+                              },
+                            child:Text("${year+2}")),
+                      ];
+                    },
+                    child:EasyContainer(
+                        mouseCursor: SystemMouseCursors.click,
+                        width: 120,
+                        height: 50,
+                        showBorder:true,
+                        color: Colors.white,
+                        customBorderRadius:BorderRadius.circular(10),
+                        child: Center(child: Obx(()=>Text("${ controllerTb.anneeSelectFiltre.value}",style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),),
+                        ))
+                    )
+                ),
               ],
             ),
             const SizedBox(width: 10,),
@@ -252,10 +252,13 @@ void getAxe(){
                       )
                   ),
                   child: CustomDropdown.search(
-                    hintText: "Mois",
-                    items:  ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Decembre"],
-                    controller: mois_controller,
-                  ),
+                        hintText: controllerTb.moisSelectFiltre.value,
+                        items:  ["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Decembre"],
+                        controller: mois_controller,
+                        onChanged:(value){
+                          controllerTb.moisSelectFiltre.value=value;
+                        }
+                    ),
                 ),
               ],
             ),
@@ -284,113 +287,101 @@ void getAxe(){
                       itemBuilder: (BuildContext context) {
                         return [
                           PopupMenuItem(
-                              child: EasyContainer(
-                                  onTap: (){
-                                    _openAxeFilterDialog();
-                                  },
-                                  mouseCursor:SystemMouseCursors.click,width:100,height: 50,color:Colors.red, child:Text("Axes",style: TextStyle(color:Colors.white,fontSize: 15),)),
+                            onTap: (){
+                              _openAxeFilterDialog();
+                            },
+                              child: Center(child: Text("Axes",style: TextStyle(color:Colors.black,fontSize: 20,fontWeight: FontWeight.bold),)),
                           ),
                           PopupMenuItem(
-                            child: EasyContainer(
-                              onTap: (){
-                                _openEnjeuFilterDialog();
-                              },
-                                mouseCursor:SystemMouseCursors.click,
-                                width: 100,height: 50,color:Colors.red, child:Text("Enjeux",style: TextStyle(color:Colors.white,fontSize: 15),)),
+                            onTap:(){
+                              _openEnjeuFilterDialog();
+                            },
+                            child: Center(child: Text("Enjeux",style: TextStyle(color:Colors.black,fontSize: 20,fontWeight: FontWeight.bold),)),
                           ),
                           PopupMenuItem(
-                            child: EasyContainer(
-                                onTap: (){
-                                  _openCritereFilterDialog();
-                                },
-                        mouseCursor:SystemMouseCursors.click,width: 100,height: 50,color:Colors.red, child:Text("Critéres",style: TextStyle(color:Colors.white,fontSize: 15),)),
+                            onTap: (){
+                              _openCritereFilterDialog();
+                            },
+                            child: Center(child: Text("Critères",style: TextStyle(color:Colors.black,fontSize: 20,fontWeight: FontWeight.bold),)),
                           ),
                           PopupMenuItem(
                             onTap: (){
                               _openProcessusFilterDialog();
                             },
-                            mouseCursor:SystemMouseCursors.click,
-                            child: EasyContainer(
-                                onTap: (){
-                                  _openProcessusFilterDialog();
-                                },
-                                mouseCursor:SystemMouseCursors.click,width: 100,height: 50,color:Colors.red, child:Text("Processus",style: TextStyle(color:Colors.white,fontSize: 15),)),
+                            child: Center(child: Text("Processus",style: TextStyle(color:Colors.black,fontSize: 20,fontWeight: FontWeight.bold),)),
                           ),
                         ];
                       },
                     ),
-                    IconButton(
-                        tooltip:"Filtrer",
-                        onPressed:(){
-                          _openTabbedDialog(context);
-                        },
-                        icon: Icon(Icons.filter_alt,size: 25,)),
+                    // IconButton(
+                    //     tooltip:"Filtrer",
+                    //     onPressed:(){
+                    //       _openTabbedDialog(context);
+                    //     },
+                    //     icon: Icon(Icons.filter_alt,size: 25,)),
                     SizedBox(width:3,),
                     IconButton(
-                        tooltip:"Désactiver les filtres",
-                        onPressed:(){
-                          setState(() {
-                            selectedCritereList = [];
-                            selectedEnjeuList = [];
-                            selectedAxeList = [];
-                          });
-                        },
-                        icon: Icon(Icons.filter_alt_off_rounded,size: 25,))
+                          tooltip:"Cliquer pour désactiver les filtres",
+                          onPressed:()async{
+                            controllerTb.disableFilter();
+                            mois_controller.text=controllerTb.moisSelectFiltre.value;
+                          },
+                          icon: Icon(Icons.filter_alt_off_rounded,size: 25,)),
                   ],
                 ),
             ],),
             Expanded(child: Container()),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: IconButton(
-                  splashRadius: 20,padding: EdgeInsets.zero,
-                  onPressed: () async{
-                    setState(() {
-                      _controllerTbQSE.dropdownMois.value=mois_controller.text;
-                      // _tb_qse.dropdownAnnee.value=annee_controller.text;
-                      //getCritere();
-                      print(_controllerTbQSE.dropdownMois.value);
-                      getAxe();
-
-                    });
-                  },
-                  icon: const Icon(Iconsax.refresh,color: Color(0xFF4F80B5),)
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextButton.icon(
-                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
-                  onPressed: () {
-                   setState(() {
-
-                   });
-                  },
-                  icon: const Icon(Iconsax.export,color: Colors.white,),
-                  label: const CustomText(
-                    text: "Exporter",
-                    color: light,
-                    size: 15,
-                  )),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: IconButton(
+            //       splashRadius: 20,padding: EdgeInsets.zero,
+            //       onPressed: () async{
+            //         String? espace=await storage.read(key:"espace");
+            //         setState(() {
+            //           controllerTb.moisSelectFiltre.value=mois_controller.text;
+            //
+            //         });
+            //       },
+            //       icon: const Icon(Iconsax.refresh,color: Color(0xFF4F80B5),)
+            //   ),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: TextButton.icon(
+            //       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
+            //       onPressed: () {
+            //        setState(() {
+            //
+            //        });
+            //       },
+            //       icon: const Icon(Iconsax.export,color: Colors.white,),
+            //       label: const CustomText(
+            //         text: "Exporter",
+            //         color: light,
+            //         size: 15,
+            //       )),
+            // ),
             InkWell(
               onTap: (){
                 setState(() {
-                  updateIndic();
-                  getCritInd();
-                  containIndModifer=[];
+                  updateIndic(context);
+                  controllerTb.containerUpdateIndicateurRow=[];
                 });
               },
               child:Container(
+                  width: 120,
                   padding: const EdgeInsets.all(8),
+                  margin: EdgeInsets.only(right: 16),
                   decoration: BoxDecoration(
                     border: Border.all(width: 3.0),
                     borderRadius: const BorderRadius.all(Radius.circular(30.0)),
                   ),
-                  child: const CustomText(
-                    text: "Sauvegarder",
-                    size: 13,
-                    color: Colors.green,
+                  child: Center(
+                    child: const CustomText(
+                      text: "Sauvegarder",
+                      size: 13,
+                      color: Colors.green,
+                    ),
                   )),
             )
             // Container(
@@ -434,12 +425,21 @@ void getAxe(){
     return critere.libelle!.toLowerCase().contains(query.toLowerCase());
     },
 
-    onApplyButtonClick: (list) {
-    setState(() {
-    selectedCritereList = List.from(list!);
-    });
-    },
-
+      onApplyButtonClick: (list)async{
+        String? espace=await storage.read(key:"espace");
+        context.go(Location);
+        setState(() {
+          controllerTb.criteresTableauBord.value=List.from(list!).isEmpty?controllerTb.criteresTableauBord:List.from(list!);
+        });
+        controllerTb.doFilter(
+          annee: controllerTb.anneeSelectFiltre.value ,
+          espace: espace,
+          mois:controllerTb.moisSelectFiltre.value,
+          axe: selectedAxeList??[],
+          critere: selectedCritereList??[],
+          enjeu: selectedEnjeuList??[],
+        );
+      },
     );
 
   }
@@ -467,10 +467,20 @@ void getAxe(){
         return enjeu.libelle!.toLowerCase().contains(query.toLowerCase());
       },
 
-      onApplyButtonClick: (list) {
+      onApplyButtonClick: (list)async{
+        String? espace=await storage.read(key:"espace");
+        context.go(Location);
         setState(() {
-          selectedEnjeuList = List.from(list!);
+          controllerTb.enjeuxTableauBord.value=List.from(list!).isEmpty?controllerTb.enjeuxTableauBord:List.from(list!);
         });
+        controllerTb.doFilter(
+          annee: controllerTb.anneeSelectFiltre.value ,
+          espace: espace,
+          mois:controllerTb.moisSelectFiltre.value,
+          axe: selectedAxeList??[],
+          critere: selectedCritereList??[],
+          enjeu: selectedEnjeuList??[],
+        );
       },
 
     );
@@ -523,7 +533,7 @@ void getAxe(){
       width: 250,
       height: 300,
       listData:DataAx,
-      selectedListData: selectedAxeList,
+      selectedListData:selectedAxeList,
       choiceChipLabel: (item) => item!.libelle,
       validateSelectedItem: (list, val) => list!.contains(val),
       controlButtons: [ControlButtonType.All, ControlButtonType.Reset],
@@ -534,76 +544,24 @@ void getAxe(){
         return axe.libelle!.toLowerCase().contains(query.toLowerCase());
       },
 
-      onApplyButtonClick: (list) {
+      onApplyButtonClick: (list)async{
+        String? espace=await storage.read(key:"espace");
+        context.go(Location);
         setState(() {
-          selectedAxeList = List.from(list!);
+          controllerTb.axesTableauBord.value=List.from(list!).isEmpty?controllerTb.axesTableauBord:List.from(list!);
         });
-        context.go("/pilotage/espace/Trechville/tableau-de-bord/indicateurs");
+        controllerTb.doFilter(
+            annee: controllerTb.anneeSelectFiltre.value ,
+            espace: espace,
+            mois:controllerTb.moisSelectFiltre.value,
+          axe: selectedAxeList??[],
+          critere: selectedCritereList??[],
+          enjeu: selectedEnjeuList??[],
+        );
       },
     );
 
   }
 
   }
-
-
-class TabbedDialog extends StatefulWidget {
-  @override
-  _TabbedDialogState createState() => _TabbedDialogState();
-}
-
-class _TabbedDialogState extends State<TabbedDialog> with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text('Tabbed Dialog'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TabBar(
-            controller: _tabController,
-            tabs: [
-              Tab(text: 'Tab 1'),
-              Tab(text: 'Tab 2'),
-            ],
-          ),
-          SizedBox(height: 20),
-          Container(
-            width: 500,
-            height: 400,
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                Center(child: Text('Content of Tab 1')),
-                Center(child: Text('Content of Tab 2')),
-              ],
-            ),
-          ),
-        ],
-      ),
-      actions: [
-        ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text('Close'),
-        ),
-      ],
-    );
-  }
-}
 

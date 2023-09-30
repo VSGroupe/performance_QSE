@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../../models/pilotage/indicateur_model.dart';
+import '../../../../../../models/pilotage/indicateur_row_model.dart';
 import '../../../../controllers/tableau_controller.dart';
 import '../../controller_tableau_bord/controller_tableau_bord.dart';
 import '../utils_TB.dart';
 import 'row_indicateur.dart';
-final ControllerTbQSE _controllerTbQSE =  Get.find();
-List<IndicateurModel> containIndicateur=[];
+
 class RowCritereNormatif extends StatefulWidget {
   final String? numero;
   final String idEnjeu;
@@ -52,7 +52,7 @@ late final IndicateurModel indicateur;
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "${widget.CritNormatifTitle}",
+                "${widget.numero}. ${widget.CritNormatifTitle}",
                 style: const TextStyle(
                     color: Colors.white, fontWeight: FontWeight.bold),
               ),
@@ -81,9 +81,11 @@ late final IndicateurModel indicateur;
         ),
         Visibility(
           visible: _press,
-          child: Column(
-              children: getIndicateurWidget(widget.CritNormatifTitle)
-          ),
+          child: Obx(()
+            => Column(
+                children: getIndicateurWidget(widget.CritNormatifTitle,controllerTableauBord.moisSelectFiltre.value,controllerTableauBord.indicateurRowTableauBord)
+            ),
+          )
         )
       ],
     );
@@ -91,12 +93,9 @@ late final IndicateurModel indicateur;
 }
 
 
-  List<Widget> getIndicateurWidget(String CritNormatifTitle){
-    containIndicateur=[];
-  for(int i=0;i<DataIndicateur.length;i++){
-    if(DataIndicateur[i].critereNormatif==CritNormatifTitle){
-      containIndicateur.add(DataIndicateur[i]);
-    }
-  }
-  return containIndicateur.map((indicateur) => Obx(() =>  RowIndicateur(indicateur: indicateur, mois:_controllerTbQSE.dropdownMois.value,))).toList();
+  List<Widget> getIndicateurWidget(String CritNormatifTitle,String moisSelected,List<IndicateurRowTableauBordModel>indicateurRowTableauBord){
+    List<String>ListStringMois=["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Decembre"];
+  final int intMois = DateTime.now().month;
+  List<IndicateurRowTableauBordModel> containerIndicateurRowTB=indicateurRowTableauBord.where((element) =>element.critereNormatif==CritNormatifTitle).toList();
+  return containerIndicateurRowTB.map((indicateur) => RowIndicateur(indicateur: indicateur,mois:moisSelected,)).toList();
 }

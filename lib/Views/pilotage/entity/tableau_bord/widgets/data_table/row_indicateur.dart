@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:perfqse/Views/pilotage/entity/tableau_bord/widgets/data_table/row_critNormatif.dart';
 import '../../../../../../models/pilotage/indicateur_model.dart';
+import '../../../../../../models/pilotage/indicateur_row_model.dart';
 import '../../../../controllers/tableau_controller.dart';
 import '../../controller_tableau_bord/controller_tableau_bord.dart';
 import '../utils_TB.dart';
 import 'dashboard_utils.dart';
 
 class RowIndicateur extends StatefulWidget {
-  final IndicateurModel indicateur;
+  final IndicateurRowTableauBordModel indicateur;
   final String mois;
   const RowIndicateur({Key? key, required this.indicateur, required this.mois})
       : super(key: key);
@@ -26,73 +27,74 @@ class _RowIndicateurState extends State<RowIndicateur> {
 
 
   void calculeRealise(){
-    for (int i=0;i<containIndicateur.length;i++) {
-      if (containIndicateur[i].idIndicateur == widget.indicateur.idIndicateur && widget.indicateur.type=="Primaire" ) {
-        int calculeRealisee = 0;
-        if (containIndicateur[i].janvier.isValidate == 1)
-          calculeRealisee += containIndicateur[i].janvier.value!;
-        if (containIndicateur[i].fevrier.isValidate == 1)
-          calculeRealisee += containIndicateur[i].fevrier.value!;
-        if (containIndicateur[i].mars.isValidate == 1)
-          calculeRealisee += containIndicateur[i].mars.value!;
-        if (containIndicateur[i].avril.isValidate == 1)
-          calculeRealisee += containIndicateur[i].avril.value!;
-        if (containIndicateur[i].mai.isValidate == 1)
-          calculeRealisee += containIndicateur[i].mai.value!;
-        if (containIndicateur[i].juin.isValidate == 1)
-          calculeRealisee += containIndicateur[i].juin.value!;
-        if (containIndicateur[i].juillet.isValidate == 1)
-          calculeRealisee += containIndicateur[i].juillet.value!;
-        if (containIndicateur[i].aout.isValidate == 1)
-          calculeRealisee += containIndicateur[i].aout.value!;
-        if (containIndicateur[i].septembre.isValidate == 1)
-          calculeRealisee += containIndicateur[i].septembre.value!;
-        if (containIndicateur[i].octobre.isValidate == 1)
-          calculeRealisee += containIndicateur[i].octobre.value!;
-        if (containIndicateur[i].novembre.isValidate == 1)
-          calculeRealisee += containIndicateur[i].novembre.value!;
-        if (containIndicateur[i].decembre.isValidate == 1)
-          calculeRealisee += containIndicateur[i].decembre.value!;
-        containIndicateur[i].realisee.value = calculeRealisee;
-        containIndModifer.add(containIndicateur[i]);
+    if (widget.indicateur.type == "Primaire") {
+      for (int i = 0; i < controllerTableauBord.indicateurRowTableauBord.toList().length; i++) {
+        var indicateur = controllerTableauBord.indicateurRowTableauBord.toList()[i];
+        if (indicateur.idIndicateur == widget.indicateur.idIndicateur) {
+          int calculeRealisee = 0;
+          if (indicateur.janvier.isValidate == 1) calculeRealisee += indicateur.janvier.value!;
+          if (indicateur.fevrier.isValidate == 1) calculeRealisee += indicateur.fevrier.value!;
+          if (indicateur.mars.isValidate == 1) calculeRealisee += indicateur.mars.value!;
+          if (indicateur.avril.isValidate == 1) calculeRealisee += indicateur.avril.value!;
+          if (indicateur.mai.isValidate == 1) calculeRealisee += indicateur.mai.value!;
+          if (indicateur.juin.isValidate == 1) calculeRealisee += indicateur.juin.value!;
+          if (indicateur.juillet.isValidate == 1) calculeRealisee += indicateur.juillet.value!;
+          if (indicateur.aout.isValidate == 1) calculeRealisee += indicateur.aout.value!;
+          if (indicateur.septembre.isValidate == 1) calculeRealisee += indicateur.septembre.value!;
+          if (indicateur.octobre.isValidate == 1) calculeRealisee += indicateur.octobre.value!;
+          if (indicateur.novembre.isValidate == 1) calculeRealisee += indicateur.novembre.value!;
+          if (indicateur.decembre.isValidate == 1) calculeRealisee += indicateur.decembre.value!;
+          indicateur.realisee.value = calculeRealisee;
+          controllerTableauBord.indicateurRowTableauBord.toList()[i] = indicateur;
+          controllerTableauBord.containerUpdateIndicateurRow.add(indicateur);
+        }
       }
     }
   }
 
- void initialisation(){
-   dataAnneeValidation = widget.indicateur.realisee.isValidate==1?true:false;
-   for (int i=0;i<containIndicateur.length;i++){
-     if(containIndicateur[i].idIndicateur==widget.indicateur.idIndicateur){
-       switch(widget.mois){
-         case "Janvier":
-           dataMoisValidation=containIndicateur[i].janvier.isValidate==1?true:false;
-         case "Février":
-           dataMoisValidation=containIndicateur[i].fevrier.isValidate==1?true:false;
-         case "Mars":
-           dataMoisValidation=containIndicateur[i].mars.isValidate==1?true:false;
-         case "Avril":
-           dataMoisValidation=containIndicateur[i].avril.isValidate==1?true:false;
-         case "Mai":
-           dataMoisValidation=containIndicateur[i].mai.isValidate==1?true:false;
-         case "Juin":
-           dataMoisValidation=containIndicateur[i].juin.isValidate==1?true:false;
-         case "Juillet":
-           dataMoisValidation=containIndicateur[i].juillet.isValidate==1?true:false;
-         case "Aout":
-           dataMoisValidation=containIndicateur[i].aout.isValidate==1?true:false;
-         case "Septembre":
-           dataMoisValidation=containIndicateur[i].septembre.isValidate==1?true:false;
-         case "Octobre":
-           dataMoisValidation=containIndicateur[i].octobre.isValidate==1?true:false;
-         case "Novembre":
-           dataMoisValidation=containIndicateur[i].novembre.isValidate==1?true:false;
-         case "Decembre":
-           dataMoisValidation=containIndicateur[i].decembre.isValidate==1?true:false;
-       }
-     }
-   }
+  void initialisation() {
+    dataAnneeValidation = widget.indicateur.realisee.isValidate == 1 ? true : false;
 
- }
+    switch (widget.mois) {
+      case "Janvier":
+        dataMoisValidation = controllerTableauBord.indicateurRowTableauBord.toList().any((indicateur) => indicateur.idIndicateur == widget.indicateur.idIndicateur && indicateur.janvier.isValidate == 1);
+        break;
+      case "Fevrier":
+        dataMoisValidation = controllerTableauBord.indicateurRowTableauBord.toList().any((indicateur) => indicateur.idIndicateur == widget.indicateur.idIndicateur && indicateur.fevrier.isValidate == 1);
+        break;
+      case "Mars":
+        dataMoisValidation = controllerTableauBord.indicateurRowTableauBord.toList().any((indicateur) => indicateur.idIndicateur == widget.indicateur.idIndicateur && indicateur.mars.isValidate == 1);
+        break;
+      case "Avril":
+        dataMoisValidation = controllerTableauBord.indicateurRowTableauBord.toList().any((indicateur) => indicateur.idIndicateur == widget.indicateur.idIndicateur && indicateur.avril.isValidate == 1);
+        break;
+      case "Mai":
+        dataMoisValidation = controllerTableauBord.indicateurRowTableauBord.toList().any((indicateur) => indicateur.idIndicateur == widget.indicateur.idIndicateur && indicateur.mai.isValidate == 1);
+        break;
+      case "Juin":
+        dataMoisValidation = controllerTableauBord.indicateurRowTableauBord.toList().any((indicateur) => indicateur.idIndicateur == widget.indicateur.idIndicateur && indicateur.juin.isValidate == 1);
+        break;
+      case "Juillet":
+        dataMoisValidation = controllerTableauBord.indicateurRowTableauBord.toList().any((indicateur) => indicateur.idIndicateur == widget.indicateur.idIndicateur && indicateur.juillet.isValidate == 1);
+        break;
+      case "Aout":
+        dataMoisValidation = controllerTableauBord.indicateurRowTableauBord.toList().any((indicateur) => indicateur.idIndicateur == widget.indicateur.idIndicateur && indicateur.aout.isValidate == 1);
+        break;
+      case "Septembre":
+        dataMoisValidation = controllerTableauBord.indicateurRowTableauBord.toList().any((indicateur) => indicateur.idIndicateur == widget.indicateur.idIndicateur && indicateur.septembre.isValidate == 1);
+        break;
+      case "Octobre":
+        dataMoisValidation = controllerTableauBord.indicateurRowTableauBord.toList().any((indicateur) => indicateur.idIndicateur == widget.indicateur.idIndicateur && indicateur.octobre.isValidate == 1);
+        break;
+      case "Novembre":
+        dataMoisValidation = controllerTableauBord.indicateurRowTableauBord.toList().any((indicateur) => indicateur.idIndicateur == widget.indicateur.idIndicateur && indicateur.novembre.isValidate == 1);
+        break;
+      case "Decembre":
+        dataMoisValidation = controllerTableauBord.indicateurRowTableauBord.toList().any((indicateur) => indicateur.idIndicateur == widget.indicateur.idIndicateur && indicateur.decembre.isValidate == 1);
+        break;
+    }
+  }
+
 
  @override
   void initState() {
@@ -281,7 +283,7 @@ class _RowIndicateurState extends State<RowIndicateur> {
                 child: buildRealiseMoisColumn(context,
                   widget.mois=="Janvier"?
                   widget.indicateur.janvier.value:
-                  widget.mois=="Février"?
+                  widget.mois=="Fevrier"?
                   widget.indicateur.fevrier.value:
                   widget.mois=="Mars"?
                   widget.indicateur.mars.value:
@@ -381,11 +383,11 @@ class _RowIndicateurState extends State<RowIndicateur> {
           SizedBox(width:2,),
           Checkbox(checkColor: Colors.white,fillColor: dataAnneeValidation == true ? MaterialStateProperty.all(Colors.green) : null,
           onChanged: (bool? value){
-            for (int i=0;i<containIndicateur.length;i++){
-            if(containIndicateur[i].idIndicateur==widget.indicateur.idIndicateur){
-              containIndicateur[i].realisee.isValidate= value! ? 1:0;
-              containIndModifer.add(containIndicateur[i]);
-              dataAnneeValidation=containIndicateur[i].realisee.isValidate==1?true:false;
+            for (int i=0;i<  controllerTableauBord.indicateurRowTableauBord.toList().length;i++){
+            if(controllerTableauBord.indicateurRowTableauBord.toList()[i].idIndicateur==widget.indicateur.idIndicateur){
+              controllerTableauBord.indicateurRowTableauBord.toList()[i].realisee.isValidate= value! ? 1:0;
+              controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord.toList()[i]);
+              dataAnneeValidation=controllerTableauBord.indicateurRowTableauBord.toList()[i].realisee.isValidate==1?true:false;
             }
             }
           }, value: dataAnneeValidation,),
@@ -420,64 +422,64 @@ class _RowIndicateurState extends State<RowIndicateur> {
           Container(width: 30,height: 40,alignment: Alignment.center,
             child: (widget.indicateur.type == "Primaire" && dataMoisValidation != true) ? IconButton(splashRadius: 20,splashColor: Colors.amber,
             onPressed: () {
-              renseignerLaDonnee(context,widget.indicateur,dataValue,"${_controllerTbQSE.dropdownMois.value}");
+              renseignerLaDonnee(context,widget.indicateur,dataValue,"${widget.mois}");
             },icon: const Icon(Icons.edit, size: 12,)):null
           ),
           Container(width: 30,height: 40,alignment: Alignment.center,
             child:  Padding(padding: const EdgeInsets.only(right: 2.0, left: 2.0),
               child: Checkbox(checkColor: Colors.white,fillColor: dataMoisValidation == true ? MaterialStateProperty.all(Colors.green) : null,
                 onChanged: (bool? value){
-                for (int i=0;i<containIndicateur.length;i++){
-                  if(containIndicateur[i].idIndicateur==widget.indicateur.idIndicateur){
+                for (int i=0;i< controllerTableauBord.indicateurRowTableauBord.toList().length;i++){
+                  if( controllerTableauBord.indicateurRowTableauBord.toList()[i].idIndicateur==widget.indicateur.idIndicateur){
                     switch(widget.mois){
                       case "Janvier":
-                        containIndicateur[i].janvier.isValidate= value! ? 1 : 0;
-                        dataMoisValidation=containIndicateur[i].janvier.isValidate==1?true:false;
-                        containIndModifer.add(containIndicateur[i]);
-                      case "Février":
-                        containIndicateur[i].fevrier.isValidate=value! ? 1 : 0;
-                        dataMoisValidation=containIndicateur[i].fevrier.isValidate==1?true:false;
-                        containIndModifer.add(containIndicateur[i]);
+                        controllerTableauBord.indicateurRowTableauBord.toList()[i].janvier.isValidate= value! ? 1 : 0;
+                        dataMoisValidation=controllerTableauBord.indicateurRowTableauBord.toList()[i].janvier.isValidate==1?true:false;
+                        controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord.toList()[i]);
+                      case "Fevrier":
+                        controllerTableauBord.indicateurRowTableauBord.toList()[i].fevrier.isValidate=value! ? 1 : 0;
+                        dataMoisValidation=controllerTableauBord.indicateurRowTableauBord.toList()[i].fevrier.isValidate==1?true:false;
+                        controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord.toList()[i]);
                       case "Mars":
-                        containIndicateur[i].mars.isValidate=value! ? 1 : 0;
-                        dataMoisValidation=containIndicateur[i].mars.isValidate==1?true:false;
-                        containIndModifer.add(containIndicateur[i]);
+                        controllerTableauBord.indicateurRowTableauBord.toList()[i].mars.isValidate=value! ? 1 : 0;
+                        dataMoisValidation=controllerTableauBord.indicateurRowTableauBord.toList()[i].mars.isValidate==1?true:false;
+                        controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord.toList()[i]);
                       case "Avril":
-                        containIndicateur[i].avril.isValidate=value! ? 1 : 0;
-                        dataMoisValidation=containIndicateur[i].avril.isValidate==1?true:false;
-                        containIndModifer.add(containIndicateur[i]);
+                        controllerTableauBord.indicateurRowTableauBord.toList()[i].avril.isValidate=value! ? 1 : 0;
+                        dataMoisValidation=controllerTableauBord.indicateurRowTableauBord.toList()[i].avril.isValidate==1?true:false;
+                        controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord.toList()[i]);
                       case "Mai":
-                        containIndicateur[i].mai.isValidate=value! ? 1 : 0;
-                        dataMoisValidation=containIndicateur[i].mai.isValidate==1?true:false;
-                        containIndModifer.add(containIndicateur[i]);
+                        controllerTableauBord.indicateurRowTableauBord.toList()[i].mai.isValidate=value! ? 1 : 0;
+                        dataMoisValidation=controllerTableauBord.indicateurRowTableauBord.toList()[i].mai.isValidate==1?true:false;
+                        controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord.toList()[i]);
                       case "Juin":
-                        containIndicateur[i].juin.isValidate=value! ? 1 : 0;
-                        dataMoisValidation=containIndicateur[i].juin.isValidate==1?true:false;
-                        containIndModifer.add(containIndicateur[i]);
+                        controllerTableauBord.indicateurRowTableauBord.toList()[i].juin.isValidate=value! ? 1 : 0;
+                        dataMoisValidation=controllerTableauBord.indicateurRowTableauBord.toList()[i].juin.isValidate==1?true:false;
+                        controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord.toList()[i]);
                       case "Juillet":
-                        containIndicateur[i].juillet.isValidate=value! ? 1 : 0;
-                        dataMoisValidation=containIndicateur[i].juillet.isValidate==1?true:false;
-                        containIndModifer.add(containIndicateur[i]);
+                        controllerTableauBord.indicateurRowTableauBord.toList()[i].juillet.isValidate=value! ? 1 : 0;
+                        dataMoisValidation=controllerTableauBord.indicateurRowTableauBord.toList()[i].juillet.isValidate==1?true:false;
+                        controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord.toList()[i]);
                       case "Aout":
-                        containIndicateur[i].aout.isValidate=value! ? 1 : 0;
-                        dataMoisValidation=containIndicateur[i].aout.isValidate==1?true:false;
-                        containIndModifer.add(containIndicateur[i]);
+                        controllerTableauBord.indicateurRowTableauBord.toList()[i].aout.isValidate=value! ? 1 : 0;
+                        dataMoisValidation=controllerTableauBord.indicateurRowTableauBord.toList()[i].aout.isValidate==1?true:false;
+                        controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord.toList()[i]);
                       case "Septembre":
-                        containIndicateur[i].septembre.isValidate=value! ? 1 : 0;
-                        dataMoisValidation=containIndicateur[i].septembre.isValidate==1?true:false;
-                        containIndModifer.add(containIndicateur[i]);
+                        controllerTableauBord.indicateurRowTableauBord.toList()[i].septembre.isValidate=value! ? 1 : 0;
+                        dataMoisValidation=controllerTableauBord.indicateurRowTableauBord.toList()[i].septembre.isValidate==1?true:false;
+                        controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord.toList()[i]);
                       case "Octobre":
-                        containIndicateur[i].octobre.isValidate=value! ? 1 : 0;
-                        dataMoisValidation=containIndicateur[i].octobre.isValidate==1?true:false;
-                        containIndModifer.add(containIndicateur[i]);
+                        controllerTableauBord.indicateurRowTableauBord.toList()[i].octobre.isValidate=value! ? 1 : 0;
+                        dataMoisValidation=controllerTableauBord.indicateurRowTableauBord.toList()[i].octobre.isValidate==1?true:false;
+                        controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord.toList()[i]);
                       case "Novembre":
-                        containIndicateur[i].novembre.isValidate=value! ? 1 : 0;
-                        dataMoisValidation=containIndicateur[i].novembre.isValidate==1?true:false;
-                        containIndModifer.add(containIndicateur[i]);
+                        controllerTableauBord.indicateurRowTableauBord.toList()[i].novembre.isValidate=value! ? 1 : 0;
+                        dataMoisValidation=controllerTableauBord.indicateurRowTableauBord.toList()[i].novembre.isValidate==1?true:false;
+                        controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord.toList()[i]);
                       case "Decembre":
-                        containIndicateur[i].decembre.isValidate=value! ? 1 : 0;
-                        dataMoisValidation=containIndicateur[i].decembre.isValidate==1?true:false;
-                        containIndModifer.add(containIndicateur[i]);
+                        controllerTableauBord.indicateurRowTableauBord.toList()[i].decembre.isValidate=value! ? 1 : 0;
+                        dataMoisValidation=controllerTableauBord.indicateurRowTableauBord.toList()[i].decembre.isValidate==1?true:false;
+                        controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord.toList()[i]);
                     }
                   }
                 }
@@ -503,7 +505,7 @@ class _RowIndicateurState extends State<RowIndicateur> {
 
   Future validateDataIndicator(bool? value, int numeroIndicateur) async {}
 
-  Future<bool> renseignerLaDonnee(BuildContext context,IndicateurModel indicator, num? value, String? mois) async {
+  Future<bool> renseignerLaDonnee(BuildContext context,IndicateurRowTableauBordModel indicator, num? value, String? mois) async {
     if (indicator.intitule != null && mois != null) {
       DashBoardUtils.editDataRow(context,indicator, value, mois);
       return true;

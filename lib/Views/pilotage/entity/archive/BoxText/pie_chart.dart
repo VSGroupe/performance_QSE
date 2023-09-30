@@ -37,7 +37,7 @@ class PieChartDonnutState extends State<PieChartDonnut> {
     final double numEmpCal=100-widget.numFull;
     Map<String, double> dataMap = {
       "numFull": widget.numFull,
-      "numEmpty":numEmpCal
+      "numEmpty":numEmpCal.abs()
     };
 
     List<Color> colorList = [
@@ -47,7 +47,7 @@ class PieChartDonnutState extends State<PieChartDonnut> {
 
     return Center(
       child: PieChart(
-        dataMap: dataMap,
+        dataMap:dataMap,
         chartType: ChartType.ring,
         baseChartColor: Colors.grey[50]!.withOpacity(0.15),
         colorList: colorList,
@@ -61,49 +61,11 @@ class PieChartDonnutState extends State<PieChartDonnut> {
         ),
         legendOptions:const LegendOptions(
             showLegends:false,
+            legendPosition:LegendPosition.top
         ),
         totalValue: 100,
       ),
     );
   }
 
-  // List<PieChartSectionData> showingSections() {
-  //   return List.generate(2, (i) {
-  //     final num numEmpCal=100-widget.numFull;
-  //     final double numEmpty= numEmpCal.toDouble();
-  //     final isTouched = i == touchedIndex;
-  //     final fontSize = isTouched ? 17.0 :12.0;
-  //     final radius = isTouched ? 20.0 : 15.0;//25.0;
-  //     const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
-  //     switch (i) {
-  //       case 0:
-  //         return PieChartSectionData(
-  //           color:widget.colorEmpty,
-  //           value: widget.numFull,
-  //             showTitle:true,
-  //           title: "${widget.numFull.toString()}%",
-  //           radius: radius,
-  //           titleStyle: TextStyle(
-  //             fontSize: fontSize,
-  //             fontWeight: FontWeight.bold,
-  //             color: Colors.black,
-  //           ),
-  //         );
-  //       case 1:
-  //         return PieChartSectionData(
-  //           color:widget.colorFull,
-  //           value: numEmpty,
-  //           title: "${numEmpty.toString()}%",
-  //           radius: radius,
-  //           titleStyle: TextStyle(
-  //             fontSize: fontSize,
-  //             fontWeight: FontWeight.bold,
-  //             color: Colors.black,
-  //           ),
-  //         );
-  //       default:
-  //         throw Error();
-  //     }
-  //   });
-  // }
 }

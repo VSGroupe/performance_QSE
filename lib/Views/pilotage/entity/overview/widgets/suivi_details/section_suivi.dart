@@ -116,12 +116,18 @@
 
 import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:perfqse/Views/pilotage/entity/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
+import 'package:perfqse/module/styled_scrollview.dart';
+import '../../../../../../models/pilotage/indicateur_row_model.dart';
 import '../../../archive/BoxText/boxaxes.dart';
 import '../../../../../../constants/colors.dart';
 
 class SectionSuivi extends StatefulWidget {
-     SectionSuivi({
-    Key? key,
+  final List<IndicateurRowTableauBordModel> indicateurRowTableauBord;
+  SectionSuivi({
+    Key? key, required this.indicateurRowTableauBord,
   }) : super(key: key);
 
      @override
@@ -129,59 +135,25 @@ class SectionSuivi extends StatefulWidget {
 }
 
 class _SectionSuiviState extends State<SectionSuivi> with TickerProviderStateMixin{
+  final ControllerTableauBord controllerTableauBord=Get.find();
+  late  dynamic data;
 
-  dynamic AxeInfos = [
-    {
-      "firsttitle":"ALIGNEMENT",
-      "secondtitle":"STRATEGIQUE",
-      "subtitle":"n indicateur(s) sur 90",
-      "numfull":48,
-      "width_1":280,
-      "width_2":130,
-      "color":Color.fromRGBO(172,28,12,1)
-    },
-    {
-      "firsttitle":"MAITRISE",
-      "secondtitle":"OPERATIONNELLE",
-      "subtitle":"n indicateur(s) sur 100",
-      "numfull":78,
-      "width_1":310,
-      "width_2":160,
-      "color":Color.fromRGBO(172,28,12,1)
-    },
-    {
-      "firsttitle":"PERF & INTEGRITE",
-      "secondtitle":"DU SYSTEME",
-      "subtitle":"n indicateur(s) sur 90",
-      "numfull":56,
-      "width_1":320,
-      "width_2":170,
-      "color":Color.fromRGBO(172,28,12,1)
-    },
-    {
-      "firsttitle":"RESILIENCE",
-      "secondtitle":"DU SYSTEME",
-      "subtitle":"n indicateur(s) sur 200",
-      "numfull":87,
-      "width_1":280,
-      "width_2":130,
-      "color":Color.fromRGBO(172,28,12,1)
-    },
-  ];
 
   @override
   void initState() {
     super.initState();
-
+    data=controllerTableauBord.getAlimentationSectionSuivie();
   }
+
    @override
   Widget build(BuildContext context) {
-    final Size _size = MediaQuery.of(context).size;
 
+    final Size _size = MediaQuery.of(context).size;
     bool btnSelect1=false;
     bool btnSelect2=false;
     bool btnSelect3=false;
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -194,22 +166,14 @@ class _SectionSuiviState extends State<SectionSuivi> with TickerProviderStateMix
         ),
         SizedBox(height: defaultPadding),
         Container(
-          width: 1200,
+          width: double.infinity,
           height: 100,
-          child: Column(
-            children: [
-                Container(
-                  width: 1200,
-                  height: 100,
-                  child: LiveList(
-                    showItemInterval: Duration(milliseconds: 500),
-                    showItemDuration: Duration(seconds: 1),
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 4,
-                    itemBuilder: _buildAnimatedItem,
-                  ),
-                ),
-            ],
+          child: LiveList(
+            showItemInterval: Duration(milliseconds: 500),
+            showItemDuration: Duration(seconds: 1),
+            scrollDirection: Axis.horizontal,
+            itemCount: 4,
+            itemBuilder: _buildAnimatedItem,
           ),
         )
       ],
@@ -230,18 +194,60 @@ class _SectionSuiviState extends State<SectionSuivi> with TickerProviderStateMix
             begin: Offset(0, -0.1),
             end: Offset.zero,
           ).animate(animation),
-          child: _buildCard(2),
+          child: _buildCard(index),
         ),
       );
 
-  Widget _buildCard(index) => Builder(
-    builder: (context) => BoxAxe(firsttitle:AxeInfos[index]["firsttitle"],
-      secondtitle:AxeInfos[index]["secondtitle"],
-      subtitle: AxeInfos[index]["subtitle"],
-      color:AxeInfos[index]["color"],
-      colorChartSectionFull: Colors.lightGreen,
-      colorChartSectionEmpty: Colors.orange,
-      numChartSectionFull: AxeInfos[index]["numfull"].toDouble(),
-      width_1:AxeInfos[index]["width_1"].toDouble(), width_2: AxeInfos[index]["width_2"].toDouble(),),
-  );
+  Widget _buildCard(index) {
+    dynamic AxeInfos = [
+      {
+        "firsttitle":"ALIGNEMENT",
+        "secondtitle":"STRATEGIQUE",
+        "subtitle":"${data[0]["numberIndicateurValidate"]} indicateur(s) sur ${data[0]["numberIndicateur"]}",
+        "numfull":data[0]["pourcentage"],
+        "width_1":280,
+        "width_2":130,
+        "color":Color.fromRGBO(172,28,12,1)
+      },
+      {
+        "firsttitle":"MAITRISE",
+        "secondtitle":"OPERATIONNELLE",
+        "subtitle":"${data[1]["numberIndicateurValidate"]} indicateur(s) sur ${data[1]["numberIndicateur"]}",
+        "numfull":data[1]["pourcentage"],
+        "width_1":306,
+        "width_2":160,
+        "color":Color.fromRGBO(172,28,12,1)
+      },
+      {
+        "firsttitle":"PERF & INTEGRITE",
+        "secondtitle":"DU SYSTEME",
+        "subtitle":"${data[2]["numberIndicateurValidate"]} indicateur(s) sur ${data[2]["numberIndicateur"]}",
+        "numfull":data[2]["pourcentage"],
+        "width_1":310,
+        "width_2":170,
+        "color":Color.fromRGBO(172,28,12,1)
+      },
+      {
+        "firsttitle":"RESILIENCE",
+        "secondtitle":"DU SYSTEME",
+        "subtitle":"${data[3]["numberIndicateurValidate"]} indicateur(s) sur ${data[3]["numberIndicateur"]}",
+        "numfull":data[3]["pourcentage"],
+        "width_1":270,
+        "width_2":130,
+        "color":Color.fromRGBO(172,28,12,1)
+      },
+    ];
+    return Builder(
+      builder: (context) =>
+          BoxAxe(firsttitle: AxeInfos[index]["firsttitle"],
+            secondtitle: AxeInfos[index]["secondtitle"],
+            subtitle: AxeInfos[index]["subtitle"],
+            color: AxeInfos[index]["color"],
+            colorChartSectionFull: Colors.lightGreen,
+            colorChartSectionEmpty: Colors.orange,
+            numChartSectionFull: AxeInfos[index]["numfull"].toDouble(),
+            width_1: AxeInfos[index]["width_1"].toDouble(),
+            width_2: AxeInfos[index]["width_2"].toDouble(),),
+    );
+  }
 }

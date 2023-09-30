@@ -3,14 +3,16 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
+import 'package:perfqse/Views/pilotage/entity/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
 import 'package:perfqse/Views/pilotage/entity/tableau_bord/widgets/data_table/row_critNormatif.dart';
 import '../../../../../../models/pilotage/indicateur_model.dart';
+import '../../../../../../models/pilotage/indicateur_row_model.dart';
 import '../../../../controllers/tableau_controller.dart';
 import '../utils_TB.dart';
 
 class DashBoardUtils{
 
-  static bool editDataRow (BuildContext context,IndicateurModel indicator,num? value,String mois){
+  static bool editDataRow (BuildContext context,IndicateurRowTableauBordModel indicator,num? value,String mois){
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -39,7 +41,7 @@ class DashBoardUtils{
 
 
 class ContentEdition extends StatefulWidget {
-  final IndicateurModel indicator;
+  final IndicateurRowTableauBordModel indicator;
   final num? value;
   final String mois;
   const ContentEdition({Key? key, this.value, required this.indicator, required this.mois}) : super(key: key);
@@ -49,7 +51,7 @@ class ContentEdition extends StatefulWidget {
 }
 
 class _ContentEditionState extends State<ContentEdition> {
-
+  final ControllerTableauBord controllerTableauBord=Get.find();
   final _keyForm  = GlobalKey<FormState>();
   final TextEditingController valueController = TextEditingController();
   late bool onLoading;
@@ -102,7 +104,7 @@ class _ContentEditionState extends State<ContentEdition> {
 
     return SizedBox(
       width: 350,
-      height: 150,
+      height:onLoading?205:180,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -139,49 +141,48 @@ class _ContentEditionState extends State<ContentEdition> {
                 onPressed: onLoading == true ? null : () async {
                   if ( _keyForm.currentState!.validate() ){
                     setState(()  {
-                      for (int i=0;i<containIndicateur.length;i++){
-                        if(containIndicateur[i].idIndicateur==widget.indicator.idIndicateur){
+                      for (int i=0;i<controllerTableauBord.indicateurRowTableauBord.toList().length;i++){
+                        if(controllerTableauBord.indicateurRowTableauBord.toList()[i].idIndicateur==widget.indicator.idIndicateur){
                            switch(widget.mois){
                              case "Janvier":
-                              containIndicateur[i].janvier.value=int.parse(valueController.text);
-                              containIndModifer.add(containIndicateur[i]);
+                               controllerTableauBord.indicateurRowTableauBord.toList()[i].janvier.value=int.parse(valueController.text);
+                               controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord[i]);
                              case "Février":
-                               containIndicateur[i].fevrier.value=int.parse(valueController.text);
-                               containIndModifer.add(containIndicateur[i]);
+                               controllerTableauBord.indicateurRowTableauBord.toList()[i].fevrier.value=int.parse(valueController.text);
+                               controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord[i]);
                              case "Mars":
-                               containIndicateur[i].mars.value=int.parse(valueController.text);
-                               containIndModifer.add(containIndicateur[i]);
+                               controllerTableauBord.indicateurRowTableauBord.toList()[i].mars.value=int.parse(valueController.text);
+                               controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord[i]);
                              case "Avril":
-                               containIndicateur[i].avril.value=int.parse(valueController.text);
-                               containIndModifer.add(containIndicateur[i]);
+                               controllerTableauBord.indicateurRowTableauBord.toList()[i].avril.value=int.parse(valueController.text);
+                               controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord[i]);
                              case "Mai":
-                               containIndicateur[i].mai.value=int.parse(valueController.text);
-                               containIndModifer.add(containIndicateur[i]);
+                               controllerTableauBord.indicateurRowTableauBord.toList()[i].mai.value=int.parse(valueController.text);
+                               controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord[i]);
                              case "Juin":
-                               containIndicateur[i].juin.value=int.parse(valueController.text);
-                               containIndModifer.add(containIndicateur[i]);
+                               controllerTableauBord.indicateurRowTableauBord.toList()[i].juin.value=int.parse(valueController.text);
+                               controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord[i]);
                              case "Juillet":
-                               containIndicateur[i].juillet.value=int.parse(valueController.text);
-                               containIndModifer.add(containIndicateur[i]);
+                               controllerTableauBord.indicateurRowTableauBord.toList()[i].juillet.value=int.parse(valueController.text);
+                               controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord[i]);
                              case "Aout":
-                               containIndicateur[i].aout.value=int.parse(valueController.text);
-                               containIndModifer.add(containIndicateur[i]);
+                               controllerTableauBord.indicateurRowTableauBord.toList()[i].aout.value=int.parse(valueController.text);
+                               controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord[i]);
                              case "Septembre":
-                               containIndicateur[i].septembre.value=int.parse(valueController.text);
-                               containIndModifer.add(containIndicateur[i]);
+                               controllerTableauBord.indicateurRowTableauBord.toList()[i].septembre.value=int.parse(valueController.text);
+                               controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord[i]);
                              case "Octobre":
-                               containIndicateur[i].octobre.value=int.parse(valueController.text);
-                               containIndModifer.add(containIndicateur[i]);
+                               controllerTableauBord.indicateurRowTableauBord.toList()[i].octobre.value=int.parse(valueController.text);
+                               controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord[i]);
                              case "Novembre":
-                               containIndicateur[i].novembre.value=int.parse(valueController.text);
-                               containIndModifer.add(containIndicateur[i]);
+                               controllerTableauBord.indicateurRowTableauBord.toList()[i].novembre.value=int.parse(valueController.text);
+                               controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord[i]);
                              case "Decembre":
-                               containIndicateur[i].decembre.value=int.parse(valueController.text);
-                               containIndModifer.add(containIndicateur[i]);
+                               controllerTableauBord.indicateurRowTableauBord.toList()[i].decembre.value=int.parse(valueController.text);
+                               controllerTableauBord.containerUpdateIndicateurRow.add(controllerTableauBord.indicateurRowTableauBord[i]);
                            }
                         }
                       }
-                       // Future.delayed(Duration(seconds: 1));
                       Navigator.of(context).pop();
                     });
 

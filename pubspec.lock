@@ -233,6 +233,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.1"
+  community_charts_common:
+    dependency: transitive
+    description:
+      name: community_charts_common
+      sha256: bcda2831d8c3225036102dff007e2a901a2fdfcbba604e10c78db3fe5d9362a5
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
+  community_charts_flutter:
+    dependency: transitive
+    description:
+      name: community_charts_flutter
+      sha256: "2294cba46b67659109b665f2d9ffeffef93bb1540a5e7a7bcf2630b809a9363e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   connectivity_plus:
     dependency: "direct main"
     description:
@@ -289,6 +305,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
+  d_chart:
+    dependency: "direct main"
+    description:
+      name: d_chart
+      sha256: "25383f0d0b71a3f540511573ac0603286b2d736ead55073d595b7f48764919e4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.6.2"
   dart_style:
     dependency: transitive
     description:
@@ -539,6 +563,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_toggle_tab:
+    dependency: "direct main"
+    description:
+      name: flutter_toggle_tab
+      sha256: "90ad0d050f656df677998825f985637d010117a1793828cd7e6dadada4ecd2c5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.1"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -1501,6 +1533,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.0+2"
+  vs_scrollbar:
+    dependency: "direct main"
+    description:
+      name: vs_scrollbar
+      sha256: "6a2df5e2597064e8dbb8fc3679065d8e748d711fa979f045328c98b7100b1665"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   vy_string_utils:
     dependency: transitive
     description:

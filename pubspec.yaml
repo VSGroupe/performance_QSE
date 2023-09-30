@@ -82,8 +82,11 @@ dependencies:
   #  popover: ^0.2.8+2
   stylish_dialog: ^1.0.2
   popover_gtk: ^0.2.6+3
+  flutter_toggle_tab: ^1.4.1
   filter_list: ^1.0.2
   material_scrollbar: ^0.0.1
+  d_chart: ^2.6.2
+  vs_scrollbar: ^1.0.0
   dropdown_search: ^5.0.6
   multiselect_dropdown_flutter: ^0.0.7
 dev_dependencies:

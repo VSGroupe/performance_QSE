@@ -1,7 +1,7 @@
 var filliale = [
 
   {
-    "commune":"Bouaflé",
+    "commune":"Bouafle",
   },
   {
     "commune":"Sicodis",

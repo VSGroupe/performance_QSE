@@ -20,12 +20,7 @@ class _ScreenOverviewPilotageState extends State<ScreenOverviewPilotage> {
   bool _isLoaded = false;
   late ScrollController _scrollController;
 
-  void loadScreen() async {
-    await Future.delayed(Duration(seconds: 2));
-    setState(() {
-      _isLoaded = true;
-    });
-  }
+
 
   bool _showFab = true;
 
@@ -50,7 +45,12 @@ class _ScreenOverviewPilotageState extends State<ScreenOverviewPilotage> {
     super.dispose();
   }
 
-
+  void loadScreen() async {
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      _isLoaded = true;
+    });
+  }
 
   @override
   void initState() {
@@ -60,6 +60,8 @@ class _ScreenOverviewPilotageState extends State<ScreenOverviewPilotage> {
     _scrollController = ScrollController();
     _scrollController.addListener(_handleScroll);
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -80,11 +82,11 @@ class _ScreenOverviewPilotageState extends State<ScreenOverviewPilotage> {
                 interactive: true,
               )),
               child:SingleChildScrollView(
-                child: const Padding(
+                child: Padding(
                   padding: EdgeInsets.only(right: 15),
                   child:  Column(
                     children:  [
-                      OverviewPilotage(),
+                      OverviewPilotage(indicateurRowTableauBord:controllerTableauBord.indicateurRowTableauBord.toList(),),
                       SizedBox(height: 5,),
                     ],
                   ),

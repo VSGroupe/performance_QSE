@@ -27,9 +27,9 @@ class _EnteteSuiviState extends State<EnteteSuivi> {
         const SizedBox(width: 5,),
         MenuDeroulant(
           indication: "",
-          items: ["Sucrivoire Siège","Sucrivoire Zuénoula","Sucrivoire Borotou-Koro"],
+          items: ["Bouafle","Trechville"],
           width: 200,
-          initValue: "Sucrivoire Siège",
+          initValue: "Bouafle",
           onChanged: (value){
           },
         ),

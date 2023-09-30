@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../../constants/colors.dart';
 import '../../../../helpers/responsive.dart';
-import '../overview/widgets/suivi_details/section_suivi.dart';
 import '../overview/widgets/suivi_details/suivi_details.dart';
 import 'widgets/entete_suivi/entete_suivi.dart';
-import 'widgets/iframe_suivi_month.dart';
 import 'widgets/suivi_mensuel/suivi_mensuel.dart';
 
 class MonitoringPilotage extends StatefulWidget {
@@ -27,9 +25,9 @@ class _MonitoringPilotageState extends State<MonitoringPilotage> {
             children: [
               Expanded(child: Column(
                 children:  [
-                  SectionSuivi(),
+                  SuiviMensuel(),
                   SizedBox(height: defaultPadding),
-                  Expanded(child: SuiviMensuel())
+                  Expanded(child: SuiviMensuel()),
                 ],
               )),
               if (!Responsive.isMobile(context)) const SizedBox(width: defaultPadding),

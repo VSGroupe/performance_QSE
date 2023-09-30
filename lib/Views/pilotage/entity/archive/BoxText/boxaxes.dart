@@ -30,17 +30,18 @@ class BoxAxe extends StatefulWidget {
 class _BoxAxeState extends State<BoxAxe> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: widget.width_1,
-      height: 120,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color:Colors.white,
+    return Card(
+      elevation: 4,
+      shape:RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20)
       ),
-      child: Card(
-        elevation: 4,
-        shape:RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20)
+      child:  Container(
+        clipBehavior:Clip.antiAlias,
+        width: widget.width_1,
+        height: 120,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color:Colors.white,
         ),
         child: Row(
           children: [

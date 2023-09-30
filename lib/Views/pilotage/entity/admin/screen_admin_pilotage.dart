@@ -1,4 +1,5 @@
 import '../../../../helpers/helper_methods.dart';
+import '../tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
 import '../widgets/privacy_widget.dart';
 import 'widgets/user_admin_pilotage/user_admin_controller.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class ScreenPilotageAdmin extends StatefulWidget {
 
 class _ScreenPilotageAdminState extends State<ScreenPilotageAdmin> {
   bool _isLoaded = false;
+  final ControllerTableauBord controllerTableauBord=Get.find();
   final UserAdminController userAdminController=Get.put(UserAdminController());
 
 
@@ -30,6 +32,7 @@ class _ScreenPilotageAdminState extends State<ScreenPilotageAdmin> {
   @override
   void initState() {
     super.initState();
+    controllerTableauBord.assemblyIndicateurWithDataIndicateur();
     userAdminController.initialisation();
     loadScreen();
   }

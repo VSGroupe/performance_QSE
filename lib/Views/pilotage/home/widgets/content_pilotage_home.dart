@@ -242,7 +242,7 @@ class _EspaceTextButtonState extends State<EspaceTextButton> {
   }
 
   Future<bool> goToEspaceEntitePilotage(String idEntite) async{
-    print(idEntite);
+
     EasyLoading.show(status: 'Chargement...');
     await Future.delayed(Duration(seconds: 2));
     String? email = await storage.read(key: 'email');
@@ -261,8 +261,8 @@ class _EspaceTextButtonState extends State<EspaceTextButton> {
       return false;
     }
     final bool verfication = (acces["est_spectateur"] || acces["est_collecteur"] || acces["est_validateur"] || acces["est_admin"]);
-    final bool checkEntite = (acces["espace"].contains(widget.espaceID));
-    if (verfication && checkEntite) {
+    final bool checkEspace= (acces["espace"].contains(widget.espaceID));
+    if (verfication && checkEspace) {
       EasyLoading.dismiss();
       await storage.write(key: 'espace',value:widget.espaceID);
 
