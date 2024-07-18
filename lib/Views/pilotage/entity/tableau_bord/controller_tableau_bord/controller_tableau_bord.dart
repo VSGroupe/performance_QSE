@@ -142,6 +142,60 @@ class ControllerTableauBord extends GetxController{
   }
 
 
+  List<dynamic>getPerformance() {
+    dynamic data = [];
+    List<Map<String,dynamic>> numberIndCritereValidate=[{}];
+    List<Map<String,dynamic>> numberIndEnjeuValidate=[{}];
+    assemblyIndicateurWithDataIndicateur();
+    List<IndicateurRowTableauBordModel> IndicateursAxe1 = indicateurRowTableauBord.toList().where((element) => element.axe == "axe1").toList();
+    List<IndicateurRowTableauBordModel> IndicateursAxe2 = indicateurRowTableauBord.toList().where((element) => element.axe == "axe2").toList();
+    List<IndicateurRowTableauBordModel> IndicateursAxe3 = indicateurRowTableauBord.toList().where((element) => element.axe == "axe3").toList();
+    List<IndicateurRowTableauBordModel> IndicateursAxe4 = indicateurRowTableauBord.toList().where((element) => element.axe == "axe4").toList();
+
+
+    int numberIndicateurValidateAxe1 = IndicateursAxe1.where((element) => element.realisee.isValidate == 1).toList().length;
+    int numberIndicateurValidateAxe2 = IndicateursAxe2.where((element) => element.realisee.isValidate == 1).toList().length;
+    int numberIndicateurValidateAxe3 = IndicateursAxe3.where((element) => element.realisee.isValidate == 1).toList().length;
+    int numberIndicateurValidateAxe4 = IndicateursAxe4.where((element) => element.realisee.isValidate == 1).toList().length;
+
+
+    criteres.forEach((critere) {
+      int Donnee=0;
+      int TotalIndCrit=0;
+      indicateurRowTableauBord.toList().forEach((indicateur) {
+        if(indicateur.critereNormatif==critere.libelle){
+          TotalIndCrit+=1;
+          if(indicateur.realisee.isValidate==1){
+            Donnee+=1;
+          }
+        }
+      }) ;
+      numberIndCritereValidate.add({"critere":critere.libelle,"perf":(Donnee/TotalIndCrit)*100});
+
+    });
+
+
+    enjeux.forEach((enjeu) {
+      int Donnee=0;
+      int TotalIndEnj=0;
+      indicateurRowTableauBord.toList().forEach((indicateur) {
+        if(indicateur.enjeu==enjeu.libelle){
+          TotalIndEnj+=1;
+          if(indicateur.realisee.isValidate==1){
+            Donnee+=1;
+          }
+        }
+      }) ;
+      numberIndEnjeuValidate.add({"enjeu":enjeu.libelle,"perf":(Donnee/TotalIndEnj)*100});
+    });
+    print("$numberIndCritereValidate + $numberIndCritereValidate");
+  return [numberIndCritereValidate,numberIndEnjeuValidate];
+  }
+
+
+
+
+
   void doFilter({required annee,required espace,required mois,required axe,required critere,required enjeu})async{
     indicateurRowTableauBord.value=await dbController.getIndicateurWithDataIndicateur(espace, annee);
     if(axe?.isNotEmpty){

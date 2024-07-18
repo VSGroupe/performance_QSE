@@ -44,9 +44,9 @@ class _RowAdminDataTableState extends State<RowAdminDataTable> {
       child: Material(
         elevation: isHovering ? 10 : 0,
         child: Container(
-          padding: const EdgeInsets.only(left: 2.0),
+          padding: const EdgeInsets.only(left: 2.0,right: 20),
           decoration: BoxDecoration(
-            border:Border.all(color: Colors.black, width: 1.0) ,
+            border:isHovering ?Border.all(color: Colors.black, width: 1.0):Border.all(width: 0) ,
             color: Colors.transparent,
           ),
           height: 40,
@@ -55,7 +55,7 @@ class _RowAdminDataTableState extends State<RowAdminDataTable> {
               // Réf
               Container(
                 height: 40,
-                width: 130,
+                width: 120,
                 alignment: Alignment.centerLeft,
                 color: Colors.transparent,
                 child: Row(

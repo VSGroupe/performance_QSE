@@ -5,12 +5,12 @@ class Banniere extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return               Expanded(
-        flex: 6,
+    return Expanded(
+        flex: 4,
         child: Card(
           elevation:1,
           child: Container(
-            height: 250,
+            height: 220,
             width: 1200,
             decoration: BoxDecoration(
               color: Colors.white,

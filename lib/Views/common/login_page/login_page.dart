@@ -116,16 +116,21 @@ class _LoginPageState extends State<LoginPage> {
                         flex: 3,
                         child: Center(
                             child:Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(
-                                  height: 60,
+                                  height: 40,
+                                ),
+                                Text("PERFORMANCE",style:TextStyle(fontSize: 47,fontWeight: FontWeight.bold,color:Colors.green)),
+                                SizedBox(
+                                  height: 55,
                                 ),
                                 Container(
                                   width:600,
-                                  height:500,
+                                  height:400,
                                   decoration: BoxDecoration(
                                     image:DecorationImage(
-                                      image: AssetImage("assets/logos/perf_QSE.png"),
+                                      image: AssetImage("assets/logos/banniereQSE.png"),
                                       fit: BoxFit.contain
                                     )
                                   ),

@@ -8,6 +8,7 @@ import '../widget/button_header_progress.dart';
 import '../widget/material_global_button.dart';
 import 'bilan/bilan.dart';
 import 'checklist/checklist.dart';
+import 'information_generale/info_gene.dart';
 import 'plan_audit/plan_audit_page.dart';
 import 'plan_audit/widgets/planing_evalauation_widget.dart';
 
@@ -30,7 +31,7 @@ class _ScreenGestionAuditState extends State<ScreenGestionAudit> {
   @override
   Widget build(BuildContext context) {
     List<Widget> widget=[
-      Center(child: Icon(Icons.cable,size: 40,),),PlanAuditPage(),CheckList(),BilanAudit(),
+      InfoGeneral(),PlanAuditPage(),CheckList(),BilanAudit(),
     ];
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;

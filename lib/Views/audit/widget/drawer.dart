@@ -64,7 +64,7 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                           child: TextButton(
                               onPressed: () {
                                 setState(() {
-                                  context.go("/audit/gestion-audits");
+                                  context.go(controllerAudit.reference.value==""? "":"/audit/gestion-audits");
                                 });
                               },
                               child: const Text(

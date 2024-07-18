@@ -182,7 +182,6 @@
 // }
 
 import 'package:flutter/material.dart';
-import 'customtext.dart';
 
 class CopyRight extends StatefulWidget {
   const CopyRight({super.key});
@@ -219,11 +218,13 @@ class _CopyRightState extends State<CopyRight> {
                     //   throw "Could not launch $url";
                     // }
                   },
-                  child: const CustomText(
-                      text: "Copyright @ Vision & Strategie Groupe",
-                     size: 15,
-                    weight: FontWeight.bold,
+                  child: const Text(
+                      "Copyright @ Vision & Strategie Groupe",style:TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
                     color: Colors.white,
+                  )
+
                   ),
                 ),
               ),

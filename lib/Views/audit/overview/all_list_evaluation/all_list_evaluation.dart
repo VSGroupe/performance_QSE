@@ -29,7 +29,7 @@ class _AllListViewState extends State<AllListView> {
               children: [
                 Image.asset("assets/images/search.png",width: 30,height: 30,),
                 SizedBox(width: 5,),
-                Text("Evaluation RSE",
+                Text("Audit QSE",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -40,7 +40,7 @@ class _AllListViewState extends State<AllListView> {
             Row(
               children: [
                 const Text(
-                  "Listes des Evaluation",
+                  "Listes des Audits",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
                 ),
                 SizedBox(
@@ -62,7 +62,7 @@ class _AllListViewState extends State<AllListView> {
                 Expanded(child: Container()),
                 MaterialButton(
                   onPressed:(){},color: Colors.yellowAccent,
-                  child: Text("Entamer une évaluation",
+                  child: Text("Démarer un audit",
                     style: TextStyle(color: Colors.black,fontWeight:FontWeight.bold,fontSize: 18),),),
                 SizedBox(
                   width: 20,
@@ -133,7 +133,7 @@ class _AllListViewState extends State<AllListView> {
                               dateValidation: '10-10-2023',
                             ),
                             ItemAudit(
-                              statut: 'Audit validé',
+                              statut: 'Audit clôturé',
                               perfGlobale: 35,
                               dateCreation: '26-09-2023',
                               dateDebut: '28-09-2023',
@@ -152,7 +152,7 @@ class _AllListViewState extends State<AllListView> {
 
 
                             ItemAudit(
-                              statut: 'Audit terminé',
+                              statut: 'Audit clôturé',
                               perfGlobale: 35,
                               dateCreation: '26-09-2023',
                               dateDebut: '28-09-2023',

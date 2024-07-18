@@ -70,7 +70,7 @@ class _CollecteGlobaleState extends State<CollecteGlobale> {
       ),
       child: Column(
         children: [
-          Text("Progrès de collecte Processus",style: Theme.of(context).textTheme.titleMedium,),
+          Text("Progrès de collecte Processus mois mars",style: Theme.of(context).textTheme.titleMedium,),
           const SizedBox(height: 18,),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

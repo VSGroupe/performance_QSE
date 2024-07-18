@@ -60,8 +60,8 @@ class _ChartConsoState extends State<ChartConso> {
           explodeIndex: 0,
           explodeOffset: '20%',
           dataSource: <ChartSampleData>[
-            ChartSampleData(x: 'Indicateurs Validées', y: numberValidate, text: 'Indicateurs Validées \n $numberValidate %'),
-            ChartSampleData(x: 'Indicateurs Non Validées', y:numberUnValidate , text: 'Indicateurs Non Validées \n $numberUnValidate %'),
+            ChartSampleData(x: 'Indicateurs renseignés', y: numberValidate, text: 'Indicateurs Validées \n $numberValidate %'),
+            ChartSampleData(x: 'Indicateurs Non renseignés', y:numberUnValidate , text: 'Indicateurs Non Validées \n $numberUnValidate %'),
           ],
           xValueMapper: (ChartSampleData data, _) => data.x as String,
           yValueMapper: (ChartSampleData data, _) => data.y,

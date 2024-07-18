@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:perfqse/Views/pilotage/entity/performs/widgets/bar_chart_enjeu.dart';
 import 'package:styled_widget/styled_widget.dart';
 import '../../../../constants/colors.dart';
 import '../../../../module/styled_scrollview.dart';
+import 'widgets/bar_chart_critere.dart';
 import 'widgets/entete_performance.dart';
 import 'widgets/perform_enjeu/perform_enjeu.dart';
 import 'widgets/perform_global/performance_global.dart';
@@ -22,43 +24,17 @@ class _PerformPilotageState extends State<PerformPilotage> {
       child: StyledScrollView(
         child: Column(
           children: [
-            SizedBox(
-              height: 405,
-              child: Row(
-                children: [
-                  Container(
-                      padding: const EdgeInsets.all(5),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      child: const PerformanceGlobale()
-                  ),
-                  SizedBox(width: 10,),
-                  Expanded(child: Container(
-                      height: double.infinity,
-                      padding: const EdgeInsets.all(5),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      child: PerformancePiliers())
-                  )
-                ],
-              ),
-            ),
+            // Text("PERFORMANCE SUIVANT LES CRITERES",style:TextStyle(
+            //   fontWeight: FontWeight.bold,fontSize: 16,
+            // ),),
+            // SizedBox(height: 10,),
+            // BarChartCritere(),
+            SizedBox(height: 20,),
+            Text("PERFORMANCE SUIVANT LES ENJEUX",style:TextStyle(
+              fontWeight: FontWeight.bold,fontSize: 16,
+            ),),
             SizedBox(height: 10,),
-            Container(
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-                child: Transform.scale(
-                  scale: 0.7,
-                  child: Container(height:800,child: PerformanceEnjeu()),
-                )
-            ),
+            BarChartEnjeu(),
           ],
         ),
       ),

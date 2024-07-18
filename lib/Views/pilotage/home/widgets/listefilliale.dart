@@ -35,7 +35,7 @@ var processTrans=[
   "prefix":"PQ"
   },
   {
-  "name":"Processus MI",
+  "name":"Processus MI(Consolidé)",
   "prefix":"PM"
   },
 ];
@@ -75,10 +75,6 @@ var smqse=[
   },
   {
     "first":"Programmes d'Audits Internes",
-  },
-
-  {
-    "first":"Suivie des Objectifs QSE",
   },
   {
     "first":"Attentes des Parties Intéressées"
