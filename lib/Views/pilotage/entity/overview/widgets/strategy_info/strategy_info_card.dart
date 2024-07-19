@@ -19,7 +19,7 @@ class StrategyInfoCard extends StatelessWidget {
           children: [
             Text(
               "Les Axes Stratégiques",
-              style: Theme.of(context).textTheme.subtitle1,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           ],
         ),

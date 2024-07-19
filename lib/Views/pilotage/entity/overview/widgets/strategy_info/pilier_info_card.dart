@@ -69,7 +69,7 @@ class PilierInfoCard extends StatelessWidget {
                 info.totalStorage!,
                 style: Theme.of(context)
                     .textTheme
-                    .caption!
+                    .bodySmall!
                     .copyWith(color: Colors.black),
               ),
             ],
