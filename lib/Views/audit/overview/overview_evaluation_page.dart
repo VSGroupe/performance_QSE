@@ -149,12 +149,12 @@ class _OverviewEvaluationPageState extends State<OverviewEvaluationPage> {
                                     title: "Nombre total d'audit:10",
                                     dataMap: {
                                       "En cours": 50,
-                                      "Terminée": 30,
+                                      "clôturer": 30,
                                       "Validée": 20,
                                     },
                                     legendLabels: {
                                       "En cours": "En cours",
-                                      "Terminée": "Terminée",
+                                      "clôturer": "clôturer",
                                       "Validée": "Validée",
                                     },
                                     listColorLegends: [
@@ -187,19 +187,23 @@ class _OverviewEvaluationPageState extends State<OverviewEvaluationPage> {
                                   typeChart: 'BarChart',
                                 ),
                                 HeaderCardOverviewEvaluation(
+                                  width:260,
                                   title: "Conclusion sur la conformte",
                                   dataMap: {
-                                    "En cours": 50,
-                                    "Terminée": 30,
-                                    "Validée": 20,
+                                    "Non conformité": 10,
+                                    "Point sensible": 30,
+                                    "conforme": 20,
+                                    "Point Fort": 40,
                                   },
                                   legendLabels: {
-                                    "En cours": "En cours",
-                                    "Terminée": "Terminée",
-                                    "Validée": "Validée",
+                                    "Non conformité": "Non conformité",
+                                    "Point sensible": "Point sensible",
+                                    "Conforme": "Conforme",
+                                    "Point Fort": "Point Fort",
                                   },
                                   listColorLegends: [
-                                    Colors.grey,
+                                    Colors.red,
+                                    const Color(0xFFDCC216),
                                     Colors.green,
                                     const Color(0xff6c5ce7),
                                   ],
@@ -290,12 +294,12 @@ class _OverviewEvaluationPageState extends State<OverviewEvaluationPage> {
                                     dateValidation: '10-10-2023',
                                   ),
                                   ItemAudit(
-                                    statut: 'Audit validé',
+                                    statut: 'Audit clôturé',
                                     perfGlobale: 35,
-                                    dateCreation: '26-09-2023',
-                                    dateDebut: '28-09-2023',
-                                    dateFin: '05-10-2023',
-                                    dateValidation: '10-10-2023',
+                                    dateCreation: '03-10-2023',
+                                    dateDebut: '05-10-2023',
+                                    dateFin: '11-10-2023',
+                                    dateValidation: '15-10-2023',
                                   ),
                                   ItemAudit(
                                     statut: 'En cours',

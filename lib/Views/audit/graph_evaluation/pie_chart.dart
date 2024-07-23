@@ -67,6 +67,7 @@ class PieChartEvaluationState extends State<PieChartEvaluation> {
         legendShape: BoxShape.rectangle,
         legendTextStyle: const TextStyle(
           fontWeight: FontWeight.bold,
+          fontSize: 11
         ),
       ),
       chartValuesOptions: ChartValuesOptions(

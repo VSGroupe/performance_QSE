@@ -35,33 +35,39 @@ class _CustomCadreState extends State<CustomCadre> {
               child: Stack(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(right:8.0,left:8.0,bottom: 12.0,top:3),
                     child: Container(
                       decoration: BoxDecoration(
                           color: Colors.black87,
                           borderRadius: BorderRadius.circular(200)),
-                      padding: const EdgeInsets.all(8),
-                      child: ClipOval(
+                        padding: const EdgeInsets.only(right:8.0,left:8.0,bottom: 12.0,top:3),
+                      child: AnimatedCrossFade(firstChild:ClipOval(
                         child: Image.asset(
                           widget.imagePath,
-                          width: 150,
-                          height: 150,
+                          width: 155,
+                          height: 155,
                           fit: BoxFit.cover,
                         ),
-                      ),
+                      ), secondChild:Container(
+                        height: 145,
+                        width: 145,
+                        decoration:BoxDecoration(
+                          color:Colors.black54,
+                          borderRadius: BorderRadius.circular(200)
+                        ),
+                        child:Center(
+                          child:Text(
+                            widget.titreCadre,style:TextStyle(
+                            fontWeight: FontWeight.bold,fontSize:34,color:Colors.white
+                          )
+                          )
+                        ),
+                      ), crossFadeState:_hovered?CrossFadeState.showSecond:CrossFadeState.showFirst,
+                          duration:Duration(milliseconds: 500))
                     ),
                   ),
                 ],
               ),
-            ),
-            const SizedBox(
-              height: 4,
-            ),
-            CustomText(
-              text: widget.titreCadre,
-              size: 25,
-              color: _hovered ? Colors.red : null,
-              weight: FontWeight.bold,
             ),
             const SizedBox(
               height: 20,

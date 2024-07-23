@@ -213,45 +213,45 @@ class _MainPageState extends State<MainPage> {
                           ],
                         ),
                         const SizedBox(
-                          height: 10,
+                          height:10,
                         ),
                         Banniere(),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            CustomCadre(
-                              onTap: () async {
-                                checkAccesEvaluation(
-                                    "${data["user"]["email"]}");
-                              },
-                              imagePath: "assets/images/audit.jpg",
-                              titreCadre: "Audit",
-                            ),
-                            CustomCadre(
-                              onTap: () {
-                                checkAccesPilotage(
-                                    "${data["user"]["email"]}");
-                              },
-                              imagePath: "assets/images/pilotage_rse.jpg",
-                              titreCadre: "Pilotage",
-                            ),
-                            CustomCadre(
-                              onTap: () {
-                                _showMyDialog();
-                              },
-                              imagePath: "assets/images/reporting_qse.png",
-                              titreCadre: "Reporting",
-                            ),
-                          ],
+                        Expanded(
+                          flex:4,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CustomCadre(
+                                onTap: () {
+                                  checkAccesPilotage(
+                                      "${data["user"]["email"]}");
+                                },
+                                imagePath: "assets/images/pilotageUpdate.png",
+                                titreCadre: "Pilotage",
+                              ),
+                              CustomCadre(
+                                onTap: () async {
+                                  checkAccesEvaluation(
+                                      "${data["user"]["email"]}");
+                                },
+                                imagePath: "assets/images/auditUpdate.png",
+                                titreCadre: "Audit",
+                              ),
+                              CustomCadre(
+                                onTap: () {
+                                  _showMyDialog();
+                                },
+                                imagePath: "assets/images/rapportUpdate.png",
+                                titreCadre: "Rapport",
+                              ),
+                            ],
+                          ),
                         )
                       ],
                     ),
                     Positioned(
-                      bottom: 9,
+                      bottom: 60,
                       child: RotatedBox(
                         quarterTurns: 2,
                         child: IconButton(

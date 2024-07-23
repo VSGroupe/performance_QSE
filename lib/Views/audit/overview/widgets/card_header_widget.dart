@@ -7,13 +7,14 @@ import '../../graph_evaluation/pie_chart.dart';
 
 class HeaderCardOverviewEvaluation extends StatefulWidget {
   final String? title;
+  final double? width;
   final Map<String,double>? dataMap;
   final Map <String,String>? legendLabels;
   final List<Color>? listColorLegends;
   final ChartType? chartType;
   final LegendPosition? legendPosition;
   final String typeChart;
-  const HeaderCardOverviewEvaluation({super.key,required this.title, this.dataMap, this.legendLabels, this.listColorLegends, this.chartType, this.legendPosition, required this.typeChart,});
+  const HeaderCardOverviewEvaluation({super.key,this.width,required this.title, this.dataMap, this.legendLabels, this.listColorLegends, this.chartType, this.legendPosition, required this.typeChart,});
 
   @override
   State<HeaderCardOverviewEvaluation> createState() => _HeaderCardOverviewEvaluationState();
@@ -27,7 +28,7 @@ class _HeaderCardOverviewEvaluationState extends State<HeaderCardOverviewEvaluat
       padding: const EdgeInsets.only(top:8.0,right: 12.0),
       child: Container(
         height: 190,
-        width: 244,
+        width:widget.width?? 244,
         decoration:BoxDecoration(
           borderRadius: BorderRadius.circular(40),
         ),

@@ -48,7 +48,7 @@ class _ItemAuditState extends State<ItemAudit> {
                     children: [
                       RichText(
                           text: TextSpan(
-                              text: "Identifiants: ",
+                              text: "Référence: ",
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -103,7 +103,48 @@ class _ItemAuditState extends State<ItemAudit> {
                                     icon: Icon(Icons.inbox_outlined),
                                   )),
                               PopupMenuItem(
-                                onTap: () {},
+                                onTap: () {
+                                  showDialog(context: context,
+                                    builder: (BuildContext context) {
+                                    return AlertDialog(
+                                        elevation:5,
+                                      backgroundColor: Colors.white,
+                                      content: Container(
+                                        height:180,
+                                        width: 350,
+                                        child:Column(
+                                          children: [
+                                            Center(
+                                                child:Icon(Icons.warning_amber,size:60,color:Colors.red,)
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text("Cette action est irréversible,voulez-vous vraiment supprimer ?",textAlign: TextAlign.center,style:TextStyle(
+                                              fontSize: 25,color: Colors.black
+                                            )),
+                                          ],
+                                        )
+                                      ),
+                                      actions: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              OutlinedButton(onPressed:(){},
+                                                  child: Text("Supprimer")),
+                                              OutlinedButton(onPressed:(){},
+                                                  child: Text("Annuler")),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    );
+                                    },
+
+                                  );
+                                },
                                 child: TextButton.icon(
                                   onPressed: null,
                                   label: Text(
@@ -152,7 +193,7 @@ class _ItemAuditState extends State<ItemAudit> {
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold)),
                         const TextSpan(
-                            text: "     Date de validation:    ",
+                            text: "     Date de clôture:    ",
                             style: TextStyle(color: Colors.grey, fontSize: 16)),
                         TextSpan(
                             text: widget.dateValidation,

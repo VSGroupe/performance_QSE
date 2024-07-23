@@ -68,7 +68,7 @@ class _ScreenAdminState extends State<ScreenAdmin> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Panneau d'aministration",style: headerBoldStyle),
+                Text("Panneau d'administration",style: headerBoldStyle),
                 SizedBox(height: 5,),
                 Expanded(
                   child: Column(

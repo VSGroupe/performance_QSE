@@ -33,13 +33,16 @@ class _HeaderMainPageState extends State<HeaderMainPage> {
           children: [
             Row(
               children: [
-                const SizedBox(
-                  width: 17,
-                ),
-                Image.asset(
-                  "assets/logos/perf_QSE.png",
-                  height: 50,
-                ),
+                // const SizedBox(
+                //   width: 17,
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Image.asset(
+                //     "assets/logos/Logo_perfQSE.png",
+                //     height: 50,
+                //   ),
+                // ),
                 const SizedBox(
                   width: 20,
                 ),
