@@ -224,6 +224,13 @@ class _MainPageState extends State<MainPage> {
                             children: [
                               CustomCadre(
                                 onTap: () {
+                                  _showMyDialog();
+                                },
+                                imagePath: "assets/images/gestion.png",
+                                titreCadre: "Gestion",
+                              ),
+                              CustomCadre(
+                                onTap: () {
                                   checkAccesPilotage(
                                       "${data["user"]["email"]}");
                                 },

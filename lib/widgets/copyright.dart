@@ -182,6 +182,7 @@
 // }
 
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CopyRight extends StatefulWidget {
   const CopyRight({super.key});
@@ -192,6 +193,20 @@ class CopyRight extends StatefulWidget {
 
 class _CopyRightState extends State<CopyRight> {
   bool isConnected=true;
+
+  @override
+  void initState() {
+    super.initState();
+    stateConnection();
+  }
+
+  //Fonction de vérificatoin de l'état de connexion de l'utilisateur courant
+  void stateConnection(){
+    final session = Supabase.instance.client.auth.currentSession;
+    if (session == null) {
+      isConnected = false;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -236,7 +251,7 @@ class _CopyRightState extends State<CopyRight> {
                     text: "Statut : ",
                     children: [
                       TextSpan(
-                          text: isConnected ? "Connecté" : "Aucune connection internet" ,
+                          text: isConnected ? "Connecté" : "Déconnecté" ,
                           style: TextStyle(color: isConnected ? Colors.green: Colors.red))
                     ],
                     style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.white),

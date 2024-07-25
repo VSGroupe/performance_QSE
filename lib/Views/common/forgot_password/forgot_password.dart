@@ -39,7 +39,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     margin: EdgeInsets.only(left: 100),
                     child: Center(
                       child: Image.asset(
-                        "assets/logos/perf_rse.png",
+                        "assets/logos/perf_qse.png",
                         height: 50,
                       ),
                     ),

@@ -83,6 +83,10 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+    final session = Supabase.instance.client.auth.currentSession;
+    if (session != null) {
+      Supabase.instance.client.auth.signOut();
+    }
     super.initState();
   }
 
@@ -264,7 +268,7 @@ class _LoginPageState extends State<LoginPage> {
                                                 }
                                               },
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor: isHovering? Colors.red:Colors.black,
+                                                backgroundColor: isHovering? Colors.lightGreen:Colors.black,
                                                 side: BorderSide(width: 1,color: Colors.black),
                                                 shape: isHovering ? StadiumBorder() : RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
                                               ),
@@ -287,7 +291,7 @@ class _LoginPageState extends State<LoginPage> {
                                             },
                                             child: const CustomText(
                                           text: "J’ai oublié mon mot de passe",
-                                          color: Colors.green,
+                                          color: Colors.red,
                                         ))
                                       ],
                                     ),

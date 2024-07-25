@@ -18,6 +18,12 @@ class _TransiteAuditState extends State<TransiteAudit> {
   final storage =FlutterSecureStorage();
   final Location="/audit/accueil";
 
+  @override
+  void initState() {
+    controllerAudit.reference.value="";
+    super.initState();
+  }
+
   Future<void> _showDialogNoAcces() async {
     return showDialog<void>(
       context: context,
@@ -48,7 +54,7 @@ class _TransiteAuditState extends State<TransiteAudit> {
 
   void getAccess(String centerTitle)async{
     String? reference = await storage.read(key:"ref");
-    List<String> ref=["E"];
+    List<String> ref= ["Q"];//["Q", "S", "E", "QS", "QE", "SE", "QSE"];
     if (reference!=null){
       ref =reference.split("\n");
     }

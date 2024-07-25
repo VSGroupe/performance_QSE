@@ -19,6 +19,35 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
     super.initState();
   }
 
+  Future<void> _showDialogNoAcces() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          title: Text(
+            "Aucune performance\nsélectionnée",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+                color: Colors.red),
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text("Veuillez sélectionner la performance à auditer\ndans l'espace à droite."),
+                SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -64,9 +93,14 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                           child: TextButton(
                               onPressed: () {
                                 setState(() {
-                                  context.go(controllerAudit.reference.value==""? "":"/audit/gestion-audits");
+                                  if (controllerAudit.reference.value == "") {
+                                    _showDialogNoAcces();
+                                  } else {
+                                    context.go("/audit/gestion-audits");
+                                  }
                                 });
                               },
+
                               child: const Text(
                                 "Démarer un audit",
                                 style: TextStyle(
@@ -99,13 +133,23 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                 ),
                 Obx(()
                 =>  CustomMenuButton(
-                    pathMenu: controllerAudit.reference.value==""? "":"/audit/accueil",
+                    pathMenu: controllerAudit.reference.value==""? "":"/audit/transite",
                     image: "assets/images/home1.png",
                     isFullPath: false,
                     // icon: Icons.home,
                     label: "Accueil",
                 ),
                  ),
+                const SizedBox(height: 5),
+                Obx(()
+                =>  CustomMenuButton(
+                  pathMenu: controllerAudit.reference.value==""? "":"/audit/accueil",
+                  image: "assets/images/audit.jpg",
+                  isFullPath: false,
+                  // icon: Icons.home,
+                  label: "Aperçu des audits",
+                ),
+                ),
                 const SizedBox(height: 5),
                 Obx(()
                 => CustomMenuButton(
