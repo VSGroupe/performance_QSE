@@ -131,15 +131,16 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                     color: Colors.black,
                   ),
                 ),
-                Obx(()
-                =>  CustomMenuButton(
-                    pathMenu: controllerAudit.reference.value==""? "":"/audit/transite",
-                    image: "assets/images/home1.png",
-                    isFullPath: false,
-                    // icon: Icons.home,
-                    label: "Accueil",
-                ),
-                 ),
+                Obx(() => CustomMenuButton(
+                  pathMenu: controllerAudit.reference.value == "" ? "" : "/audit/transite",
+                  image: "assets/images/home1.png",
+                  isFullPath: false,
+                  label: "Accueil",
+                  onTap: () {
+                    // Set the reference value to an empty string
+                    controllerAudit.reference.value = "";
+                  },
+                )),
                 const SizedBox(height: 5),
                 Obx(()
                 =>  CustomMenuButton(
@@ -148,6 +149,12 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                   isFullPath: false,
                   // icon: Icons.home,
                   label: "Aperçu des audits",
+                  onTap: () {
+                    // Action to execute
+                    if(controllerAudit.reference.value == ""){
+                      _showDialogNoAcces();
+                    }
+                  },
                 ),
                 ),
                 const SizedBox(height: 5),
@@ -158,6 +165,12 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                     // icon: Icons.person,
                     isFullPath: false,
                     label: "Profil",
+                    onTap: () {
+                      // Action to execute
+                      if(controllerAudit.reference.value == ""){
+                        _showDialogNoAcces();
+                      }
+                    },
                 ),
                  ),
                 const SizedBox(height: 5),
@@ -168,18 +181,30 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                     // icon: Icons.table_chart_rounded,
                     isFullPath: false,
                     label: "Gestion Audits",
+                    onTap: () {
+                      // Action to execute
+                      if(controllerAudit.reference.value == ""){
+                        _showDialogNoAcces();
+                      }
+                    },
                 ),
                  ),
                 const SizedBox(height: 5),
-                 Obx(()
+                Obx(()
                    => CustomMenuButton(
-                    pathMenu: controllerAudit.reference.value==""?"":'/audit/admin',
-                    image: "assets/images/homme-daffaire.png",
-                    // icon: Icons.admin_panel_settings_outlined,
-                    isFullPath: false,
-                    label: "Administration",
+                        pathMenu: controllerAudit.reference.value==""?"":'/audit/admin',
+                        image: "assets/images/homme-daffaire.png",
+                        // icon: Icons.admin_panel_settings_outlined,
+                        isFullPath: false,
+                        label: "Administration",
+                        onTap: () {
+                          // Action to execute
+                           if(controllerAudit.reference.value == ""){
+                             _showDialogNoAcces();
+                           }
+                         },
+                  ),
                 ),
-                 ),
                 const SizedBox(height: 5),
                 const CustomMenuButton(
                   pathMenu: '',
@@ -188,9 +213,7 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                   isFullPath: false,
                   label: "Réssources",
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
+                const SizedBox(height: 5,),
                 Container(
                   width: 240,
                   padding: const EdgeInsets.all(8),
@@ -218,23 +241,24 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
 
 class CustomMenuButton extends StatefulWidget {
   final String pathMenu;
-  // final bool isExtended;
   final String image;
   final bool isFullPath;
   final String label;
-  // final IconData icon;
-  const CustomMenuButton(
-      {Key? key,
-      required this.label,
-      // required this.icon,
-      required this.pathMenu,
-      required this.isFullPath,
-      required this.image})
-      : super(key: key);
+  final VoidCallback? onTap; // Pour pouvoir effectuer une action lorqu'on clique sur le bouton
+
+  const CustomMenuButton({
+    Key? key,
+    required this.label,
+    required this.pathMenu,
+    required this.isFullPath,
+    required this.image,
+    this.onTap, // On pourra ainsi définir une action à exécuter lorsqu'on clique sur le bouton
+  }) : super(key: key);
 
   @override
   State<CustomMenuButton> createState() => _CustomMenuButtonState();
 }
+
 
 class _CustomMenuButtonState extends State<CustomMenuButton> {
   bool _isHovering = false;
@@ -244,7 +268,12 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
   Widget build(BuildContext context) {
     return InkWell(
       overlayColor: MaterialStateProperty.all(Colors.transparent),
-      onTap: () {},
+      onTap: () {
+        if (widget.onTap != null) {
+          widget.onTap!(); // Call the onTap callback
+        }
+        context.go(widget.pathMenu);
+      },
       onHover: (isHovering) {
         setState(() {
           _isHovering = isHovering;
@@ -256,14 +285,17 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
         decoration: BoxDecoration(
             color: isSelected
                 ? _isHovering
-                    ? const Color(0xFFEEEEEE)
-                    : const Color(0xFFE8F0FE)
+                ? const Color(0xFFEEEEEE)
+                : const Color(0xFFE8F0FE)
                 : Colors.transparent,
             borderRadius: const BorderRadius.only(
                 topRight: Radius.circular(20),
                 bottomRight: Radius.circular(20))),
         child: OutlinedButton(
           onPressed: () {
+            if (widget.onTap != null) {
+              widget.onTap!(); // Call the onTap callback
+            }
             context.go(widget.pathMenu);
           },
           style: OutlinedButton.styleFrom(
@@ -279,14 +311,6 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
           ),
           child: Row(
             children: [
-              /*  widget.image == ""
-                  ? Icon(
-                      widget.icon,
-                      size: 25,
-                      color:
-                          isSelected ? const Color(0xFF114693) : Colors.black,
-                    )
-                  : */
               Image.asset(
                 widget.image,
                 width: 30,
@@ -308,3 +332,4 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
     );
   }
 }
+

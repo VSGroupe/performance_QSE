@@ -17,11 +17,6 @@ class _TransiteAuditState extends State<TransiteAudit> {
   final ControllerAudit controllerAudit =Get.put(ControllerAudit());
   final storage =FlutterSecureStorage();
   final Location="/audit/accueil";
-  @override
-  void initState() {
-    controllerAudit.reference.value="";
-    super.initState();
-  }
 
   Future<void> _showDialogNoAcces() async {
     return showDialog<void>(
