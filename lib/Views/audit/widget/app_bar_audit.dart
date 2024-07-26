@@ -10,7 +10,6 @@ class AppBarEvaluation extends StatefulWidget {
 
 class _AppBarEvaluationState extends State<AppBarEvaluation> {
 
-
   @override
   Widget build(BuildContext context) {
       final nom ="AMANI";

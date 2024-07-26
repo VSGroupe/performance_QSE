@@ -125,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                                 SizedBox(
                                   height: 40,
                                 ),
-                                Text("PERFORMANCE",style:TextStyle(fontSize: 47,fontWeight: FontWeight.bold,color:Colors.green)),
+                                Text("PERFORMANCE QSE",style:TextStyle(fontSize: 47,fontWeight: FontWeight.bold,color:Colors.green)),
                                 SizedBox(
                                   height: 55,
                                 ),

@@ -17,7 +17,6 @@ class _TransiteAuditState extends State<TransiteAudit> {
   final ControllerAudit controllerAudit =Get.put(ControllerAudit());
   final storage =FlutterSecureStorage();
   final Location="/audit/accueil";
-
   @override
   void initState() {
     controllerAudit.reference.value="";
@@ -54,7 +53,7 @@ class _TransiteAuditState extends State<TransiteAudit> {
 
   void getAccess(String centerTitle)async{
     String? reference = await storage.read(key:"ref");
-    List<String> ref= ["Q"];//["Q", "S", "E", "QS", "QE", "SE", "QSE"];
+    List<String> ref= ["Q", "S"];//["Q", "S", "E", "QS", "QE", "SE", "QSE"];
     if (reference!=null){
       ref =reference.split("\n");
     }
