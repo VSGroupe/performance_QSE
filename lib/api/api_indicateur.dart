@@ -21,7 +21,7 @@ class ApiTableau_Bord {
 
   Future<void> getIndicateur({required reference,required annee,required entity}) async {
     final response = await http.post(
-      Uri.parse(baseUrl + "/indicateur/getlist"),
+      Uri.parse(baseUrl),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

@@ -66,6 +66,15 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
+  Future<bool> checkAccesGestion() async {
+    final accesOk = true;
+    if (accesOk){
+      context.go("/gestion/accueil");
+    }
+    //_showMyDialog();
+    return !accesOk;
+  }
+
   Future<bool> checkAccesPilotage(String email) async {
     final result =
         await supabase.from("AccesPilotage").select().eq("email", email);
@@ -102,6 +111,15 @@ class _MainPageState extends State<MainPage> {
     }
     _showMyDialog();
     return false;
+  }
+
+  Future<bool> checkAccesRapport() async {
+    final accesOk = true;
+    //if (accesOk){
+      //context.go("/rapport/accueil");
+    //}
+    _showMyDialog();
+    return !accesOk;
   }
 
   @override
@@ -224,7 +242,7 @@ class _MainPageState extends State<MainPage> {
                             children: [
                               CustomCadre(
                                 onTap: () {
-                                  _showMyDialog();
+                                  checkAccesGestion();
                                 },
                                 imagePath: "assets/images/gestion.png",
                                 titreCadre: "Gestion",
@@ -247,7 +265,7 @@ class _MainPageState extends State<MainPage> {
                               ),
                               CustomCadre(
                                 onTap: () {
-                                  _showMyDialog();
+                                  checkAccesRapport();
                                 },
                                 imagePath: "assets/images/rapportUpdate.png",
                                 titreCadre: "Rapport",

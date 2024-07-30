@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:perfqse/Views/gestion/screen_gestion.dart';
+import 'package:perfqse/Views/rapport/home_rapport.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../Views/audit/gestion_audits/plan_audit/plan_audit_page.dart';
 import '../Views/audit/gestion_audits/screen_gestions_audits.dart';
@@ -16,6 +18,8 @@ import '../Views/common/forgot_password/forgot_password.dart';
 import '../Views/common/login_page/login_page.dart';
 import '../Views/common/main_page/common_home_page.dart';
 import '../Views/common/reload_page/reload_page.dart';
+import '../Views/gestion/home_gestion.dart';
+import '../Views/gestion/widgets/dashboard_gestion.dart';
 import '../Views/pilotage/entity/admin/screen_admin_pilotage.dart';
 import '../Views/pilotage/entity/entity_piloatage_main.dart';
 import '../Views/pilotage/entity/overview/screen_overview_pilotage.dart';
@@ -59,6 +63,13 @@ class RouteClass {
           key: state.pageKey,
           restorationId: state.pageKey.value,
           child: ReloadScreen(redirection: state.extra.toString(),),
+        ),
+      ),
+      GoRoute(path: "/rapport",
+        pageBuilder: (context, state) => NoTransitionPage<void>(
+          key: state.pageKey,
+          restorationId: state.pageKey.value,
+          child: const DrawerRapport(),
         ),
       ),
       GoRoute(
@@ -158,56 +169,79 @@ class RouteClass {
                 ]
             ),
           ]),
-            ShellRoute(
-              navigatorKey: _shellNavigatorKey,
-              builder: (BuildContext context, GoRouterState state, Widget child) {
-                return ScreenEvaluation(child: child);
-              },
-              routes: <RouteBase>[
-                GoRoute(
-                  path: '/audit/transite',
-                  pageBuilder: (context, state) => NoTransitionPage<void>(
-                      key: state.pageKey,
-                      child: const TransiteAudit()
-                  ),
-                ),
-                GoRoute(
-                  path: '/audit/accueil',
-                  pageBuilder: (context, state) => NoTransitionPage<void>(
-                      key: state.pageKey,
-                      child: const OverviewEvaluationPage()
-                  ),
-                ),
-                GoRoute(
-                  path: '/audit/list-audits',
-                  pageBuilder: (context, state) => NoTransitionPage<void>(
-                      key: state.pageKey,
-                      child: const AllListView()
-                  ),
-                ),
-                GoRoute(
-                  path: '/audit/gestion-audits',
-                  pageBuilder: (context, state) => NoTransitionPage<void>(
-                      key: state.pageKey,
-                      child: ScreenGestionAudit()
-                  ),
-                ),
-                GoRoute(
-                  path: '/audit/profil',
-                  pageBuilder: (context, state) => NoTransitionPage<void>(
-                      key: state.pageKey,
-                      child: ScreenPilotageProfil()
-                  ),
-                ),
-                GoRoute(
-                  path: '/audit/admin',
-                  pageBuilder: (context, state) => NoTransitionPage<void>(
-                      key: state.pageKey,
-                      child: ScreenAdmin()
-                  ),
-                ),
-              ],
+
+      // Routes pour la gestion du module Gestion
+
+      ShellRoute(
+        navigatorKey: _shellNavigatorKey,
+        builder: (BuildContext context, GoRouterState state, Widget child) {
+          return ScreenGestion(child: child);
+        },
+        routes: <RouteBase>[
+          GoRoute(
+            path: '/gestion/accueil',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: const DashboardGestion()
             ),
+          ),
+        ],
+      ),
+
+
+
+      // Les routes pour le module Audit
+
+      ShellRoute(
+        navigatorKey: _shellNavigatorKey,
+        builder: (BuildContext context, GoRouterState state, Widget child) {
+          return ScreenEvaluation(child: child);
+        },
+        routes: <RouteBase>[
+          GoRoute(
+            path: '/audit/transite',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: const TransiteAudit()
+            ),
+          ),
+          GoRoute(
+            path: '/audit/accueil',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: const OverviewEvaluationPage()
+            ),
+          ),
+          GoRoute(
+            path: '/audit/list-audits',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: const AllListView()
+            ),
+          ),
+          GoRoute(
+            path: '/audit/gestion-audits',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenGestionAudit()
+            ),
+          ),
+          GoRoute(
+            path: '/audit/profil',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenPilotageProfil()
+            ),
+          ),
+          GoRoute(
+            path: '/audit/admin',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenAdmin()
+            ),
+          ),
+        ],
+      ),
 
       GoRoute(
           path: '/account/login',
