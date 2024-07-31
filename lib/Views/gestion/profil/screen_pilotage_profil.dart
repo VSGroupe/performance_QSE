@@ -7,21 +7,21 @@ import '../../../../helpers/helper_methods.dart';
 import '../../../../models/common/user_model.dart';
 import '../../../../models/pilotage/acces_pilotage_model.dart';
 import '../../../../utils/pilotage_utils.dart';
-import '../../pilotage/entity/profil/controller/profil_pilotage_controller.dart';
+import '../../audit/autre/widgets/evaluation_utils.dart';
 import '../../pilotage/entity/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
-import '../autre/widgets/evaluation_utils.dart';
-import '../constant/constants.dart';
-import 'admin.dart';
+import 'controller/profil_pilotage_controller.dart';
+import 'profil_pilotage.dart';
 
-class ScreenAdmin extends StatefulWidget {
-  /// Constructs a [ScreenAdmin] widget.
-  const ScreenAdmin({super.key});
+
+class ScreenAuditProfil extends StatefulWidget {
+  /// Constructs a [ScreenAuditProfil] widget.
+  const ScreenAuditProfil({super.key});
 
   @override
-  State<ScreenAdmin> createState() => _ScreenAdminState();
+  State<ScreenAuditProfil> createState() => _ScreenAuditProfilState();
 }
 
-class _ScreenAdminState extends State<ScreenAdmin> {
+class _ScreenAuditProfilState extends State<ScreenAuditProfil> {
 
   final storage = FlutterSecureStorage();
   final ProfilPilotageController userController= Get.put(ProfilPilotageController());
@@ -62,19 +62,21 @@ class _ScreenAdminState extends State<ScreenAdmin> {
           );
         }
         final data = snapshot.data!;
+        userController.userModel.value=UserModel.fromJson(data["user"]);
+        userController.accesPilotageModel.value=AccesPilotageModel.fromJson(data["accesPilotage"]);
         return Scaffold(
           body: Padding(
             padding: EdgeInsets.only(top: 16,left: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Panneau d'administration",style: headerBoldStyle),
+                Text("Profil",style: TextStyle(fontSize: 20,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
                 SizedBox(height: 5,),
                 Expanded(
                   child: Column(
                     children: [
                       Expanded(child: Container(
-                          child: Admin()
+                          child: Obx((){return ProfilPilotage(userModel: userController.userModel.value, accesPilotageModel: userController.accesPilotageModel.value);})
                       ),
                       )
                     ],

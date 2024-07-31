@@ -122,10 +122,10 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 width: 250,
                 child: InkWell(
                   onTap: () {
-                    getAccess("QSE");
+                    context.go("/gestion/profil");
                   },
                   mouseCursor: SystemMouseCursors.click,
-                  child: Image.asset("assets/images/qse.png", fit: BoxFit.contain),
+                  child: Image.asset("assets/images/user-profile.png", fit: BoxFit.contain),
                 ),
               ),
             ),
@@ -205,28 +205,45 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 },
                 child: AnimatedContainer(
                   duration: Duration(milliseconds: 300),
-                  height: isHoveredQSE ? 390 : 40,
+                  height: isHoveredQSE ? 390 : 45,
                   width: 275,
-                  color: Colors.blue,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        color: Colors.red,
-                        padding: EdgeInsets.symmetric(vertical: 8),
-                        child: Text(
-                          "Gestion de l'entreprise",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 1,
+                    ),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(8),
+                              topRight: Radius.circular(8),
+                            ),
+                            border: Border.all(
+                              color: Colors.grey,
+                              width: 1,
+                            ),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Text(
+                            "Gestion de l'entreprise",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      if (isHoveredQSE)
-                        Expanded(
-                          child: SingleChildScrollView(
+                        if (isHoveredQSE)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Column(
                               children: [
-                                SizedBox(height: 10),
                                 SizedBox(
                                   width: 245, // Fixed width for buttons
                                   child: ElevatedButton(
@@ -269,8 +286,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                               ],
                             ),
                           ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -292,82 +309,69 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 },
                 child: AnimatedContainer(
                   duration: Duration(milliseconds: 300),
-                  height: isHoveredQ ? 270 : 40,
+                  height: isHoveredQ ? 270 : 45,
                   width: 300,
-                  color: Colors.blue,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        color: Colors.red,
-                        padding: EdgeInsets.symmetric(vertical: 8),
-                        child: Text(
-                          "Gestion de Pilotage",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 1,
+                    ),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(8),
+                              topRight: Radius.circular(8),
+                            ),
+                            border: Border.all(
+                              color: Colors.grey,
+                              width: 1,
+                            ),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Text(
+                            "Gestion SM QSE",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      if (isHoveredQ)
-                        Expanded(
-                          child: SingleChildScrollView(
+                        if (isHoveredQ)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Column(
                               children: [
-                                SizedBox(height: 10),
                                 SizedBox(
-                                  width: 250, // Fixed width for buttons
+                                  width: 245, // Fixed width for buttons
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      getAccess("QSE");
+                                      getAccess("Q");
                                     },
-                                    child: Text("Politique QSE"),
+                                    child: Text("Questions fréquentes"),
                                   ),
                                 ),
                                 SizedBox(height: 10),
                                 SizedBox(
-                                  width: 250, // Fixed width for buttons
+                                  width: 245, // Fixed width for buttons
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      getAccess("QSE");
+                                      getAccess("Q");
                                     },
-                                    child: Text("Non conformités"),
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                SizedBox(
-                                  width: 250, // Fixed width for buttons
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      getAccess("QSE");
-                                    },
-                                    child: Text("Attentes des intéressés"),
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                SizedBox(
-                                  width: 250, // Fixed width for buttons
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      getAccess("QSE");
-                                    },
-                                    child: Text("Gestion des processus"),
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                SizedBox(
-                                  width: 250, // Fixed width for buttons
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      getAccess("QSE");
-                                    },
-                                    child: Text("Gestion des indicateurs"),
+                                    child: Text("Questions générales"),
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -389,69 +393,89 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 },
                 child: AnimatedContainer(
                   duration: Duration(milliseconds: 300),
-                  height: isHoveredS ? 270 : 40,
-                  width: 300,
-                  color: Colors.blue,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        color: Colors.red,
-                        padding: EdgeInsets.symmetric(vertical: 8),
-                        child: Text(
-                          "Gestion d'Audits",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                  height: isHoveredS ? 250 : 45,
+                  width: 275,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 1,
+                    ),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(8),
+                              topRight: Radius.circular(8),
+                            ),
+                            border: Border.all(
+                              color: Colors.grey,
+                              width: 1,
+                            ),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Text(
+                            "Gestion des services",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      if (isHoveredS)
-                        Expanded(
-                          child: SingleChildScrollView(
+                        if (isHoveredS)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Column(
                               children: [
-                                SizedBox(height: 10),
                                 SizedBox(
-                                  width: 250, // Fixed width for buttons
+                                  width: 245, // Fixed width for buttons
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      getAccess("QSE");
+                                      getAccess("S");
                                     },
-                                    child: Text("Panneau de gestion"),
+                                    child: Text("Services disponibles"),
                                   ),
                                 ),
                                 SizedBox(height: 10),
                                 SizedBox(
-                                  width: 250, // Fixed width for buttons
+                                  width: 245, // Fixed width for buttons
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      getAccess("QSE");
+                                      getAccess("S");
                                     },
-                                    child: Text("Programme des audits internes"),
+                                    child: Text("Service clientèle"),
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-            // Information Widget
+            // Information widget
             if (_showInfo)
               Positioned(
-                left: _infoPosition.dx - 230,
-                top: _infoPosition.dy -50,
+                top: _infoPosition.dy,
+                left: _infoPosition.dx,
                 child: Material(
                   color: Colors.transparent,
                   child: Container(
-                    padding: EdgeInsets.all(10),
-                    color: Colors.white,
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.7),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                     child: Text(
                       _infoText,
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),

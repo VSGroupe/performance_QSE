@@ -160,27 +160,11 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                 const SizedBox(height: 5),
                 Obx(()
                 => CustomMenuButton(
-                    pathMenu:controllerAudit.reference.value==""?"":'/audit/profil',
-                    image: "assets/images/profile-user.png",
-                    // icon: Icons.person,
-                    isFullPath: false,
-                    label: "Profil",
-                    onTap: () {
-                      // Action to execute
-                      if(controllerAudit.reference.value == ""){
-                        _showDialogNoAcces();
-                      }
-                    },
-                ),
-                 ),
-                const SizedBox(height: 5),
-                Obx(()
-                => CustomMenuButton(
                     pathMenu: controllerAudit.reference.value==""?"":'/audit/gestion-audits',
                     image: "assets/images/audit.png",
                     // icon: Icons.table_chart_rounded,
                     isFullPath: false,
-                    label: "Gestion Audits",
+                    label: "Démarrer un audit",
                     onTap: () {
                       // Action to execute
                       if(controllerAudit.reference.value == ""){
@@ -189,22 +173,6 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                     },
                 ),
                  ),
-                const SizedBox(height: 5),
-                Obx(()
-                   => CustomMenuButton(
-                        pathMenu: controllerAudit.reference.value==""?"":'/audit/admin',
-                        image: "assets/images/homme-daffaire.png",
-                        // icon: Icons.admin_panel_settings_outlined,
-                        isFullPath: false,
-                        label: "Administration",
-                        onTap: () {
-                          // Action to execute
-                           if(controllerAudit.reference.value == ""){
-                             _showDialogNoAcces();
-                           }
-                         },
-                  ),
-                ),
                 const SizedBox(height: 5),
                 const CustomMenuButton(
                   pathMenu: '',
@@ -221,9 +189,39 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                     color: Colors.black,
                   ),
                 ),
-                const SizedBox(
-                  height: 5,
+                const SizedBox(height: 5,),
+                const CustomMenuButton(
+                  pathMenu: '/pilotage',
+                  image: "assets/images/retour_pilotage.jpg",
+                  isFullPath: true,
+                  // icon: Icons.arrow_circle_left_sharp,
+                  label: "Pilotage",
                 ),
+                const SizedBox(height: 5,),
+                const CustomMenuButton(
+                  pathMenu: '/gestion/accueil',
+                  image: "assets/images/retour.jpg",
+                  isFullPath: true,
+                  // icon: Icons.arrow_circle_left_sharp,
+                  label: "Gestion",
+                ),
+                const SizedBox(height: 5,),
+                const CustomMenuButton(
+                  pathMenu: '',
+                  image: "assets/images/retour_rapport.jpg",
+                  isFullPath: true,
+                  // icon: Icons.arrow_circle_left_sharp,
+                  label: "Rapport",
+                ),
+                const SizedBox(height: 5,),
+                Container(
+                  width: 240,
+                  padding: const EdgeInsets.all(8),
+                  child: const Divider(
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 5,),
                 const CustomMenuButton(
                   pathMenu: '/',
                   image: "assets/images/return.png",

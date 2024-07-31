@@ -62,36 +62,6 @@ var processGene=[
     "prefix":"PM"
   },
 ];
-var smqse=[
-  {
-    "first":"Politique QSE",
-  },
-
-  {
-    "first":"Responsabiltés et Autorités",
-  },
-  {
-    "first":"Non Conformité et Actions Correctives",
-  },
-  {
-    "first":"Programmes d'Audits Internes",
-  },
-  {
-    "first":"Attentes des Parties Intéressées"
-  },
-  {
-    "first":"Gestion des Processus"
-  },
-  {
-    "first":"Revue de direction"
-  },
-  {
-    "first":"Risques et Opportunités"
-  },
-  {
-    "first":"Ressources et Compétences"
-  }
-];
 
 
 // ListView.builder(

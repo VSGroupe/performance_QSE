@@ -9,8 +9,6 @@ import '../Views/audit/gestion_audits/plan_audit/plan_audit_page.dart';
 import '../Views/audit/gestion_audits/screen_gestions_audits.dart';
 import '../Views/audit/overview/all_list_evaluation/all_list_evaluation.dart';
 import '../Views/audit/overview/overview_evaluation_page.dart';
-import '../Views/audit/panneau_admin/screen_admin.dart';
-import '../Views/audit/profil/screen_pilotage_profil.dart';
 import '../Views/audit/screen_evaluation.dart';
 import '../Views/audit/transiteAudit.dart';
 import '../Views/common/error_page/page_not_found.dart';
@@ -18,6 +16,7 @@ import '../Views/common/forgot_password/forgot_password.dart';
 import '../Views/common/login_page/login_page.dart';
 import '../Views/common/main_page/common_home_page.dart';
 import '../Views/common/reload_page/reload_page.dart';
+import '../Views/gestion/audit_management/panneau_gestion/screen_admin.dart';
 import '../Views/gestion/home_gestion.dart';
 import '../Views/gestion/widgets/dashboard_gestion.dart';
 import '../Views/pilotage/entity/admin/screen_admin_pilotage.dart';
@@ -185,9 +184,22 @@ class RouteClass {
                 child: const DashboardGestion()
             ),
           ),
+          GoRoute(
+            path: '/gestion/profil',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenPilotageProfil()
+            ),
+          ),
+          GoRoute(
+            path: '/gestion/admin',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenAdmin()
+            ),
+          ),
         ],
       ),
-
 
 
       // Les routes pour le module Audit
@@ -224,20 +236,6 @@ class RouteClass {
             pageBuilder: (context, state) => NoTransitionPage<void>(
                 key: state.pageKey,
                 child: ScreenGestionAudit()
-            ),
-          ),
-          GoRoute(
-            path: '/audit/profil',
-            pageBuilder: (context, state) => NoTransitionPage<void>(
-                key: state.pageKey,
-                child: ScreenPilotageProfil()
-            ),
-          ),
-          GoRoute(
-            path: '/audit/admin',
-            pageBuilder: (context, state) => NoTransitionPage<void>(
-                key: state.pageKey,
-                child: ScreenAdmin()
             ),
           ),
         ],
