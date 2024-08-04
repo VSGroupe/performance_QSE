@@ -87,7 +87,7 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
 
   void getAccess(String centerTitle)async{
     String? reference = await storage.read(key:"ref");
-    List<String> ref= ["Q", "S", "QS"];//["Q", "S", "E", "QS", "QE", "SE", "QSE"];
+    List<String> ref= ["Q", "S", "E", "QS", "QE", "SE", "QSE"];//["Q", "S", "QS", "E"];
     if (reference!=null){
       ref =reference.split("\n");
     }
@@ -100,107 +100,129 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
   }
 
 
+  // Menu de sélection des types d'audits
+
   void _showCustomDialog(BuildContext context) {
     showDialog(
       context: context,
+      barrierColor: Colors.transparent, // Supprime l'effet sombre
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: Colors.transparent,
           child: Stack(
             children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
+                },
+                child: Container(
+                  color: Colors.transparent, // Transparence pour capturer les clics
+                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
+                ),
+              ),
               Positioned(
-                left: 50.0,
+                left: 0.0,
                 top: 100.0,
-                right: 50.0,
+                right: 1180.0,
                 child: Material(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          'Sélectionnez un élément',
-                          style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  color: Colors.transparent,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFD1DBE4), // Couleur de fond bleue
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: Colors.grey, width: 2.0), // Bordure blanche
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            "Sélectionnez le type d'audit",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black, // Couleur du texte blanche
+                            ),
+                          ),
                         ),
-                      ),
-                      Divider(height: 1),
-                      ListBody(
-                        children: <Widget>[
-                          ListTile(
-                            title: Text('Item 1'),
-                            onTap: () {
-                              Navigator.of(context).pop();
-                              setState(() {
-                                chemin = "/audit/accueil";
-                              });
-                              getAccess("QSE");
-                            },
-                          ),
-                          ListTile(
-                            title: Text('Item 2'),
-                            onTap: () {
-                              Navigator.of(context).pop();
-                              setState(() {
-                                chemin = "/audit/accueil";
-                              });
-                              getAccess("QS");
-                            },
-                          ),
-                          ListTile(
-                            title: Text('Item 3'),
-                            onTap: () {
-                              Navigator.of(context).pop();
-                              setState(() {
-                                chemin = "/audit/accueil";
-                              });
-                              getAccess("SE");
-                            },
-                          ),
-                          ListTile(
-                            title: Text('Item 4'),
-                            onTap: () {
-                              Navigator.of(context).pop();
-                              setState(() {
-                                chemin = "/audit/accueil";
-                              });
-                              getAccess("Q");
-                            },
-                          ),
-                          ListTile(
-                            title: Text('Item 5'),
-                            onTap: () {
-                              Navigator.of(context).pop();
-                              setState(() {
-                                chemin = "/audit/accueil";
-                              });
-                              getAccess("QE");
-                            },
-                          ),
-                          ListTile(
-                            title: Text('Item 6'),
-                            onTap: () {
-                              Navigator.of(context).pop();
-                              setState(() {
-                                chemin = "/audit/accueil";
-                              });
-                              getAccess("S");
-                            },
-                          ),
-                          ListTile(
-                            title: Text('Item 7'),
-                            onTap: () {
-                              Navigator.of(context).pop();
-                              setState(() {
-                                chemin = "/audit/accueil";
-                              });
-                              getAccess("E");
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
+                        Divider(height: 1, color: Colors.grey),
+                        ListBody(
+                          children: <Widget>[
+                            ListTile(
+                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  chemin = "/audit/gestion-auditsQ";
+                                });
+                                getAccess("Q");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  chemin = "/audit/gestion-auditsS";
+                                });
+                                getAccess("S");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  chemin = "/audit/gestion-auditsE";
+                                });
+                                getAccess("E");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit QSE', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  chemin = "/audit/gestion-audits";
+                                });
+                                getAccess("QSE");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit QS', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  chemin = "/audit/gestion-auditsQS";
+                                });
+                                getAccess("QS");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit QE', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  chemin = "/audit/gestion-auditsQE";
+                                });
+                                getAccess("QE");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit SE', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  chemin = "/audit/gestion-auditsSE";
+                                });
+                                getAccess("SE");
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -210,6 +232,142 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
       },
     );
   }
+
+
+  // Menu de sélection des aperçus par types d'audits.
+
+  void _showCustomDialogApercu(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
+                },
+                child: Container(
+                  color: Colors.transparent, // Transparence pour capturer les clics
+                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
+                ),
+              ),
+              Positioned(
+                left: 0.0,
+                top: 100.0,
+                right: 1180.0,
+                child: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFD1DBE4), // Couleur de fond bleue
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: Colors.grey, width: 2.0), // Bordure blanche
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            "Sélectionnez le type d'audit",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black, // Couleur du texte blanche
+                            ),
+                          ),
+                        ),
+                        Divider(height: 1, color: Colors.grey),
+                        ListBody(
+                          children: <Widget>[
+                            ListTile(
+                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  chemin = "/apercu/auditsQ";
+                                });
+                                getAccess("Q");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  chemin = "/apercu/auditsS";
+                                });
+                                getAccess("S");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  chemin = "/apercu/auditsE";
+                                });
+                                getAccess("E");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit QSE', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  chemin = "/audit/accueil";
+                                });
+                                getAccess("QSE");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit QS', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  chemin = "/apercu/auditsQS";
+                                });
+                                getAccess("QS");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit QE', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  chemin = "/apercu/auditsQE";
+                                });
+                                getAccess("QE");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit SE', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  chemin = "/apercu/auditsSE";
+                                });
+                                getAccess("SE");
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+
 
 
   @override
@@ -310,19 +468,13 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                 const SizedBox(height: 3),
                 Obx(()
                 =>  CustomMenuButton(
-                  pathMenu: controllerAudit.reference.value==""? "":"/audit/accueil",
+                  pathMenu: controllerAudit.reference.value==""? "":pagecourante,
                   image: "assets/images/audit.jpg",
                   isFullPath: false,
                   // icon: Icons.home,
                   label: "Aperçu des audits",
                   onTap: () {
-                    setState(() {
-                      controllerAudit.currentPage.value="/audit/accueil";
-                    });
-                    // Action to execute
-                    if(controllerAudit.reference.value == ""){
-                      _showDialogNoAcces();
-                    }
+                    _showCustomDialogApercu(context);
                   },
                 ),
                 ),
@@ -430,82 +582,6 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
     );
   }
 }
-
-
-// // Action to execute
-// final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
-// final RenderBox box = context.findRenderObject() as RenderBox;
-// final Offset position = box.localToGlobal(Offset.zero, ancestor: overlay);
-//
-// showGeneralDialog(
-// context: context,
-// barrierDismissible: false, // Ne ferme pas la boîte de dialogue en cliquant en dehors
-// barrierColor: Colors.transparent, // Pas d'effet sombre
-// pageBuilder: (context, _, __) {
-// return Stack(
-// children: [
-// GestureDetector(
-// onTap: () {
-// Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
-// },
-// child: Container(
-// color: Colors.transparent, // Transparence pour capturer les clics
-// child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
-// ),
-// ),
-// Positioned(
-// left: 80,
-// top: 244,
-// child: Material(
-// color: Colors.transparent, // Rendre le fond transparent
-// child: Container(
-// decoration: BoxDecoration(
-// color: Colors.white, // Couleur de fond personnalisée
-// borderRadius: BorderRadius.circular(10),
-// border: Border.all(color: Colors.grey, width: 2), // Bordure personnalisée
-// ),
-// padding: EdgeInsets.all(6),
-// constraints: BoxConstraints(
-// maxHeight: MediaQuery.of(context).size.height * 0.5, // Limiter la hauteur à 50% de la hauteur de l'écran
-// ),
-// child: Column(
-// mainAxisSize: MainAxisSize.min,
-// children: [
-// Text(
-// "Sélectionner le type\nd'audit",
-// style: TextStyle(
-// fontSize: 14,
-// color: Colors.black,
-// fontWeight: FontWeight.bold,
-// ),
-// ),
-// SizedBox(height: 20),
-// ElevatedButton(
-// onPressed: () {
-// Navigator.pop(context);
-// getAccess("QSE");
-// },
-// style: ElevatedButton.styleFrom(
-// backgroundColor: Colors.blue, // Couleur de fond du bouton
-// shape: RoundedRectangleBorder(
-// borderRadius: BorderRadius.circular(10), // Rayon des coins du bouton
-// side: BorderSide(color: Colors.blue, width: 2), // Couleur et largeur de la bordure du bouton
-// ),
-// padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Padding du bouton
-// ),
-// child: Text("Button"),
-// ),
-// ],
-// ),
-// ),
-// ),
-// ),
-// ],
-// );
-// },
-// );
-
-
 
 class CustomMenuButton extends StatefulWidget {
   final String pathMenu;

@@ -6,10 +6,21 @@ import 'package:perfqse/Views/gestion/screen_gestion.dart';
 import 'package:perfqse/Views/rapport/home_rapport.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../Views/audit/audit_management/panneau_gestion/screen_admin.dart';
-import '../Views/audit/gestion_audits/plan_audit/plan_audit_page.dart';
-import '../Views/audit/gestion_audits/screen_gestions_audits.dart';
-import '../Views/audit/overview/all_list_evaluation/all_list_evaluation.dart';
-import '../Views/audit/overview/overview_evaluation_page.dart';
+import '../Views/audit/gestion_audits/auditE/screen_gestions_audits.dart';
+import '../Views/audit/gestion_audits/auditQ/screen_gestions_audits.dart';
+import '../Views/audit/gestion_audits/auditQE/screen_gestions_audits.dart';
+import '../Views/audit/gestion_audits/auditQS/screen_gestions_audits.dart';
+import '../Views/audit/gestion_audits/auditQSE/screen_gestions_audits.dart';
+import '../Views/audit/gestion_audits/auditS/screen_gestions_audits.dart';
+import '../Views/audit/gestion_audits/auditSE/screen_gestions_audits.dart';
+import '../Views/audit/overview/E/overview_evaluation_page.dart';
+import '../Views/audit/overview/Q/overview_evaluation_page.dart';
+import '../Views/audit/overview/QE/overview_evaluation_page.dart';
+import '../Views/audit/overview/QS/overview_evaluation_page.dart';
+import '../Views/audit/overview/QSE/all_list_evaluation/all_list_evaluation.dart';
+import '../Views/audit/overview/QSE/overview_evaluation_page.dart';
+import '../Views/audit/overview/S/overview_evaluation_page.dart';
+import '../Views/audit/overview/SE/overview_evaluation_page.dart';
 import '../Views/audit/screen_evaluation.dart';
 import '../Views/audit/transiteAudit.dart';
 import '../Views/common/error_page/page_not_found.dart';
@@ -203,6 +214,9 @@ class RouteClass {
           return ScreenEvaluation(child: child);
         },
         routes: <RouteBase>[
+
+          // Route du Dashboaord des Audits
+
           GoRoute(
             path: '/audit/transite',
             pageBuilder: (context, state) => NoTransitionPage<void>(
@@ -210,6 +224,10 @@ class RouteClass {
                 child: const TransiteAudit()
             ),
           ),
+
+          //Routes des pages d'aperçu des Audits
+
+          // Pour les audits QSE
           GoRoute(
             path: '/audit/accueil',
             pageBuilder: (context, state) => NoTransitionPage<void>(
@@ -217,6 +235,64 @@ class RouteClass {
                 child: const OverviewEvaluationPage()
             ),
           ),
+
+          // Pour les audits Environnement (E)
+          GoRoute(
+            path: '/apercu/auditsE',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: const OverviewEvaluationPageE()
+            ),
+          ),
+
+          //Pour les audits Qualité (Q)
+          GoRoute(
+            path: '/apercu/auditsQ',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: const OverviewEvaluationPageQ()
+            ),
+          ),
+
+          //Pour les audits QE
+          GoRoute(
+            path: '/apercu/auditsQE',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: const OverviewEvaluationPageQE()
+            ),
+          ),
+
+          //Pour les audits QS
+          GoRoute(
+            path: '/apercu/auditsQS',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: const OverviewEvaluationPageQS()
+            ),
+          ),
+
+          //Pour les audits S
+          GoRoute(
+            path: '/apercu/auditsS',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: const OverviewEvaluationPageS()
+            ),
+          ),
+
+          //Pour les audits SE
+          GoRoute(
+            path: '/apercu/auditsSE',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: const OverviewEvaluationPageSE()
+            ),
+          ),
+
+          //Routes des pages d'affichage de la liste des audits.
+
+          //Liste des audits Environnements
           GoRoute(
             path: '/audit/list-audits',
             pageBuilder: (context, state) => NoTransitionPage<void>(
@@ -224,11 +300,57 @@ class RouteClass {
                 child: const AllListView()
             ),
           ),
+
+
+          // Routes des pages d'édition d'audits
+
           GoRoute(
             path: '/audit/gestion-audits',
             pageBuilder: (context, state) => NoTransitionPage<void>(
                 key: state.pageKey,
                 child: ScreenGestionAudit()
+            ),
+          ),
+          GoRoute(
+            path: '/audit/gestion-auditsE',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenGestionAuditE()
+            ),
+          ),
+          GoRoute(
+            path: '/audit/gestion-auditsQ',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenGestionAuditQ()
+            ),
+          ),
+          GoRoute(
+            path: '/audit/gestion-auditsQE',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenGestionAuditQE()
+            ),
+          ),
+          GoRoute(
+            path: '/audit/gestion-auditsQS',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenGestionAuditQS()
+            ),
+          ),
+          GoRoute(
+            path: '/audit/gestion-auditsS',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenGestionAuditS()
+            ),
+          ),
+          GoRoute(
+            path: '/audit/gestion-auditsSE',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenGestionAuditSE()
             ),
           ),
           GoRoute(

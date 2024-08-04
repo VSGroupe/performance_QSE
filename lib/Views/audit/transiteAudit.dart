@@ -119,7 +119,7 @@ class _TransiteAuditState extends State<TransiteAudit> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(
-                                        "Démarrer d'un audit QSE",
+                                        "Démarrer un audit QSE",
                                         style: TextStyle(
                                           fontSize: 14,
                                           color: Colors.black,
