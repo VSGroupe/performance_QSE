@@ -15,6 +15,12 @@ class _DashboardGestionState extends State<DashboardGestion> {
   final ControllerAudit controllerAudit = Get.put(ControllerAudit());
   final storage = FlutterSecureStorage();
   final String location = "/gestion/accueil";
+  bool _isHoveringBox1 = false;
+  bool _isHoveringBox2 = false;
+  bool _isHoveringBox3 = false;
+  bool _isHoveringBox4 = false;
+  bool _isHoveringBox5 = false;
+  bool _isHoveringBox6 = false;
 
   bool isHoveredQSE = false;
   bool isHoveredQ = false;
@@ -114,84 +120,457 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: Container(color: Colors.transparent),
               ),
             ),
+
+
+            // Première barre juste après les barres déroulantes
+
+
             Positioned(
-              top: 160,
-              right: 490,
-              child: SizedBox(
-                height: 250,
-                width: 250,
+              top: 100,
+              right: 200,
+              child: InkWell(
+                child: SizedBox(
+                  height: 160,
+                  width: 900,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage(
+                              "assets/images/barre_qse.jpg"),
+                          fit: BoxFit.fitWidth),
+                      color: Colors.grey, // Changez la couleur de fond selon vos besoins
+                      border: Border.all(color: Colors.white, width: 2), // Bordure grise
+                      borderRadius: BorderRadius.circular(20), // Bordure circulaire
+                    ),
+                    // child: Stack(
+                    //   children: [
+                    //     Positioned(
+                    //       top: 15, // Positionner l'image en haut
+                    //       left: 0,
+                    //       right: 0, // Centrer horizontalement
+                    //       child: SizedBox(
+                    //         height: 50,
+                    //         width: 80,
+                    //         child: Image.asset("assets/images/barre_qse.jpg", fit: BoxFit.contain),
+                    //       ),
+                    //     ),
+                    //     Positioned(
+                    //       top: 10, // Positionner le texte en bas avec un padding de 10
+                    //       left: 500,
+                    //       right: 0,
+                    //       child: Text(
+                    //         'Q',
+                    //         textAlign: TextAlign.center,
+                    //         style: TextStyle(
+                    //           color: Colors.white,
+                    //           fontSize: 16,
+                    //           fontWeight: FontWeight.bold,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     Positioned(
+                    //       bottom: 10, // Positionner le texte en bas avec un padding de 10
+                    //       left: 0,
+                    //       right: 0,
+                    //       child: Text(
+                    //         'S',
+                    //         textAlign: TextAlign.center,
+                    //         style: TextStyle(
+                    //           color: Colors.white,
+                    //           fontSize: 16,
+                    //           fontWeight: FontWeight.bold,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     Positioned(
+                    //       top: 10, // Positionner le texte en bas avec un padding de 10
+                    //       left: 0,
+                    //       right: 500,
+                    //       child: Text(
+                    //         'E',
+                    //         textAlign: TextAlign.center,
+                    //         style: TextStyle(
+                    //           color: Colors.white,
+                    //           fontSize: 16,
+                    //           fontWeight: FontWeight.bold,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                  ),
+                ),
+              ),
+            ),
+
+
+            // Les annotations qui suivront sont à lire du haut vers le bas et de la gauche vers la droite
+
+            // 1
+
+            Positioned(
+              top: 300,
+              right: 923,
+              child: MouseRegion(
+                onEnter: (_) => setState(() {
+                  _isHoveringBox1 = true;
+                }),
+                onExit: (_) => setState(() {
+                  _isHoveringBox1 = false;
+                }),
                 child: InkWell(
                   onTap: () {
+                    // action à effectuer
                     context.go("/gestion/profil");
                   },
-                  mouseCursor: SystemMouseCursors.click,
-                  child: Image.asset("assets/images/user-profile.png", fit: BoxFit.contain),
+                  child: SizedBox(
+                    height: 160,
+                    width: 275,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: _isHoveringBox1 ? Colors.white38 : Colors.white, //Color(0xFFD1DBE4),
+                        border: Border.all(color: Colors.grey, width: 2), // Bordure grise
+                        borderRadius: BorderRadius.circular(20), // Bordure circulaire
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: 15, // Positionner l'image en haut
+                            left: 0,
+                            right: 0, // Centrer horizontalement
+                            child: SizedBox(
+                              height: 90,
+                              width: 110,
+                              child: Image.asset("assets/images/gestion_QSE.png", fit: BoxFit.contain),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 10, // Positionner le texte en bas avec un padding de 10
+                            left: 0,
+                            right: 0,
+                            child: Text(
+                              'Politique QSE',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
+
+            // 4
+
             Positioned(
-              top: 160,
-              right: 490,
-              child: SizedBox(
-                height: 250,
-                width: 250,
+              top: 490,
+              right: 923,
+              child: MouseRegion(
+                onEnter: (_) => setState(() {
+                  _isHoveringBox4 = true;
+                }),
+                onExit: (_) => setState(() {
+                  _isHoveringBox4 = false;
+                }),
                 child: InkWell(
-                  key: _keyS,
                   onTap: () {
-                    _handleButtonTap('keyS', _keyS);
+                    // action à effectuer
+                    context.go("/gestion/profil");
                   },
-                  mouseCursor: SystemMouseCursors.click,
-                  child: Image.asset("assets/images/qse.png", fit: BoxFit.contain),
+                  child: SizedBox(
+                    height: 160,
+                    width: 275,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: _isHoveringBox4 ? Colors.white38 : Colors.white, // Change la couleur de fond lorsqu'on survole
+                        border: Border.all(color: Colors.grey, width: 2), // Bordure grise
+                        borderRadius: BorderRadius.circular(20), // Bordure circulaire
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: 15, // Positionner l'image en haut
+                            left: 0,
+                            right: 0, // Centrer horizontalement
+                            child: SizedBox(
+                              height: 90,
+                              width: 120,
+                              child: Image.asset("assets/images/non_conformites_et_actions_correctives.jpg", fit: BoxFit.contain),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 10, // Positionner le texte en bas avec un padding de 10
+                            left: 0,
+                            right: 0,
+                            child: Text(
+                              'Non conformités & actions correctives',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
-            // Main content with images and dropdown menus
+
+            // 2
+
             Positioned(
-              bottom: 35,
-              right: 460,
-              child: SizedBox(
-                height: 200,
-                width: 300,
+              top: 300,
+              right: 50,//480,
+              child: MouseRegion(
+                onEnter: (_) => setState(() {
+                  _isHoveringBox2 = true;
+                }),
+                onExit: (_) => setState(() {
+                  _isHoveringBox2 = false;
+                }),
                 child: InkWell(
-                  key: _keyE,
-                  onTap: () => _handleButtonTap('keyE', _keyE),
-                  mouseCursor: SystemMouseCursors.click,
-                  child: Image.asset("assets/images/e.png", fit: BoxFit.contain),
+                  onTap: () {
+                    // action à effectuer
+                    context.go("/gestion/profil");
+                  },
+                  child: SizedBox(
+                    height: 160,
+                    width: 275,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: _isHoveringBox2 ? Colors.white38 : Colors.white, // Change la couleur de fond lorsqu'on survole
+                        border: Border.all(color: Colors.grey, width: 2), // Bordure grise
+                        borderRadius: BorderRadius.circular(20), // Bordure circulaire
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: 15, // Positionner l'image en haut
+                            left: 0,
+                            right: 0, // Centrer horizontalement
+                            child: SizedBox(
+                              height: 90,
+                              width: 110,
+                              child: Image.asset("assets/images/respo_autorites1.jpg", fit: BoxFit.contain),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 10, // Positionner le texte en bas avec un padding de 10
+                            left: 0,
+                            right: 0,
+                            child: Text(
+                              "Responsabilités et autorités",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
+
+            // 3
+
             Positioned(
-              top: 130,
-              left: 60,
-              child: SizedBox(
-                height: 160,
-                width: 300,
+              top: 300,
+              right: 480,//50,
+              child: MouseRegion(
+                onEnter: (_) => setState(() {
+                  _isHoveringBox3 = true;
+                }),
+                onExit: (_) => setState(() {
+                  _isHoveringBox3 = false;
+                }),
                 child: InkWell(
-                  key: _keyQ,
-                  onTap: () => _handleButtonTap('keyQ', _keyQ),
-                  mouseCursor: SystemMouseCursors.click,
-                  child: Image.asset("assets/images/q.png", fit: BoxFit.contain),
+                  onTap: () {
+                    // action à effectuer
+                    context.go("/gestion/profil");
+                  },
+                  child: SizedBox(
+                    height: 160,
+                    width: 275,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: _isHoveringBox3 ? Colors.white38 : Colors.white, // Change la couleur de fond lorsqu'on survole
+                        border: Border.all(color: Colors.grey, width: 2), // Bordure grise
+                        borderRadius: BorderRadius.circular(20), // Bordure circulaire
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: 15, // Positionner l'image en haut
+                            left: 0,
+                            right: 0, // Centrer horizontalement
+                            child: SizedBox(
+                              height: 90,
+                              width: 110,
+                              child: Image.asset("assets/images/parties_interesses1.jpg", fit: BoxFit.contain),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 10, // Positionner le texte en bas avec un padding de 10
+                            left: 0,
+                            right: 0,
+                            child: Text(
+                              'Parties intéressées',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
+
+            // 5
+
             Positioned(
-              top: 130,
-              right: 50,
-              child: SizedBox(
-                height: 160,
-                width: 300,
+              top: 490,
+              right: 50,//480,
+              child: MouseRegion(
+                onEnter: (_) => setState(() {
+                  _isHoveringBox5 = true;
+                }),
+                onExit: (_) => setState(() {
+                  _isHoveringBox5 = false;
+                }),
                 child: InkWell(
-                  key: _keyS,
-                  onTap: () => _handleButtonTap('keyS', _keyS),
-                  mouseCursor: SystemMouseCursors.click,
-                  child: Image.asset("assets/images/s.png", fit: BoxFit.contain),
+                  onTap: () {
+                    // action à effectuer
+                    context.go("/gestion/profil");
+                  },
+                  child: SizedBox(
+                    height: 160,
+                    width: 275,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: _isHoveringBox5 ? Colors.white38 : Colors.white, // Change la couleur de fond lorsqu'on survole
+                        border: Border.all(color: Colors.grey, width: 2), // Bordure grise
+                        borderRadius: BorderRadius.circular(20), // Bordure circulaire
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: 15, // Positionner l'image en haut
+                            left: 0,
+                            right: 0, // Centrer horizontalement
+                            child: SizedBox(
+                              height: 90,
+                              width: 120,
+                              child: Image.asset("assets/images/firm.jpg", fit: BoxFit.contain),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 10, // Positionner le texte en bas avec un padding de 10
+                            left: 0,
+                            right: 0,
+                            child: Text(
+                              "Fonctionnement de\nl'entreprise",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
+
+            // 6
+
+            Positioned(
+              top: 490,
+              right: 480,//50,
+              child: MouseRegion(
+                onEnter: (_) => setState(() {
+                  _isHoveringBox6 = true;
+                }),
+                onExit: (_) => setState(() {
+                  _isHoveringBox6 = false;
+                }),
+                child: InkWell(
+                  onTap: () {
+                    // action à effectuer
+                    context.go("/gestion/profil");
+                  },
+                  child: SizedBox(
+                    height: 160,
+                    width: 275,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: _isHoveringBox6 ? Colors.white38 : Colors.white, // Change la couleur de fond lorsqu'on survole
+                        border: Border.all(color: Colors.grey, width: 2), // Bordure grise
+                        borderRadius: BorderRadius.circular(20), // Bordure circulaire
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: 15, // Positionner l'image en haut
+                            left: 0,
+                            right: 0, // Centrer horizontalement
+                            child: SizedBox(
+                              height: 90,
+                              width: 110,
+                              child: Image.asset("assets/images/gestion_process2.jpg", fit: BoxFit.contain),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 10, // Positionner le texte en bas avec un padding de 10
+                            left: 0,
+                            right: 0,
+                            child: Text(
+                              'Gestion des processus',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              ),
+
+
             // QSE Dropdown
             Positioned(
               top: 30,
-              right: 480,
+              right: 50,//480
               child: MouseRegion(
                 onEnter: (_) {
                   setState(() {
@@ -208,7 +587,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                   height: isHoveredQSE ? 390 : 45,
                   width: 275,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Color(0xFF468FBC),//Color(0xFFB0C0CF),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color: Colors.grey,
@@ -270,16 +649,6 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                     onPressed: () {
                                       getAccess("QSE");
                                     },
-                                    child: Text("Le personnel"),
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                SizedBox(
-                                  width: 245, // Fixed width for buttons
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      getAccess("QSE");
-                                    },
                                     child: Text("Gestion du personnel"),
                                   ),
                                 ),
@@ -309,10 +678,10 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 },
                 child: AnimatedContainer(
                   duration: Duration(milliseconds: 300),
-                  height: isHoveredQ ? 270 : 45,
-                  width: 300,
+                  height: isHoveredQ ? 390 : 45,
+                  width: 275,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Color(0xFFD1DBE4),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color: Colors.grey,
@@ -338,7 +707,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                           ),
                           padding: EdgeInsets.symmetric(vertical: 8),
                           child: Text(
-                            "Gestion SM QSE",
+                            "Gestion SM-QSE",
                             textAlign: TextAlign.center,
                             style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
                           ),
@@ -354,7 +723,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                     onPressed: () {
                                       getAccess("Q");
                                     },
-                                    child: Text("Questions fréquentes"),
+                                    child: Text("Politique QSE"),
                                   ),
                                 ),
                                 SizedBox(height: 10),
@@ -364,9 +733,10 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                     onPressed: () {
                                       getAccess("Q");
                                     },
-                                    child: Text("Questions générales"),
+                                    child: Text("Non conformités &\nactions correctives"),
                                   ),
                                 ),
+                                SizedBox(height: 10),
                               ],
                             ),
                           ),
@@ -379,7 +749,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
             // S Dropdown
             Positioned(
               top: 30,
-              right: 50,
+              right: 480,//50
               child: MouseRegion(
                 onEnter: (_) {
                   setState(() {
@@ -393,10 +763,10 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 },
                 child: AnimatedContainer(
                   duration: Duration(milliseconds: 300),
-                  height: isHoveredS ? 250 : 45,
+                  height: isHoveredS ? 390 : 45,
                   width: 275,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Color(0xFFB0C0CF),//Color(0xFF468FBC),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color: Colors.grey,
@@ -422,7 +792,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                           ),
                           padding: EdgeInsets.symmetric(vertical: 8),
                           child: Text(
-                            "Gestion des services",
+                            "Gestion SM-QSE",
                             textAlign: TextAlign.center,
                             style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
                           ),
@@ -438,7 +808,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                     onPressed: () {
                                       getAccess("S");
                                     },
-                                    child: Text("Services disponibles"),
+                                    child: Text("Parties intéressées"),
                                   ),
                                 ),
                                 SizedBox(height: 10),
@@ -448,7 +818,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                     onPressed: () {
                                       getAccess("S");
                                     },
-                                    child: Text("Service clientèle"),
+                                    child: Text("Gestion des processus"),
                                   ),
                                 ),
                               ],

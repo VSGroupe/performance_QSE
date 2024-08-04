@@ -76,12 +76,6 @@ class _DrawerGestionState extends State<DrawerGestion> {
               )),
               const SizedBox(height: 5),
               Obx(() => _buildMenuButton(
-                pathMenu: controllerAudit.reference.value.isEmpty ? "/gestion/admin" : '/gestion/admin',
-                image: "assets/images/homme-daffaire.png",
-                label: "Admin audits",
-              )),
-              const SizedBox(height: 5),
-              Obx(() => _buildMenuButton(
                 pathMenu: controllerAudit.reference.value.isEmpty ? "" : '/audit/admin',
                 image: "assets/images/res.png",
                 label: "Ressources",

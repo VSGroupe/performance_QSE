@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AppBarGestion extends StatefulWidget {
 
@@ -10,11 +11,54 @@ class AppBarGestion extends StatefulWidget {
 
 class _AppBarGestionState extends State<AppBarGestion> {
 
+  late final SupabaseClient _supabaseClient;
+  late String _userEmail = 'No email available';
+  late String _nom = "Aucun nom";
+  late String _prenoms = "Aucun prénom";
+
+
+  @override
+  void initState() {
+    super.initState();
+    _supabaseClient = Supabase.instance.client;
+    _fetchUserInfo();
+  }
+
+  Future<void> _fetchUserInfo() async {
+    final user = _supabaseClient.auth.currentUser;
+    if (user != null) {
+      _userEmail = user.email ?? 'No email available';
+
+      final response = await _supabaseClient
+          .from('Users')
+          .select('prenom, nom')
+          .eq('email', _userEmail)
+          .single()
+          .execute();
+      if (response.data == null) {
+        // Gérer les erreurs ici
+        print('Error fetching user profile: ${response.data!.message}');
+        setState(() {
+          _nom = 'Error First Name';
+          _prenoms = 'Error Laste Name';
+        });
+      } else {
+        final data = response.data as Map<String, dynamic>;
+        setState(() {
+          _nom = data['nom'] ?? 'Aucun nom';
+          _prenoms = data['prenom'] ?? 'Aucun prenom';
+        });
+      };
+    } else {
+      // Gérer le cas où l'utilisateur n'est pas authentifié
+      setState(() {
+        _userEmail = 'No email available';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final nom ="AKA";
-    final prenom ="Joël";
-    final email ="projet.dd@visionstrategie.com";
     return Container(
       height: 50,
       color: Color.fromRGBO(170, 160, 150,1),
@@ -36,7 +80,7 @@ class _AppBarGestionState extends State<AppBarGestion> {
               const SizedBox(
                 width: 20,
               ),
-              Text("Dashboard de GESTION",
+              Text("Accueil GESTION",
                   style: TextStyle(color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 23,
@@ -49,7 +93,7 @@ class _AppBarGestionState extends State<AppBarGestion> {
               Row(
                 children: [
                   Center(
-                    child: Text("${prenom} ${nom}",style:TextStyle(
+                    child: Text("${_prenoms} ${_nom}",style:TextStyle(
                       fontSize: 18,fontWeight: FontWeight.bold,
                       color:Colors.white,
                     )),
@@ -59,7 +103,7 @@ class _AppBarGestionState extends State<AppBarGestion> {
                     backgroundColor: Colors.yellowAccent,
                     child: Center(
                       child: Text(
-                          "${prenom[0]}${nom[0]}",style: TextStyle(
+                          "${_prenoms[0]}${_nom[0]}",style: TextStyle(
                         color:Color(0xFFF1CD0B),
                         fontWeight: FontWeight.bold,
                         fontSize: 20,

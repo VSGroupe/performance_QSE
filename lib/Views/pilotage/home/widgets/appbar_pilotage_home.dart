@@ -151,6 +151,7 @@ class _appBarPilotageHomeState extends State<appBarPilotageHome> {
           ),
           subTitle: const Text('Informations du compte et plus'),
           onPressed: () {
+            context.go("/gestion/profil");
           }),
       QudsPopupMenuWidget(
           builder: (c) => Container(
@@ -183,7 +184,8 @@ class _appBarPilotageHomeState extends State<appBarPilotageHome> {
                               ),
                             ],
                           );
-                        },);
+                        },
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,

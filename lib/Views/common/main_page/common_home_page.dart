@@ -151,7 +151,8 @@ class _MainPageState extends State<MainPage> {
                     image: DecorationImage(
                         image: AssetImage(
                             "assets/images/background_image.jpg"),
-                        fit: BoxFit.fitWidth)),
+                        fit: BoxFit.fitWidth)
+                ),
                 child: Stack(
                   children: [
                     Column(

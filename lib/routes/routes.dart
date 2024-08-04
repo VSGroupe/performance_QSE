@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:perfqse/Views/gestion/screen_gestion.dart';
 import 'package:perfqse/Views/rapport/home_rapport.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../Views/audit/audit_management/panneau_gestion/screen_admin.dart';
 import '../Views/audit/gestion_audits/plan_audit/plan_audit_page.dart';
 import '../Views/audit/gestion_audits/screen_gestions_audits.dart';
 import '../Views/audit/overview/all_list_evaluation/all_list_evaluation.dart';
@@ -16,7 +17,6 @@ import '../Views/common/forgot_password/forgot_password.dart';
 import '../Views/common/login_page/login_page.dart';
 import '../Views/common/main_page/common_home_page.dart';
 import '../Views/common/reload_page/reload_page.dart';
-import '../Views/gestion/audit_management/panneau_gestion/screen_admin.dart';
 import '../Views/gestion/home_gestion.dart';
 import '../Views/gestion/widgets/dashboard_gestion.dart';
 import '../Views/pilotage/entity/admin/screen_admin_pilotage.dart';
@@ -191,13 +191,6 @@ class RouteClass {
                 child: ScreenPilotageProfil()
             ),
           ),
-          GoRoute(
-            path: '/gestion/admin',
-            pageBuilder: (context, state) => NoTransitionPage<void>(
-                key: state.pageKey,
-                child: ScreenAdmin()
-            ),
-          ),
         ],
       ),
 
@@ -236,6 +229,13 @@ class RouteClass {
             pageBuilder: (context, state) => NoTransitionPage<void>(
                 key: state.pageKey,
                 child: ScreenGestionAudit()
+            ),
+          ),
+          GoRoute(
+            path: '/audit/admin',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenAdmin()
             ),
           ),
         ],

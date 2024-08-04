@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
 import 'package:perfqse/Views/audit/controller/controller_audit.dart';
+
+import '../../../utils/utils.dart';
 
 class DrawerEvaluation extends StatefulWidget {
   const DrawerEvaluation({Key? key}) : super(key: key);
@@ -13,9 +16,15 @@ class DrawerEvaluation extends StatefulWidget {
 
 class _DrawerEvaluationState extends State<DrawerEvaluation> {
   final ControllerAudit controllerAudit =Get.put(ControllerAudit());
+  final storage = FlutterSecureStorage();
+  final Location="/audit/accueil";
+  late String chemin = "";
+  late String pagecourante = "";
+
   @override
   void initState() {
     controllerAudit.reference.value="";
+    pagecourante = controllerAudit.currentPage.value;
     super.initState();
   }
 
@@ -47,6 +56,161 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
       },
     );
   }
+
+  Future<void> showDialogNoAcces() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Accès refusé'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text("Vous n'avez pas la référence d'accès à cet espace."),
+                SizedBox(
+                  height: 20,
+                ),
+                Image.asset(
+                  "assets/images/forbidden.png",
+                  width: 50,
+                  height: 50,
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+  void getAccess(String centerTitle)async{
+    String? reference = await storage.read(key:"ref");
+    List<String> ref= ["Q", "S", "QS"];//["Q", "S", "E", "QS", "QE", "SE", "QSE"];
+    if (reference!=null){
+      ref =reference.split("\n");
+    }
+    if(ref.contains(centerTitle)) {
+      controllerAudit.reference.value=centerTitle;
+      context.go(chemin);
+    }else{
+      showDialogNoAcces();
+    }
+  }
+
+
+  void _showCustomDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            children: <Widget>[
+              Positioned(
+                left: 50.0,
+                top: 100.0,
+                right: 50.0,
+                child: Material(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'Sélectionnez un élément',
+                          style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Divider(height: 1),
+                      ListBody(
+                        children: <Widget>[
+                          ListTile(
+                            title: Text('Item 1'),
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              setState(() {
+                                chemin = "/audit/accueil";
+                              });
+                              getAccess("QSE");
+                            },
+                          ),
+                          ListTile(
+                            title: Text('Item 2'),
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              setState(() {
+                                chemin = "/audit/accueil";
+                              });
+                              getAccess("QS");
+                            },
+                          ),
+                          ListTile(
+                            title: Text('Item 3'),
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              setState(() {
+                                chemin = "/audit/accueil";
+                              });
+                              getAccess("SE");
+                            },
+                          ),
+                          ListTile(
+                            title: Text('Item 4'),
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              setState(() {
+                                chemin = "/audit/accueil";
+                              });
+                              getAccess("Q");
+                            },
+                          ),
+                          ListTile(
+                            title: Text('Item 5'),
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              setState(() {
+                                chemin = "/audit/accueil";
+                              });
+                              getAccess("QE");
+                            },
+                          ),
+                          ListTile(
+                            title: Text('Item 6'),
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              setState(() {
+                                chemin = "/audit/accueil";
+                              });
+                              getAccess("S");
+                            },
+                          ),
+                          ListTile(
+                            title: Text('Item 7'),
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              setState(() {
+                                chemin = "/audit/accueil";
+                              });
+                              getAccess("E");
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +264,6 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                                   }
                                 });
                               },
-
                               child: const Text(
                                 "Démarer un audit",
                                 style: TextStyle(
@@ -138,10 +301,13 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                   label: "Accueil",
                   onTap: () {
                     // Set the reference value to an empty string
-                    controllerAudit.reference.value = "";
+                    setState(() {
+                      controllerAudit.reference.value = "";
+                      controllerAudit.currentPage.value="/audit/transite";
+                    });
                   },
                 )),
-                const SizedBox(height: 5),
+                const SizedBox(height: 3),
                 Obx(()
                 =>  CustomMenuButton(
                   pathMenu: controllerAudit.reference.value==""? "":"/audit/accueil",
@@ -150,6 +316,9 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                   // icon: Icons.home,
                   label: "Aperçu des audits",
                   onTap: () {
+                    setState(() {
+                      controllerAudit.currentPage.value="/audit/accueil";
+                    });
                     // Action to execute
                     if(controllerAudit.reference.value == ""){
                       _showDialogNoAcces();
@@ -157,31 +326,56 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                   },
                 ),
                 ),
-                const SizedBox(height: 5),
+                const SizedBox(height: 3),
+                Obx(() => CustomMenuButton(
+                  pathMenu: controllerAudit.reference.value == "" ? "" : pagecourante,
+                  image: "assets/images/audit.png",
+                  isFullPath: false,
+                  label: "Démarrer un audit",
+                  onTap: () {
+                    _showCustomDialog(context);
+                  },
+                )),
+                const SizedBox(height: 3),
                 Obx(()
                 => CustomMenuButton(
-                    pathMenu: controllerAudit.reference.value==""?"":'/audit/gestion-audits',
-                    image: "assets/images/audit.png",
-                    // icon: Icons.table_chart_rounded,
-                    isFullPath: false,
-                    label: "Démarrer un audit",
-                    onTap: () {
-                      // Action to execute
-                      if(controllerAudit.reference.value == ""){
-                        _showDialogNoAcces();
-                      }
-                    },
-                ),
-                 ),
-                const SizedBox(height: 5),
-                const CustomMenuButton(
-                  pathMenu: '',
-                  image: "assets/images/res.png",
-                  // icon: Icons.admin_panel_settings_outlined,
+                  pathMenu: controllerAudit.reference.value==""?"":'/audit/admin',
+                  image: "assets/images/homme-daffaire.png",
+                  // icon: Icons.table_chart_rounded,
                   isFullPath: false,
-                  label: "Réssources",
+                  label: "Admin audits",
+                  onTap: () {
+                    setState(() {
+                      controllerAudit.currentPage.value="/audit/admin";
+                    });
+                    // Action to execute
+                    if(controllerAudit.reference.value == ""){
+                      _showDialogNoAcces();
+                    }
+                  },
                 ),
-                const SizedBox(height: 5,),
+                ),
+
+                const SizedBox(height: 3),
+                Obx(() => CustomMenuButton(
+                  pathMenu: controllerAudit.reference.value == "" ? "" : "",
+                  image: "assets/images/res.png",
+                  isFullPath: false,
+                  label: "Programme des\naudits internes",
+                  onTap: () {
+                    _showDialogNoAcces();
+                  },
+                )),
+
+                // const SizedBox(height: 3),
+                // const CustomMenuButton(
+                //   pathMenu: '',
+                //   image: "assets/images/res.png",
+                //   // icon: Icons.admin_panel_settings_outlined,
+                //   isFullPath: false,
+                //   label: "Programme des\naudits internes",
+                // ),
+                const SizedBox(height: 3),
                 Container(
                   width: 240,
                   padding: const EdgeInsets.all(8),
@@ -189,7 +383,7 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                     color: Colors.black,
                   ),
                 ),
-                const SizedBox(height: 5,),
+                const SizedBox(height: 3),
                 const CustomMenuButton(
                   pathMenu: '/pilotage',
                   image: "assets/images/retour_pilotage.jpg",
@@ -197,7 +391,7 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                   // icon: Icons.arrow_circle_left_sharp,
                   label: "Pilotage",
                 ),
-                const SizedBox(height: 5,),
+                const SizedBox(height: 3),
                 const CustomMenuButton(
                   pathMenu: '/gestion/accueil',
                   image: "assets/images/retour.jpg",
@@ -205,7 +399,7 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                   // icon: Icons.arrow_circle_left_sharp,
                   label: "Gestion",
                 ),
-                const SizedBox(height: 5,),
+                const SizedBox(height: 3),
                 const CustomMenuButton(
                   pathMenu: '',
                   image: "assets/images/retour_rapport.jpg",
@@ -213,7 +407,7 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                   // icon: Icons.arrow_circle_left_sharp,
                   label: "Rapport",
                 ),
-                const SizedBox(height: 5,),
+                const SizedBox(height: 3),
                 Container(
                   width: 240,
                   padding: const EdgeInsets.all(8),
@@ -221,7 +415,7 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                     color: Colors.black,
                   ),
                 ),
-                const SizedBox(height: 5,),
+                const SizedBox(height: 3),
                 const CustomMenuButton(
                   pathMenu: '/',
                   image: "assets/images/return.png",
@@ -236,6 +430,82 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
     );
   }
 }
+
+
+// // Action to execute
+// final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+// final RenderBox box = context.findRenderObject() as RenderBox;
+// final Offset position = box.localToGlobal(Offset.zero, ancestor: overlay);
+//
+// showGeneralDialog(
+// context: context,
+// barrierDismissible: false, // Ne ferme pas la boîte de dialogue en cliquant en dehors
+// barrierColor: Colors.transparent, // Pas d'effet sombre
+// pageBuilder: (context, _, __) {
+// return Stack(
+// children: [
+// GestureDetector(
+// onTap: () {
+// Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
+// },
+// child: Container(
+// color: Colors.transparent, // Transparence pour capturer les clics
+// child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
+// ),
+// ),
+// Positioned(
+// left: 80,
+// top: 244,
+// child: Material(
+// color: Colors.transparent, // Rendre le fond transparent
+// child: Container(
+// decoration: BoxDecoration(
+// color: Colors.white, // Couleur de fond personnalisée
+// borderRadius: BorderRadius.circular(10),
+// border: Border.all(color: Colors.grey, width: 2), // Bordure personnalisée
+// ),
+// padding: EdgeInsets.all(6),
+// constraints: BoxConstraints(
+// maxHeight: MediaQuery.of(context).size.height * 0.5, // Limiter la hauteur à 50% de la hauteur de l'écran
+// ),
+// child: Column(
+// mainAxisSize: MainAxisSize.min,
+// children: [
+// Text(
+// "Sélectionner le type\nd'audit",
+// style: TextStyle(
+// fontSize: 14,
+// color: Colors.black,
+// fontWeight: FontWeight.bold,
+// ),
+// ),
+// SizedBox(height: 20),
+// ElevatedButton(
+// onPressed: () {
+// Navigator.pop(context);
+// getAccess("QSE");
+// },
+// style: ElevatedButton.styleFrom(
+// backgroundColor: Colors.blue, // Couleur de fond du bouton
+// shape: RoundedRectangleBorder(
+// borderRadius: BorderRadius.circular(10), // Rayon des coins du bouton
+// side: BorderSide(color: Colors.blue, width: 2), // Couleur et largeur de la bordure du bouton
+// ),
+// padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Padding du bouton
+// ),
+// child: Text("Button"),
+// ),
+// ],
+// ),
+// ),
+// ),
+// ),
+// ],
+// );
+// },
+// );
+
+
 
 class CustomMenuButton extends StatefulWidget {
   final String pathMenu;
@@ -279,7 +549,7 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
       },
       child: Container(
         width: 248,
-        height: 40,
+        height: 45,
         decoration: BoxDecoration(
             color: isSelected
                 ? _isHovering
