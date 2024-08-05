@@ -16,7 +16,7 @@ class TransiteAudit extends StatefulWidget {
 class _TransiteAuditState extends State<TransiteAudit> {
   final ControllerAudit controllerAudit =Get.put(ControllerAudit());
   final storage =FlutterSecureStorage();
-  final Location="/audit/accueil";
+  String Location="";
 
   Future<void> _showDialogNoAcces() async {
     return showDialog<void>(
@@ -48,7 +48,7 @@ class _TransiteAuditState extends State<TransiteAudit> {
 
   void getAccess(String centerTitle)async{
     String? reference = await storage.read(key:"ref");
-    List<String> ref= ["Q", "S", "QS"];//["Q", "S", "E", "QS", "QE", "SE", "QSE"];
+    List<String> ref= ["Q", "S", "E", "QS", "QE", "SE", "QSE"]; //["Q", "S", "QS"];//
     if (reference!=null){
       ref =reference.split("\n");
     }
@@ -137,6 +137,9 @@ class _TransiteAuditState extends State<TransiteAudit> {
                                       ElevatedButton(
                                         onPressed: () {
                                           Navigator.pop(context);
+                                          setState(() {
+                                            Location="/audit/gestion-audits";
+                                          });
                                           getAccess("QSE");
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -147,7 +150,10 @@ class _TransiteAuditState extends State<TransiteAudit> {
                                           ),
                                           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Padding du bouton
                                         ),
-                                        child: Text("Button"),
+                                        child: Text(
+                                          "Continuer",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -234,6 +240,9 @@ class _TransiteAuditState extends State<TransiteAudit> {
                                       ElevatedButton(
                                         onPressed: () {
                                           Navigator.pop(context);
+                                          setState(() {
+                                            Location="/audit/gestion-auditsQS";
+                                          });
                                           getAccess("QS");
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -244,7 +253,10 @@ class _TransiteAuditState extends State<TransiteAudit> {
                                           ),
                                           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Padding du bouton
                                         ),
-                                        child: Text("Button"),
+                                        child: Text(
+                                          "Continuer",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -333,6 +345,9 @@ class _TransiteAuditState extends State<TransiteAudit> {
                                       ElevatedButton(
                                         onPressed: () {
                                           Navigator.pop(context);
+                                          setState(() {
+                                            Location="/audit/gestion-auditsE";
+                                          });
                                           getAccess("E");
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -343,7 +358,10 @@ class _TransiteAuditState extends State<TransiteAudit> {
                                           ),
                                           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Padding du bouton
                                         ),
-                                        child: Text("Button"),
+                                        child: Text(
+                                          "Continuer",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -432,6 +450,9 @@ class _TransiteAuditState extends State<TransiteAudit> {
                                       ElevatedButton(
                                         onPressed: () {
                                           Navigator.pop(context);
+                                          setState(() {
+                                            Location="/audit/gestion-auditsQ";
+                                          });
                                           getAccess("Q");
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -442,7 +463,10 @@ class _TransiteAuditState extends State<TransiteAudit> {
                                           ),
                                           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Padding du bouton
                                         ),
-                                        child: Text("Button"),
+                                        child: Text(
+                                          "Continuer",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -547,6 +571,9 @@ class _TransiteAuditState extends State<TransiteAudit> {
                                       ElevatedButton(
                                         onPressed: () {
                                           Navigator.pop(context);
+                                          setState(() {
+                                            Location="/audit/gestion-auditsS";
+                                          });
                                           getAccess("S");
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -557,7 +584,10 @@ class _TransiteAuditState extends State<TransiteAudit> {
                                           ),
                                           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Padding du bouton
                                         ),
-                                        child: Text("Button"),
+                                        child: Text(
+                                          "Continuer",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -665,6 +695,9 @@ class _TransiteAuditState extends State<TransiteAudit> {
                                       ElevatedButton(
                                         onPressed: () {
                                           Navigator.pop(context);
+                                          setState(() {
+                                            Location="/audit/gestion-auditsSE";
+                                          });
                                           getAccess("SE");
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -675,7 +708,10 @@ class _TransiteAuditState extends State<TransiteAudit> {
                                           ),
                                           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Padding du bouton
                                         ),
-                                        child: Text("Button"),
+                                        child: Text(
+                                          "Continuer",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -782,6 +818,9 @@ class _TransiteAuditState extends State<TransiteAudit> {
                                       ElevatedButton(
                                         onPressed: () {
                                           Navigator.pop(context);
+                                          setState(() {
+                                            Location="/audit/gestion-auditsQE";
+                                          });
                                           getAccess("QE");
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -792,7 +831,10 @@ class _TransiteAuditState extends State<TransiteAudit> {
                                           ),
                                           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Padding du bouton
                                         ),
-                                        child: Text("Button"),
+                                        child: Text(
+                                          "Continuer",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                       ),
                                     ],
                                   ),

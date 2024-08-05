@@ -418,12 +418,12 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                                   if (controllerAudit.reference.value == "") {
                                     _showDialogNoAcces();
                                   } else {
-                                    context.go("/audit/gestion-audits");
+                                    context.go("");
                                   }
                                 });
                               },
                               child: const Text(
-                                "Démarer un audit",
+                                "Profil",
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
