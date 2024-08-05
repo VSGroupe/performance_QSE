@@ -402,38 +402,7 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                       SizedBox(
                         height: 20,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 11.3),
-                        child: Container(
-                          width: 200,
-                          decoration: const BoxDecoration(
-                            color: Colors.amber,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(20),
-                            ),
-                          ),
-                          child: TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  if (controllerAudit.reference.value == "") {
-                                    _showDialogNoAcces();
-                                  } else {
-                                    context.go("");
-                                  }
-                                });
-                              },
-                              child: const Text(
-                                "Profil",
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              )),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
+                      
                       const Text(
                         "Menu Principal",
                         textAlign: TextAlign.center,
