@@ -49,12 +49,12 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 25),
+      padding: EdgeInsets.only(left: 400,top: 30), // Ajout de padding top pour ajuster vers le haut
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start, // Changer de center à start
         children: [
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start, // Changer de center à start
             children: [
               Container(
                 width: 750,
@@ -88,7 +88,7 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
               ),
               const SizedBox(height: 10),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start, // Changer de center à start
                 children: [
                   SizedBox(width: 3),
                   ContentBox(

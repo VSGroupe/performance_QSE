@@ -23,13 +23,14 @@ class _HeaderPilotageHomeState extends State<HeaderPilotageHome> {
           children: [
 
             Padding(
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(0),
               child: RichText(text:TextSpan(
-                  text:"PILOTAGE",style: TextStyle(fontSize: 35,color:Colors.black,fontWeight: FontWeight.bold),
+                  text:"PILOTAGE",style: TextStyle(fontSize: 50,color:Colors.black,fontWeight: FontWeight.bold),
                   children: [
-                    TextSpan(text:" Q",style: TextStyle(fontSize: 35,color:Color.fromRGBO(172,28,12,1),fontWeight: FontWeight.bold),),
-                    TextSpan(text:"S",style: TextStyle(fontSize: 35,color:Color.fromRGBO(206,131,0,1),fontWeight: FontWeight.bold),),
-                    TextSpan(text:"E",style: TextStyle(fontSize: 35,color:Color.fromRGBO(42,77,4,1),fontWeight: FontWeight.bold),)
+                    TextSpan(text:" PERFORMANCE ",style: TextStyle(fontSize: 50,color:Color.fromRGBO(42,77,4,1),fontWeight: FontWeight.bold),),
+                    TextSpan(text:" Q",style: TextStyle(fontSize: 50,color:Color.fromRGBO(172,28,12,1),fontWeight: FontWeight.bold),),
+                    TextSpan(text:"S",style: TextStyle(fontSize: 50,color:Color.fromRGBO(206,131,0,1),fontWeight: FontWeight.bold),),
+                    TextSpan(text:"E",style: TextStyle(fontSize: 50,color:Color.fromRGBO(42,77,4,1),fontWeight: FontWeight.bold),)
                   ]
               ),
 
@@ -40,7 +41,6 @@ class _HeaderPilotageHomeState extends State<HeaderPilotageHome> {
         ),
         //const SizedBox(height:15,),
         Container(
-          height: 250,
           width: 1200,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,7 +51,7 @@ class _HeaderPilotageHomeState extends State<HeaderPilotageHome> {
                   child: Card(
                     elevation: 5,
                     child: Container(
-                      height: 250,
+                      height: 100,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(17),

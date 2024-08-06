@@ -65,26 +65,28 @@ class _PilotageHomeState extends State<PilotageHome> {
               child: Column(
                 children: [
                   appBarPilotageHome(
-                    title: "Pilotage", mainData: data["user"],),
+                    title: "Pilotage", mainData: data["user"],
+                  ),
                   Expanded(child: Container(
-                    // height: 800,
+                    height: 800,
                     padding: const EdgeInsets.only(
                         left: 10, right: 10, bottom: 10),
                     decoration: const BoxDecoration(
                         image: DecorationImage(image: AssetImage(
                             "assets/images/background_image.jpg"),
-                            fit: BoxFit.fitWidth)),
+                            fit: BoxFit.fitWidth)
+                    ),
                     child: Stack(
                       children: [
                         SingleChildScrollView(
                           child: Container(
-                            height: 630,
+                            height: 620,
                             child: Column(
                               children: const [
-                                const SizedBox(height: 10,),
+                                const SizedBox(height: 20,),
                                 HeaderPilotageHome(),
-                                const SizedBox(height: 10,),
-                                Expanded(child: ContentPilotageHome())
+                                const SizedBox(height: 0,),
+                                Expanded(child: ContentPilotageHome()),
                               ],
                             ),
                           ),
