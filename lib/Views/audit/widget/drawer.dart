@@ -402,7 +402,7 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                       SizedBox(
                         height: 20,
                       ),
-                      
+
                       const Text(
                         "Menu Principal",
                         textAlign: TextAlign.center,
