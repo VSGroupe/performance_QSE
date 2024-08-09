@@ -76,7 +76,7 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
                   ),
                   child: Center(
                     child: Text(
-                      "Suivi des Indicateurs",
+                      "Processus et  Indicateurs",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 23,

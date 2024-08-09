@@ -128,7 +128,7 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                   color: Colors.transparent,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Color(0xFFD1DBE4), // Couleur de fond bleue
+                      color: Color(0xFFF2F2F2), // Couleur de fond bleue
                       borderRadius: BorderRadius.circular(8.0),
                       border: Border.all(color: Colors.grey, width: 2.0), // Bordure blanche
                     ),
@@ -262,7 +262,7 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                   color: Colors.transparent,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Color(0xFFD1DBE4), // Couleur de fond bleue
+                      color: Color(0xFFF2F2F2), // Couleur de fond bleue
                       borderRadius: BorderRadius.circular(8.0),
                       border: Border.all(color: Colors.grey, width: 2.0), // Bordure blanche
                     ),

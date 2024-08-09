@@ -28,25 +28,6 @@ class _DashboardGestionState extends State<DashboardGestion> {
   bool _isHoveringBox11 = false;
   bool _isHoveringBox12 = false;
 
-  bool isHoveredQSE = false;
-  bool isHoveredQ = false;
-  bool isHoveredS = false;
-
-  bool _showInfo = false; // State to control the visibility of the information widget
-  Offset _infoPosition = Offset.zero; // Position of the information widget
-  String _infoText = ''; // Text of the information widget
-
-  final GlobalKey _keyE = GlobalKey();
-  final GlobalKey _keyQ = GlobalKey();
-  final GlobalKey _keyS = GlobalKey();
-
-  final Map<String, String> buttonInfo = {
-    'keyE': "Je suis le bouton Er\nrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr\nrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",
-    'keyQ': "I'm the Q button",
-    'keyS': "Helloooo!!! It'es me S",
-  };
-  String _activeKey = '';
-
   Future<void> _showDialogNoAcces() async {
     return showDialog<void>(
       context: context,
@@ -86,32 +67,1228 @@ class _DashboardGestionState extends State<DashboardGestion> {
     }
   }
 
-  void _showInformation(Offset position, String infoText) {
-    setState(() {
-      _showInfo = true;
-      _infoPosition = position;
-      _infoText = infoText;
-    });
-  }
-
   void _hideInformation() {
     setState(() {
-      _showInfo = false;
     });
   }
 
-  void _handleButtonTap(String key, GlobalKey buttonKey) {
-    final RenderBox? renderBox = buttonKey.currentContext?.findRenderObject() as RenderBox?;
-    if (renderBox != null) {
-      final Offset buttonPosition = renderBox.localToGlobal(renderBox.size.centerLeft(Offset.zero));
-      final String infoText = buttonInfo[key] ?? 'Aucune information disponible';
-      _showInformation(buttonPosition, infoText);
-      setState(() {
-        _activeKey = key;
-      });
-    }
+  //box 1
+
+  void _showCustomDialog1(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
+                },
+                child: Container(
+                  color: Colors.transparent, // Transparence pour capturer les clics
+                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
+                ),
+              ),
+              Positioned(
+                left: 400.0,
+                top: 450.0,
+                right: 850.0,
+                child: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    width: 100,
+                    decoration: BoxDecoration(
+                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                          spreadRadius: 4, // Étendue de l'ombre
+                          blurRadius: 5, // Flou de l'ombre
+                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            "Sélection 1",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black, // Couleur du texte blanche
+                            ),
+                          ),
+                        ),
+                        Divider(height: 1, color: Colors.grey),
+                        ListBody(
+                          children: <Widget>[
+                            ListTile(
+                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsQ";
+                                });
+                                getAccess("Q");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsS";
+                                });
+                                getAccess("S");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsE";
+                                });
+                                getAccess("E");
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
+  // box 2
+  void _showCustomDialog2(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
+                },
+                child: Container(
+                  color: Colors.transparent, // Transparence pour capturer les clics
+                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
+                ),
+              ),
+              Positioned(
+                left: 620.0,
+                top: 450.0,
+                right: 620.0,
+                child: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    width: 100,
+                    decoration: BoxDecoration(
+                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                          spreadRadius: 4, // Étendue de l'ombre
+                          blurRadius: 5, // Flou de l'ombre
+                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            "Sélection 2",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black, // Couleur du texte blanche
+                            ),
+                          ),
+                        ),
+                        Divider(height: 1, color: Colors.grey),
+                        ListBody(
+                          children: <Widget>[
+                            ListTile(
+                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsQ";
+                                });
+                                getAccess("Q");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsS";
+                                });
+                                getAccess("S");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsE";
+                                });
+                                getAccess("E");
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // Box 3
+  void _showCustomDialog3(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
+                },
+                child: Container(
+                  color: Colors.transparent, // Transparence pour capturer les clics
+                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
+                ),
+              ),
+              Positioned(
+                left: 860.0,
+                top: 450.0,
+                right: 400.0,
+                child: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    width: 100,
+                    decoration: BoxDecoration(
+                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                          spreadRadius: 4, // Étendue de l'ombre
+                          blurRadius: 5, // Flou de l'ombre
+                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            "Sélection 3",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black, // Couleur du texte blanche
+                            ),
+                          ),
+                        ),
+                        Divider(height: 1, color: Colors.grey),
+                        ListBody(
+                          children: <Widget>[
+                            ListTile(
+                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsQ";
+                                });
+                                getAccess("Q");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsS";
+                                });
+                                getAccess("S");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsE";
+                                });
+                                getAccess("E");
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // Box 4
+  void _showCustomDialog4(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
+                },
+                child: Container(
+                  color: Colors.transparent, // Transparence pour capturer les clics
+                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
+                ),
+              ),
+              Positioned(
+                left: 1090.0,
+                top: 450.0,
+                right: 160.0,
+                child: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    width: 100,
+                    decoration: BoxDecoration(
+                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                          spreadRadius: 4, // Étendue de l'ombre
+                          blurRadius: 5, // Flou de l'ombre
+                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            "Sélection 4",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black, // Couleur du texte blanche
+                            ),
+                          ),
+                        ),
+                        Divider(height: 1, color: Colors.grey),
+                        ListBody(
+                          children: <Widget>[
+                            ListTile(
+                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsQ";
+                                });
+                                getAccess("Q");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsS";
+                                });
+                                getAccess("S");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsE";
+                                });
+                                getAccess("E");
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  //box 5
+
+  void _showCustomDialog5(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
+                },
+                child: Container(
+                  color: Colors.transparent, // Transparence pour capturer les clics
+                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
+                ),
+              ),
+              Positioned(
+                left: 400.0,
+                top: 450.0,
+                right: 850.0,
+                child: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    width: 100,
+                    decoration: BoxDecoration(
+                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                          spreadRadius: 4, // Étendue de l'ombre
+                          blurRadius: 5, // Flou de l'ombre
+                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            "Sélection 5",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black, // Couleur du texte blanche
+                            ),
+                          ),
+                        ),
+                        Divider(height: 1, color: Colors.grey),
+                        ListBody(
+                          children: <Widget>[
+                            ListTile(
+                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsQ";
+                                });
+                                getAccess("Q");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsS";
+                                });
+                                getAccess("S");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsE";
+                                });
+                                getAccess("E");
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // box 6
+  void _showCustomDialog6(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
+                },
+                child: Container(
+                  color: Colors.transparent, // Transparence pour capturer les clics
+                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
+                ),
+              ),
+              Positioned(
+                left: 620.0,
+                top: 450.0,
+                right: 620.0,
+                child: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    width: 100,
+                    decoration: BoxDecoration(
+                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                          spreadRadius: 4, // Étendue de l'ombre
+                          blurRadius: 5, // Flou de l'ombre
+                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            "Sélection 6",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black, // Couleur du texte blanche
+                            ),
+                          ),
+                        ),
+                        Divider(height: 1, color: Colors.grey),
+                        ListBody(
+                          children: <Widget>[
+                            ListTile(
+                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsQ";
+                                });
+                                getAccess("Q");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsS";
+                                });
+                                getAccess("S");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsE";
+                                });
+                                getAccess("E");
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // Box 7
+  void _showCustomDialog7(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
+                },
+                child: Container(
+                  color: Colors.transparent, // Transparence pour capturer les clics
+                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
+                ),
+              ),
+              Positioned(
+                left: 860.0,
+                top: 450.0,
+                right: 400.0,
+                child: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    width: 100,
+                    decoration: BoxDecoration(
+                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                          spreadRadius: 4, // Étendue de l'ombre
+                          blurRadius: 5, // Flou de l'ombre
+                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            "Sélection 7",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black, // Couleur du texte blanche
+                            ),
+                          ),
+                        ),
+                        Divider(height: 1, color: Colors.grey),
+                        ListBody(
+                          children: <Widget>[
+                            ListTile(
+                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsQ";
+                                });
+                                getAccess("Q");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsS";
+                                });
+                                getAccess("S");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsE";
+                                });
+                                getAccess("E");
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // Box 8
+  void _showCustomDialog8(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
+                },
+                child: Container(
+                  color: Colors.transparent, // Transparence pour capturer les clics
+                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
+                ),
+              ),
+              Positioned(
+                left: 1090.0,
+                top: 450.0,
+                right: 160.0,
+                child: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    width: 100,
+                    decoration: BoxDecoration(
+                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                          spreadRadius: 4, // Étendue de l'ombre
+                          blurRadius: 5, // Flou de l'ombre
+                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            "Sélection 4",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black, // Couleur du texte blanche
+                            ),
+                          ),
+                        ),
+                        Divider(height: 1, color: Colors.grey),
+                        ListBody(
+                          children: <Widget>[
+                            ListTile(
+                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsQ";
+                                });
+                                getAccess("Q");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsS";
+                                });
+                                getAccess("S");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsE";
+                                });
+                                getAccess("E");
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  //box 9
+
+  void _showCustomDialog9(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
+                },
+                child: Container(
+                  color: Colors.transparent, // Transparence pour capturer les clics
+                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
+                ),
+              ),
+              Positioned(
+                left: 400.0,
+                top: 450.0,
+                right: 850.0,
+                child: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    width: 100,
+                    decoration: BoxDecoration(
+                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                          spreadRadius: 4, // Étendue de l'ombre
+                          blurRadius: 5, // Flou de l'ombre
+                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            "Sélection 1",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black, // Couleur du texte blanche
+                            ),
+                          ),
+                        ),
+                        Divider(height: 1, color: Colors.grey),
+                        ListBody(
+                          children: <Widget>[
+                            ListTile(
+                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsQ";
+                                });
+                                getAccess("Q");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsS";
+                                });
+                                getAccess("S");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsE";
+                                });
+                                getAccess("E");
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // box 10
+  void _showCustomDialog10(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
+                },
+                child: Container(
+                  color: Colors.transparent, // Transparence pour capturer les clics
+                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
+                ),
+              ),
+              Positioned(
+                left: 620.0,
+                top: 450.0,
+                right: 620.0,
+                child: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    width: 100,
+                    decoration: BoxDecoration(
+                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                          spreadRadius: 4, // Étendue de l'ombre
+                          blurRadius: 5, // Flou de l'ombre
+                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            "Sélection 10",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black, // Couleur du texte blanche
+                            ),
+                          ),
+                        ),
+                        Divider(height: 1, color: Colors.grey),
+                        ListBody(
+                          children: <Widget>[
+                            ListTile(
+                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsQ";
+                                });
+                                getAccess("Q");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsS";
+                                });
+                                getAccess("S");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsE";
+                                });
+                                getAccess("E");
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // Box 11
+  void _showCustomDialog11(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
+                },
+                child: Container(
+                  color: Colors.transparent, // Transparence pour capturer les clics
+                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
+                ),
+              ),
+              Positioned(
+                left: 860.0,
+                top: 450.0,
+                right: 400.0,
+                child: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    width: 100,
+                    decoration: BoxDecoration(
+                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                          spreadRadius: 4, // Étendue de l'ombre
+                          blurRadius: 5, // Flou de l'ombre
+                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            "Sélection 11",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black, // Couleur du texte blanche
+                            ),
+                          ),
+                        ),
+                        Divider(height: 1, color: Colors.grey),
+                        ListBody(
+                          children: <Widget>[
+                            ListTile(
+                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsQ";
+                                });
+                                getAccess("Q");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsS";
+                                });
+                                getAccess("S");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsE";
+                                });
+                                getAccess("E");
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // Box 12
+  void _showCustomDialog12(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
+                },
+                child: Container(
+                  color: Colors.transparent, // Transparence pour capturer les clics
+                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
+                ),
+              ),
+              Positioned(
+                left: 1090.0,
+                top: 450.0,
+                right: 160.0,
+                child: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    width: 100,
+                    decoration: BoxDecoration(
+                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                          spreadRadius: 4, // Étendue de l'ombre
+                          blurRadius: 5, // Flou de l'ombre
+                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            "Sélection 12",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black, // Couleur du texte blanche
+                            ),
+                          ),
+                        ),
+                        Divider(height: 1, color: Colors.grey),
+                        ListBody(
+                          children: <Widget>[
+                            ListTile(
+                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsQ";
+                                });
+                                getAccess("Q");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsS";
+                                });
+                                getAccess("S");
+                              },
+                            ),
+                            ListTile(
+                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  //chemin = "/audit/gestion-auditsE";
+                                });
+                                getAccess("E");
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+
+  // le corps
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -164,19 +1341,14 @@ class _DashboardGestionState extends State<DashboardGestion> {
               ),
             ),
 
-
-
-
-
-
-            // Première barre juste après les barres déroulantes
+            // La barre d'image
 
             Positioned(
-              top: 100,
-              right: 200,
+              top: 80,
+              right: 201,
               child: InkWell(
                 child: SizedBox(
-                  height: 160,
+                  height: 130,
                   width: 900,
                   child: Container(
                     decoration: BoxDecoration(
@@ -255,7 +1427,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
             // 1
 
             Positioned(
-              top: 300,
+              top: 230,
               right: 898,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
@@ -267,7 +1439,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    context.go("/gestion/profil");
+                    _showCustomDialog1(context);
+                    //context.go("/gestion/profil");
                   },
                   child: SizedBox(
                     height: 50,
@@ -323,7 +1496,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
             // 2
 
             Positioned(
-              top: 300,
+              top: 230,
               right: 667,//50,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
@@ -335,7 +1508,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    context.go("/gestion/profil");
+                    _showCustomDialog2(context);
+                    //context.go("/gestion/profil");
                   },
                   child: SizedBox(
                     height: 50,
@@ -391,7 +1565,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
             // 3
 
             Positioned(
-              top: 300,
+              top: 230,
               right: 436,//480,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
@@ -403,7 +1577,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    context.go("/gestion/profil");
+                    _showCustomDialog3(context);
+                    //context.go("/gestion/profil");
                   },
                   child: SizedBox(
                     height: 50,
@@ -459,7 +1634,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
             // 4
 
             Positioned(
-              top: 300,
+              top: 230,
               right: 205,//480,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
@@ -471,7 +1646,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    context.go("/gestion/profil");
+                    _showCustomDialog4(context);
+                    //context.go("/gestion/profil");
                   },
                   child: SizedBox(
                     height: 50,
@@ -503,15 +1679,15 @@ class _DashboardGestionState extends State<DashboardGestion> {
                             ),
                           ),
                           Positioned(
-                            bottom: 1, // Positionner le texte en bas avec un padding de 10
-                            left: 50,
+                            bottom: 5, // Positionner le texte en bas avec un padding de 10
+                            left: 48,
                             right: 0,
                             child: Text(
-                              "Fonctionnement général",
+                              "Périmètres et domaines d'application",
                               //textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 16,
+                                fontSize: 13,
                                 //fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -527,7 +1703,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
             //5
 
             Positioned(
-              top: 385,
+              top: 295,
               right: 898,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
@@ -539,7 +1715,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    context.go("/gestion/profil");
+                    _showCustomDialog5(context);
+                    //context.go("/gestion/profil");
                   },
                   child: SizedBox(
                     height: 50,
@@ -595,7 +1772,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
             // 6
 
             Positioned(
-              top: 385,
+              top: 295,
               right: 667,//50,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
@@ -607,7 +1784,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    context.go("/gestion/profil");
+                    _showCustomDialog6(context);
+                    //context.go("/gestion/profil");
                   },
                   child: SizedBox(
                     height: 50,
@@ -663,7 +1841,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
             // 7
 
             Positioned(
-              top: 385,
+              top: 295,
               right: 436,//50,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
@@ -675,7 +1853,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    context.go("/gestion/profil");
+                    _showCustomDialog7(context);
+                    //context.go("/gestion/profil");
                   },
                   child: SizedBox(
                     height: 50,
@@ -731,7 +1910,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
             // 8
 
             Positioned(
-              top: 385,
+              top: 295,
               right: 205,//50,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
@@ -743,7 +1922,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    context.go("/gestion/profil");
+                    _showCustomDialog8(context);
+                    //context.go("/gestion/profil");
                   },
                   child: SizedBox(
                     height: 50,
@@ -800,7 +1980,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
             // 9
 
             Positioned(
-              top: 470,
+              top: 360,
               right: 898,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
@@ -812,7 +1992,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    context.go("/gestion/profil");
+                    _showCustomDialog9(context);
+                    //context.go("/gestion/profil");
                   },
                   child: SizedBox(
                     height: 50,
@@ -870,7 +2051,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
             // 10
 
             Positioned(
-              top: 470,
+              top: 360,
               right: 667,//50,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
@@ -882,7 +2063,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    context.go("/gestion/profil");
+                    _showCustomDialog10(context);
+                    //context.go("/gestion/profil");
                   },
                   child: SizedBox(
                     height: 50,
@@ -938,7 +2120,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
             // 11
 
             Positioned(
-              top: 470,
+              top: 360,
               right: 436,//50,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
@@ -950,7 +2132,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    context.go("/gestion/profil");
+                    _showCustomDialog11(context);
+                    //context.go("/gestion/profil");
                   },
                   child: SizedBox(
                     height: 50,
@@ -1006,7 +2189,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
             // 12
 
             Positioned(
-              top: 470,
+              top: 360,
               right: 205,//50,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
@@ -1018,7 +2201,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    context.go("/gestion/profil");
+                    _showCustomDialog12(context);
+                    //context.go("/gestion/profil");
                   },
                   child: SizedBox(
                     height: 50,
@@ -1343,25 +2527,25 @@ class _DashboardGestionState extends State<DashboardGestion> {
 
 
             // Information widget
-            if (_showInfo)
-              Positioned(
-                top: _infoPosition.dy,
-                left: _infoPosition.dx,
-                child: Material(
-                  color: Colors.transparent,
-                  child: Container(
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.7),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      _infoText,
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ),
+            // if (_showInfo)
+            //   Positioned(
+            //     top: _infoPosition.dy,
+            //     left: _infoPosition.dx,
+            //     child: Material(
+            //       color: Colors.transparent,
+            //       child: Container(
+            //         padding: EdgeInsets.all(8),
+            //         decoration: BoxDecoration(
+            //           color: Colors.black.withOpacity(0.7),
+            //           borderRadius: BorderRadius.circular(8),
+            //         ),
+            //         child: Text(
+            //           _infoText,
+            //           style: TextStyle(color: Colors.white),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
           ],
         ),
       ),
