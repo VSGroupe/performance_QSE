@@ -264,13 +264,13 @@ class _MainPageState extends State<MainPage> {
                                 imagePath: "assets/images/auditUpdate.png",
                                 titreCadre: "Audit",
                               ),
-                              CustomCadre(
-                                onTap: () {
-                                  checkAccesRapport();
-                                },
-                                imagePath: "assets/images/rapportUpdate.png",
-                                titreCadre: "Rapport",
-                              ),
+                              // CustomCadre(
+                              //   onTap: () {
+                              //     checkAccesRapport();
+                              //   },
+                              //   imagePath: "assets/images/rapportUpdate.png",
+                              //   titreCadre: "Rapport",
+                              // ),
                             ],
                           ),
                         )

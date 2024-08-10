@@ -49,7 +49,7 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 400,top: 30), // Ajout de padding top pour ajuster vers le haut
+      padding: EdgeInsets.only(left: 382,top: 30), // Ajout de padding top pour ajuster vers le haut
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start, // Changer de center à start
         children: [

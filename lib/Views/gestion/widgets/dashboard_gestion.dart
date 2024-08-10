@@ -12,9 +12,15 @@ class DashboardGestion extends StatefulWidget {
 }
 
 class _DashboardGestionState extends State<DashboardGestion> {
+
   final ControllerAudit controllerAudit = Get.put(ControllerAudit());
+
   final storage = FlutterSecureStorage();
+
   final String location = "/gestion/accueil";
+
+  double scaleValue = 1.0; // Valeur initiale d'échelle pour l'agrandissement
+
   bool _isHoveringBox1 = false;
   bool _isHoveringBox2 = false;
   bool _isHoveringBox3 = false;
@@ -77,102 +83,143 @@ class _DashboardGestionState extends State<DashboardGestion> {
   void _showCustomDialog1(BuildContext context) {
     showDialog(
       context: context,
-      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      barrierColor: Colors.black.withOpacity(0.5), // Rétablit l'effet sombre
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: Colors.transparent,
-          child: Stack(
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
-                },
-                child: Container(
-                  color: Colors.transparent, // Transparence pour capturer les clics
-                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
-                ),
-              ),
-              Positioned(
-                left: 400.0,
-                top: 450.0,
-                right: 850.0,
-                child: Material(
-                  color: Colors.transparent,
-                  child: Container(
-                    width: 100,
-                    decoration: BoxDecoration(
-                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
-                      borderRadius: BorderRadius.circular(8.0),
-                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
-                          spreadRadius: 4, // Étendue de l'ombre
-                          blurRadius: 5, // Flou de l'ombre
-                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            "Sélection 1",
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black, // Couleur du texte blanche
-                            ),
-                          ),
-                        ),
-                        Divider(height: 1, color: Colors.grey),
-                        ListBody(
-                          children: <Widget>[
-                            ListTile(
-                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsQ";
-                                });
-                                getAccess("Q");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsS";
-                                });
-                                getAccess("S");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsE";
-                                });
-                                getAccess("E");
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Stack(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        // Inverse l'animation avant de fermer
+                        scaleValue = 0.0;
+                      });
+                      Future.delayed(Duration(milliseconds: 300), () {
+                        Navigator.of(context).pop();
+                        scaleValue = 1.0;
+                      });
+                    },
+                    child: Container(
+                      color: Colors.transparent, // Transparence pour capturer les clics
+                      child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
                     ),
                   ),
-                ),
-              ),
-            ],
+                  Positioned(
+                    left: 490.0,
+                    top: 280.0,
+                    right: 750.0,
+                    child: TweenAnimationBuilder(
+                      tween: Tween<double>(begin: 0.0, end: scaleValue),
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                      builder: (context, double scale, child) {
+                        return Align(
+                          alignment: Alignment.topLeft, // Définir le point d'origine
+                          child: Transform.scale(
+                            scale: scale,
+                            alignment: Alignment.topLeft, // Définir le point d'origine pour l'agrandissement
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Container(
+                          width: 250,
+                          height: 180,
+                          decoration: BoxDecoration(
+                            color: Colors.white,//Color(0xFFD1DBE4), // Couleur de fond
+                            borderRadius: BorderRadius.circular(8.0),
+                            // border: Border.all(color: Colors.grey, width: 1.0), // Bordure
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //     color: Colors.grey.withOpacity(0.5), // Couleur de l'ombre
+                            //     spreadRadius: 4, // Étendue de l'ombre
+                            //     blurRadius: 5, // Flou de l'ombre
+                            //     offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                            //   ),
+                            // ],
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/analyse-exploratoire.png', // Remplacez par le chemin de votre image
+                                      width: 30.0, // Ajustez la taille de l'image selon vos besoins
+                                      height: 40.0,
+                                    ),
+                                    SizedBox(width: 8.0), // Espace entre l'image et le texte
+                                    Text(
+                                      "Contexte",
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Divider(height: 1, color: Colors.grey),
+                              ListBody(
+                                children: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsQ";
+                                      });
+                                      context.go("");
+                                    },
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Analyse du contexte',
+                                        style: TextStyle(color: Colors.black, fontSize: 16.0,),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsS";
+                                      });
+                                      context.go("");
+                                    },
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Poids des risques\net opportunités',
+                                        style: TextStyle(color: Colors.black, fontSize: 16.0,),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         );
       },
     );
   }
+
 
   // box 2
   void _showCustomDialog2(BuildContext context) {
@@ -182,93 +229,129 @@ class _DashboardGestionState extends State<DashboardGestion> {
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: Colors.transparent,
-          child: Stack(
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
-                },
-                child: Container(
-                  color: Colors.transparent, // Transparence pour capturer les clics
-                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
-                ),
-              ),
-              Positioned(
-                left: 620.0,
-                top: 450.0,
-                right: 620.0,
-                child: Material(
-                  color: Colors.transparent,
-                  child: Container(
-                    width: 100,
-                    decoration: BoxDecoration(
-                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
-                      borderRadius: BorderRadius.circular(8.0),
-                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
-                          spreadRadius: 4, // Étendue de l'ombre
-                          blurRadius: 5, // Flou de l'ombre
-                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            "Sélection 2",
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black, // Couleur du texte blanche
-                            ),
-                          ),
-                        ),
-                        Divider(height: 1, color: Colors.grey),
-                        ListBody(
-                          children: <Widget>[
-                            ListTile(
-                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsQ";
-                                });
-                                getAccess("Q");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsS";
-                                });
-                                getAccess("S");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsE";
-                                });
-                                getAccess("E");
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Stack(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        // Inverse l'animation avant de fermer
+                        scaleValue = 0.0;
+                      });
+                      Future.delayed(Duration(milliseconds: 300), () {
+                        Navigator.of(context).pop();
+                        scaleValue = 1.0;
+                      });
+                    },
+                    child: Container(
+                      color: Colors.transparent, // Transparence pour capturer les clics
+                      child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
                     ),
                   ),
-                ),
-              ),
-            ],
+                  Positioned(
+                    left: 720.0,
+                    top: 280.0,
+                    right: 520.0,
+                    child: TweenAnimationBuilder(
+                      tween: Tween<double>(begin: 0.0, end: scaleValue),
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                      builder: (context, double scale, child) {
+                        return Align(
+                          alignment: Alignment.topLeft, // Définir le point d'origine
+                          child: Transform.scale(
+                            scale: scale,
+                            alignment: Alignment.topLeft, // Définir le point d'origine pour l'agrandissement
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Container(
+                          width: 250,
+                          decoration: BoxDecoration(
+                            color: Colors.white, // Couleur de fond bleue
+                            borderRadius: BorderRadius.circular(8.0),
+                            border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                                spreadRadius: 4, // Étendue de l'ombre
+                                blurRadius: 5, // Flou de l'ombre
+                                offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/icons/gestion_processus1.png', // Remplacez par le chemin de votre image
+                                      width: 24.0, // Ajustez la taille de l'image selon vos besoins
+                                      height: 24.0,
+                                    ),
+                                    SizedBox(width: 8.0), // Espace entre l'image et le texte
+                                    Text(
+                                      "Sélection 6",
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Divider(height: 1, color: Colors.grey),
+                              ListBody(
+                                children: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsQ";
+                                      });
+                                      getAccess("Q");
+                                    },
+                                    child: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsS";
+                                      });
+                                      getAccess("S");
+                                    },
+                                    child: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsE";
+                                      });
+                                      getAccess("E");
+                                    },
+                                    child: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         );
       },
@@ -279,97 +362,133 @@ class _DashboardGestionState extends State<DashboardGestion> {
   void _showCustomDialog3(BuildContext context) {
     showDialog(
       context: context,
-      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      barrierColor: Colors.black.withOpacity(0.5), // Rétablit l'effet sombre
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: Colors.transparent,
-          child: Stack(
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
-                },
-                child: Container(
-                  color: Colors.transparent, // Transparence pour capturer les clics
-                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
-                ),
-              ),
-              Positioned(
-                left: 860.0,
-                top: 450.0,
-                right: 400.0,
-                child: Material(
-                  color: Colors.transparent,
-                  child: Container(
-                    width: 100,
-                    decoration: BoxDecoration(
-                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
-                      borderRadius: BorderRadius.circular(8.0),
-                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
-                          spreadRadius: 4, // Étendue de l'ombre
-                          blurRadius: 5, // Flou de l'ombre
-                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            "Sélection 3",
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black, // Couleur du texte blanche
-                            ),
-                          ),
-                        ),
-                        Divider(height: 1, color: Colors.grey),
-                        ListBody(
-                          children: <Widget>[
-                            ListTile(
-                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsQ";
-                                });
-                                getAccess("Q");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsS";
-                                });
-                                getAccess("S");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsE";
-                                });
-                                getAccess("E");
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Stack(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        // Inverse l'animation avant de fermer
+                        scaleValue = 0.0;
+                      });
+                      Future.delayed(Duration(milliseconds: 300), () {
+                        Navigator.of(context).pop();
+                        scaleValue = 1.0;
+                      });
+                    },
+                    child: Container(
+                      color: Colors.transparent, // Transparence pour capturer les clics
+                      child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
                     ),
                   ),
-                ),
-              ),
-            ],
+                  Positioned(
+                    left: 960.0,
+                    top: 280.0,
+                    right: 280.0,
+                    child: TweenAnimationBuilder(
+                      tween: Tween<double>(begin: 0.0, end: scaleValue),
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                      builder: (context, double scale, child) {
+                        return Align(
+                          alignment: Alignment.topLeft, // Définir le point d'origine
+                          child: Transform.scale(
+                            scale: scale,
+                            alignment: Alignment.topLeft, // Définir le point d'origine pour l'agrandissement
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Container(
+                          width: 250,
+                          decoration: BoxDecoration(
+                            color: Colors.white,//Color(0xFFD1DBE4), // Couleur de fond bleue
+                            borderRadius: BorderRadius.circular(8.0),
+                            // border: Border.all(color: Colors.white, width: 1.0), // Bordure blanche
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //     color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                            //     spreadRadius: 4, // Étendue de l'ombre
+                            //     blurRadius: 5, // Flou de l'ombre
+                            //     offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                            //   ),
+                            // ],
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/icons/gestion_processus1.png', // Remplacez par le chemin de votre image
+                                      width: 24.0, // Ajustez la taille de l'image selon vos besoins
+                                      height: 24.0,
+                                    ),
+                                    SizedBox(width: 8.0), // Espace entre l'image et le texte
+                                    Text(
+                                      "Sélection 6",
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Divider(height: 1, color: Colors.grey),
+                              ListBody(
+                                children: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsQ";
+                                      });
+                                      getAccess("Q");
+                                    },
+                                    child: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsS";
+                                      });
+                                      getAccess("S");
+                                    },
+                                    child: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsE";
+                                      });
+                                      getAccess("E");
+                                    },
+                                    child: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         );
       },
@@ -380,97 +499,133 @@ class _DashboardGestionState extends State<DashboardGestion> {
   void _showCustomDialog4(BuildContext context) {
     showDialog(
       context: context,
-      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      barrierColor: Colors.black.withOpacity(0.5), // Rétablit l'effet sombre
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: Colors.transparent,
-          child: Stack(
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
-                },
-                child: Container(
-                  color: Colors.transparent, // Transparence pour capturer les clics
-                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
-                ),
-              ),
-              Positioned(
-                left: 1090.0,
-                top: 450.0,
-                right: 160.0,
-                child: Material(
-                  color: Colors.transparent,
-                  child: Container(
-                    width: 100,
-                    decoration: BoxDecoration(
-                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
-                      borderRadius: BorderRadius.circular(8.0),
-                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
-                          spreadRadius: 4, // Étendue de l'ombre
-                          blurRadius: 5, // Flou de l'ombre
-                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            "Sélection 4",
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black, // Couleur du texte blanche
-                            ),
-                          ),
-                        ),
-                        Divider(height: 1, color: Colors.grey),
-                        ListBody(
-                          children: <Widget>[
-                            ListTile(
-                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsQ";
-                                });
-                                getAccess("Q");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsS";
-                                });
-                                getAccess("S");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsE";
-                                });
-                                getAccess("E");
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Stack(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        // Inverse l'animation avant de fermer
+                        scaleValue = 0.0;
+                      });
+                      Future.delayed(Duration(milliseconds: 300), () {
+                        Navigator.of(context).pop();
+                        scaleValue = 1.0;
+                      });
+                    },
+                    child: Container(
+                      color: Colors.transparent, // Transparence pour capturer les clics
+                      child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
                     ),
                   ),
-                ),
-              ),
-            ],
+                  Positioned(
+                    left: 1180.0,
+                    top: 280.0,
+                    right: 60.0,
+                    child: TweenAnimationBuilder(
+                      tween: Tween<double>(begin: 0.0, end: scaleValue),
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                      builder: (context, double scale, child) {
+                        return Align(
+                          alignment: Alignment.topLeft, // Définir le point d'origine
+                          child: Transform.scale(
+                            scale: scale,
+                            alignment: Alignment.topLeft, // Définir le point d'origine pour l'agrandissement
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Container(
+                          width: 250,
+                          decoration: BoxDecoration(
+                            color: Colors.white, //Color(0xFFD1DBE4), // Couleur de fond bleue
+                            borderRadius: BorderRadius.circular(8.0),
+                            // border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //     color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                            //     spreadRadius: 4, // Étendue de l'ombre
+                            //     blurRadius: 5, // Flou de l'ombre
+                            //     offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                            //   ),
+                            // ],
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/icons/gestion_processus1.png', // Remplacez par le chemin de votre image
+                                      width: 24.0, // Ajustez la taille de l'image selon vos besoins
+                                      height: 24.0,
+                                    ),
+                                    SizedBox(width: 8.0), // Espace entre l'image et le texte
+                                    Text(
+                                      "Sélection 6",
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Divider(height: 1, color: Colors.grey),
+                              ListBody(
+                                children: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsQ";
+                                      });
+                                      getAccess("Q");
+                                    },
+                                    child: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsS";
+                                      });
+                                      getAccess("S");
+                                    },
+                                    child: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsE";
+                                      });
+                                      getAccess("E");
+                                    },
+                                    child: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         );
       },
@@ -482,97 +637,133 @@ class _DashboardGestionState extends State<DashboardGestion> {
   void _showCustomDialog5(BuildContext context) {
     showDialog(
       context: context,
-      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      barrierColor: Colors.black.withOpacity(0.5), // Rétablit l'effet sombre
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: Colors.transparent,
-          child: Stack(
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
-                },
-                child: Container(
-                  color: Colors.transparent, // Transparence pour capturer les clics
-                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
-                ),
-              ),
-              Positioned(
-                left: 400.0,
-                top: 450.0,
-                right: 850.0,
-                child: Material(
-                  color: Colors.transparent,
-                  child: Container(
-                    width: 100,
-                    decoration: BoxDecoration(
-                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
-                      borderRadius: BorderRadius.circular(8.0),
-                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
-                          spreadRadius: 4, // Étendue de l'ombre
-                          blurRadius: 5, // Flou de l'ombre
-                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            "Sélection 5",
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black, // Couleur du texte blanche
-                            ),
-                          ),
-                        ),
-                        Divider(height: 1, color: Colors.grey),
-                        ListBody(
-                          children: <Widget>[
-                            ListTile(
-                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsQ";
-                                });
-                                getAccess("Q");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsS";
-                                });
-                                getAccess("S");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsE";
-                                });
-                                getAccess("E");
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Stack(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        // Inverse l'animation avant de fermer
+                        scaleValue = 0.0;
+                      });
+                      Future.delayed(Duration(milliseconds: 300), () {
+                        Navigator.of(context).pop();
+                        scaleValue = 1.0;
+                      });
+                    },
+                    child: Container(
+                      color: Colors.transparent, // Transparence pour capturer les clics
+                      child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
                     ),
                   ),
-                ),
-              ),
-            ],
+                  Positioned(
+                    left: 490.0,
+                    top: 347.0,
+                    right: 750.0,
+                    child: TweenAnimationBuilder(
+                      tween: Tween<double>(begin: 0.0, end: scaleValue),
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                      builder: (context, double scale, child) {
+                        return Align(
+                          alignment: Alignment.topLeft, // Définir le point d'origine
+                          child: Transform.scale(
+                            scale: scale,
+                            alignment: Alignment.topLeft, // Définir le point d'origine pour l'agrandissement
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Container(
+                          width: 250,
+                          decoration: BoxDecoration(
+                            color: Colors.white, //Color(0xFFD1DBE4), // Couleur de fond bleue
+                            borderRadius: BorderRadius.circular(8.0),
+                            // border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //     color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                            //     spreadRadius: 4, // Étendue de l'ombre
+                            //     blurRadius: 5, // Flou de l'ombre
+                            //     offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                            //   ),
+                            // ],
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/icons/gestion_processus1.png', // Remplacez par le chemin de votre image
+                                      width: 24.0, // Ajustez la taille de l'image selon vos besoins
+                                      height: 24.0,
+                                    ),
+                                    SizedBox(width: 8.0), // Espace entre l'image et le texte
+                                    Text(
+                                      "Sélection 6",
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Divider(height: 1, color: Colors.grey),
+                              ListBody(
+                                children: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsQ";
+                                      });
+                                      getAccess("Q");
+                                    },
+                                    child: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsS";
+                                      });
+                                      getAccess("S");
+                                    },
+                                    child: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsE";
+                                      });
+                                      getAccess("E");
+                                    },
+                                    child: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         );
       },
@@ -583,299 +774,410 @@ class _DashboardGestionState extends State<DashboardGestion> {
   void _showCustomDialog6(BuildContext context) {
     showDialog(
       context: context,
-      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      barrierColor: Colors.black.withOpacity(0.5), // Rétablit l'effet sombre
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: Colors.transparent,
-          child: Stack(
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
-                },
-                child: Container(
-                  color: Colors.transparent, // Transparence pour capturer les clics
-                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
-                ),
-              ),
-              Positioned(
-                left: 620.0,
-                top: 450.0,
-                right: 620.0,
-                child: Material(
-                  color: Colors.transparent,
-                  child: Container(
-                    width: 100,
-                    decoration: BoxDecoration(
-                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
-                      borderRadius: BorderRadius.circular(8.0),
-                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
-                          spreadRadius: 4, // Étendue de l'ombre
-                          blurRadius: 5, // Flou de l'ombre
-                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            "Sélection 6",
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black, // Couleur du texte blanche
-                            ),
-                          ),
-                        ),
-                        Divider(height: 1, color: Colors.grey),
-                        ListBody(
-                          children: <Widget>[
-                            ListTile(
-                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsQ";
-                                });
-                                getAccess("Q");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsS";
-                                });
-                                getAccess("S");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsE";
-                                });
-                                getAccess("E");
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Stack(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        // Inverse l'animation avant de fermer
+                        scaleValue = 0.0;
+                      });
+                      Future.delayed(Duration(milliseconds: 300), () {
+                        Navigator.of(context).pop();
+                        scaleValue = 1.0;
+                      });
+                    },
+                    child: Container(
+                      color: Colors.transparent, // Transparence pour capturer les clics
+                      child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
                     ),
                   ),
-                ),
-              ),
-            ],
+                  Positioned(
+                    left: 720.0,
+                    top: 347.0,
+                    right: 520.0,
+                    child: TweenAnimationBuilder(
+                      tween: Tween<double>(begin: 0.0, end: scaleValue),
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                      builder: (context, double scale, child) {
+                        return Align(
+                          alignment: Alignment.topLeft, // Définir le point d'origine
+                          child: Transform.scale(
+                            scale: scale,
+                            alignment: Alignment.topLeft, // Définir le point d'origine pour l'agrandissement
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Container(
+                          width: 250,
+                          decoration: BoxDecoration(
+                            color: Colors.white, //Color(0xFFD1DBE4), // Couleur de fond bleue
+                            borderRadius: BorderRadius.circular(8.0),
+                            // border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //     color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                            //     spreadRadius: 4, // Étendue de l'ombre
+                            //     blurRadius: 5, // Flou de l'ombre
+                            //     offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                            //   ),
+                            // ],
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/icons/gestion_processus1.png', // Remplacez par le chemin de votre image
+                                      width: 24.0, // Ajustez la taille de l'image selon vos besoins
+                                      height: 24.0,
+                                    ),
+                                    SizedBox(width: 8.0), // Espace entre l'image et le texte
+                                    Text(
+                                      "Sélection 6",
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Divider(height: 1, color: Colors.grey),
+                              ListBody(
+                                children: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsQ";
+                                      });
+                                      getAccess("Q");
+                                    },
+                                    child: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsS";
+                                      });
+                                      getAccess("S");
+                                    },
+                                    child: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsE";
+                                      });
+                                      getAccess("E");
+                                    },
+                                    child: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         );
       },
     );
   }
+
+
 
   // Box 7
   void _showCustomDialog7(BuildContext context) {
     showDialog(
       context: context,
-      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      barrierColor: Colors.black.withOpacity(0.5), // Rétablit l'effet sombre
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: Colors.transparent,
-          child: Stack(
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
-                },
-                child: Container(
-                  color: Colors.transparent, // Transparence pour capturer les clics
-                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
-                ),
-              ),
-              Positioned(
-                left: 860.0,
-                top: 450.0,
-                right: 400.0,
-                child: Material(
-                  color: Colors.transparent,
-                  child: Container(
-                    width: 100,
-                    decoration: BoxDecoration(
-                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
-                      borderRadius: BorderRadius.circular(8.0),
-                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
-                          spreadRadius: 4, // Étendue de l'ombre
-                          blurRadius: 5, // Flou de l'ombre
-                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            "Sélection 7",
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black, // Couleur du texte blanche
-                            ),
-                          ),
-                        ),
-                        Divider(height: 1, color: Colors.grey),
-                        ListBody(
-                          children: <Widget>[
-                            ListTile(
-                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsQ";
-                                });
-                                getAccess("Q");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsS";
-                                });
-                                getAccess("S");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsE";
-                                });
-                                getAccess("E");
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Stack(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        // Inverse l'animation avant de fermer
+                        scaleValue = 0.0;
+                      });
+                      Future.delayed(Duration(milliseconds: 300), () {
+                        Navigator.of(context).pop();
+                        scaleValue = 1.0;
+                      });
+                    },
+                    child: Container(
+                      color: Colors.transparent, // Transparence pour capturer les clics
+                      child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
                     ),
                   ),
-                ),
-              ),
-            ],
+                  Positioned(
+                    left: 960.0,
+                    top: 347.0,
+                    right: 280.0,
+                    child: TweenAnimationBuilder(
+                      tween: Tween<double>(begin: 0.0, end: scaleValue),
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                      builder: (context, double scale, child) {
+                        return Align(
+                          alignment: Alignment.topLeft, // Définir le point d'origine
+                          child: Transform.scale(
+                            scale: scale,
+                            alignment: Alignment.topLeft, // Définir le point d'origine pour l'agrandissement
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Container(
+                          width: 250,
+                          decoration: BoxDecoration(
+                            color: Colors.white, //Color(0xFFD1DBE4), // Couleur de fond bleue
+                            borderRadius: BorderRadius.circular(8.0),
+                            // border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //     color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                            //     spreadRadius: 4, // Étendue de l'ombre
+                            //     blurRadius: 5, // Flou de l'ombre
+                            //     offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                            //   ),
+                            // ],
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/icons/gestion_processus1.png', // Remplacez par le chemin de votre image
+                                      width: 24.0, // Ajustez la taille de l'image selon vos besoins
+                                      height: 24.0,
+                                    ),
+                                    SizedBox(width: 8.0), // Espace entre l'image et le texte
+                                    Text(
+                                      "Sélection 6",
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Divider(height: 1, color: Colors.grey),
+                              ListBody(
+                                children: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsQ";
+                                      });
+                                      getAccess("Q");
+                                    },
+                                    child: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsS";
+                                      });
+                                      getAccess("S");
+                                    },
+                                    child: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsE";
+                                      });
+                                      getAccess("E");
+                                    },
+                                    child: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         );
       },
     );
   }
 
+
   // Box 8
   void _showCustomDialog8(BuildContext context) {
     showDialog(
       context: context,
-      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      barrierColor: Colors.black.withOpacity(0.5), // Rétablit l'effet sombre
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: Colors.transparent,
-          child: Stack(
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
-                },
-                child: Container(
-                  color: Colors.transparent, // Transparence pour capturer les clics
-                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
-                ),
-              ),
-              Positioned(
-                left: 1090.0,
-                top: 450.0,
-                right: 160.0,
-                child: Material(
-                  color: Colors.transparent,
-                  child: Container(
-                    width: 100,
-                    decoration: BoxDecoration(
-                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
-                      borderRadius: BorderRadius.circular(8.0),
-                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
-                          spreadRadius: 4, // Étendue de l'ombre
-                          blurRadius: 5, // Flou de l'ombre
-                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            "Sélection 4",
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black, // Couleur du texte blanche
-                            ),
-                          ),
-                        ),
-                        Divider(height: 1, color: Colors.grey),
-                        ListBody(
-                          children: <Widget>[
-                            ListTile(
-                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsQ";
-                                });
-                                getAccess("Q");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsS";
-                                });
-                                getAccess("S");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsE";
-                                });
-                                getAccess("E");
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Stack(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        // Inverse l'animation avant de fermer
+                        scaleValue = 0.0;
+                      });
+                      Future.delayed(Duration(milliseconds: 300), () {
+                        Navigator.of(context).pop();
+                        scaleValue = 1.0;
+                      });
+                    },
+                    child: Container(
+                      color: Colors.transparent, // Transparence pour capturer les clics
+                      child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
                     ),
                   ),
-                ),
-              ),
-            ],
+                  Positioned(
+                    left: 1180.0,
+                    top: 347.0,
+                    right: 60.0,
+                    child: TweenAnimationBuilder(
+                      tween: Tween<double>(begin: 0.0, end: scaleValue),
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                      builder: (context, double scale, child) {
+                        return Align(
+                          alignment: Alignment.topLeft, // Définir le point d'origine
+                          child: Transform.scale(
+                            scale: scale,
+                            alignment: Alignment.topLeft, // Définir le point d'origine pour l'agrandissement
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Container(
+                          width: 250,
+                          decoration: BoxDecoration(
+                            color: Colors.white, //Color(0xFFD1DBE4), // Couleur de fond bleue
+                            borderRadius: BorderRadius.circular(8.0),
+                            // border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //     color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                            //     spreadRadius: 4, // Étendue de l'ombre
+                            //     blurRadius: 5, // Flou de l'ombre
+                            //     offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                            //   ),
+                            // ],
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/icons/gestion_processus1.png', // Remplacez par le chemin de votre image
+                                      width: 24.0, // Ajustez la taille de l'image selon vos besoins
+                                      height: 24.0,
+                                    ),
+                                    SizedBox(width: 8.0), // Espace entre l'image et le texte
+                                    Text(
+                                      "Sélection 6",
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Divider(height: 1, color: Colors.grey),
+                              ListBody(
+                                children: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsQ";
+                                      });
+                                      getAccess("Q");
+                                    },
+                                    child: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsS";
+                                      });
+                                      getAccess("S");
+                                    },
+                                    child: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsE";
+                                      });
+                                      getAccess("E");
+                                    },
+                                    child: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         );
       },
@@ -887,97 +1189,133 @@ class _DashboardGestionState extends State<DashboardGestion> {
   void _showCustomDialog9(BuildContext context) {
     showDialog(
       context: context,
-      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      barrierColor: Colors.black.withOpacity(0.5), // Rétablit l'effet sombre
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: Colors.transparent,
-          child: Stack(
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
-                },
-                child: Container(
-                  color: Colors.transparent, // Transparence pour capturer les clics
-                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
-                ),
-              ),
-              Positioned(
-                left: 400.0,
-                top: 450.0,
-                right: 850.0,
-                child: Material(
-                  color: Colors.transparent,
-                  child: Container(
-                    width: 100,
-                    decoration: BoxDecoration(
-                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
-                      borderRadius: BorderRadius.circular(8.0),
-                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
-                          spreadRadius: 4, // Étendue de l'ombre
-                          blurRadius: 5, // Flou de l'ombre
-                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            "Sélection 1",
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black, // Couleur du texte blanche
-                            ),
-                          ),
-                        ),
-                        Divider(height: 1, color: Colors.grey),
-                        ListBody(
-                          children: <Widget>[
-                            ListTile(
-                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsQ";
-                                });
-                                getAccess("Q");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsS";
-                                });
-                                getAccess("S");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsE";
-                                });
-                                getAccess("E");
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Stack(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        // Inverse l'animation avant de fermer
+                        scaleValue = 0.0;
+                      });
+                      Future.delayed(Duration(milliseconds: 300), () {
+                        Navigator.of(context).pop();
+                        scaleValue = 1.0;
+                      });
+                    },
+                    child: Container(
+                      color: Colors.transparent, // Transparence pour capturer les clics
+                      child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
                     ),
                   ),
-                ),
-              ),
-            ],
+                  Positioned(
+                    left: 490.0,
+                    top: 410.0,
+                    right: 750.0,
+                    child: TweenAnimationBuilder(
+                      tween: Tween<double>(begin: 0.0, end: scaleValue),
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                      builder: (context, double scale, child) {
+                        return Align(
+                          alignment: Alignment.topLeft, // Définir le point d'origine
+                          child: Transform.scale(
+                            scale: scale,
+                            alignment: Alignment.topLeft, // Définir le point d'origine pour l'agrandissement
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Container(
+                          width: 250,
+                          decoration: BoxDecoration(
+                            color: Colors.white, //Color(0xFFD1DBE4), // Couleur de fond bleue
+                            borderRadius: BorderRadius.circular(8.0),
+                            // border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //     color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                            //     spreadRadius: 4, // Étendue de l'ombre
+                            //     blurRadius: 5, // Flou de l'ombre
+                            //     offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                            //   ),
+                            // ],
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/icons/gestion_processus1.png', // Remplacez par le chemin de votre image
+                                      width: 24.0, // Ajustez la taille de l'image selon vos besoins
+                                      height: 24.0,
+                                    ),
+                                    SizedBox(width: 8.0), // Espace entre l'image et le texte
+                                    Text(
+                                      "Sélection 6",
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Divider(height: 1, color: Colors.grey),
+                              ListBody(
+                                children: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsQ";
+                                      });
+                                      getAccess("Q");
+                                    },
+                                    child: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsS";
+                                      });
+                                      getAccess("S");
+                                    },
+                                    child: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsE";
+                                      });
+                                      getAccess("E");
+                                    },
+                                    child: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         );
       },
@@ -988,97 +1326,133 @@ class _DashboardGestionState extends State<DashboardGestion> {
   void _showCustomDialog10(BuildContext context) {
     showDialog(
       context: context,
-      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      barrierColor: Colors.black.withOpacity(0.5), // Rétablit l'effet sombre
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: Colors.transparent,
-          child: Stack(
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
-                },
-                child: Container(
-                  color: Colors.transparent, // Transparence pour capturer les clics
-                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
-                ),
-              ),
-              Positioned(
-                left: 620.0,
-                top: 450.0,
-                right: 620.0,
-                child: Material(
-                  color: Colors.transparent,
-                  child: Container(
-                    width: 100,
-                    decoration: BoxDecoration(
-                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
-                      borderRadius: BorderRadius.circular(8.0),
-                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
-                          spreadRadius: 4, // Étendue de l'ombre
-                          blurRadius: 5, // Flou de l'ombre
-                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            "Sélection 10",
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black, // Couleur du texte blanche
-                            ),
-                          ),
-                        ),
-                        Divider(height: 1, color: Colors.grey),
-                        ListBody(
-                          children: <Widget>[
-                            ListTile(
-                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsQ";
-                                });
-                                getAccess("Q");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsS";
-                                });
-                                getAccess("S");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsE";
-                                });
-                                getAccess("E");
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Stack(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        // Inverse l'animation avant de fermer
+                        scaleValue = 0.0;
+                      });
+                      Future.delayed(Duration(milliseconds: 300), () {
+                        Navigator.of(context).pop();
+                        scaleValue = 1.0;
+                      });
+                    },
+                    child: Container(
+                      color: Colors.transparent, // Transparence pour capturer les clics
+                      child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
                     ),
                   ),
-                ),
-              ),
-            ],
+                  Positioned(
+                    left: 720.0,
+                    top: 410.0,
+                    right: 520.0,
+                    child: TweenAnimationBuilder(
+                      tween: Tween<double>(begin: 0.0, end: scaleValue),
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                      builder: (context, double scale, child) {
+                        return Align(
+                          alignment: Alignment.topLeft, // Définir le point d'origine
+                          child: Transform.scale(
+                            scale: scale,
+                            alignment: Alignment.topLeft, // Définir le point d'origine pour l'agrandissement
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Container(
+                          width: 250,
+                          decoration: BoxDecoration(
+                            color: Colors.white, //Color(0xFFD1DBE4), // Couleur de fond bleue
+                            borderRadius: BorderRadius.circular(8.0),
+                            // border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //     color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                            //     spreadRadius: 4, // Étendue de l'ombre
+                            //     blurRadius: 5, // Flou de l'ombre
+                            //     offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                            //   ),
+                            // ],
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/icons/gestion_processus1.png', // Remplacez par le chemin de votre image
+                                      width: 24.0, // Ajustez la taille de l'image selon vos besoins
+                                      height: 24.0,
+                                    ),
+                                    SizedBox(width: 8.0), // Espace entre l'image et le texte
+                                    Text(
+                                      "Sélection 6",
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Divider(height: 1, color: Colors.grey),
+                              ListBody(
+                                children: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsQ";
+                                      });
+                                      getAccess("Q");
+                                    },
+                                    child: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsS";
+                                      });
+                                      getAccess("S");
+                                    },
+                                    child: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsE";
+                                      });
+                                      getAccess("E");
+                                    },
+                                    child: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         );
       },
@@ -1089,97 +1463,133 @@ class _DashboardGestionState extends State<DashboardGestion> {
   void _showCustomDialog11(BuildContext context) {
     showDialog(
       context: context,
-      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      barrierColor: Colors.black.withOpacity(0.5), // Rétablit l'effet sombre
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: Colors.transparent,
-          child: Stack(
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
-                },
-                child: Container(
-                  color: Colors.transparent, // Transparence pour capturer les clics
-                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
-                ),
-              ),
-              Positioned(
-                left: 860.0,
-                top: 450.0,
-                right: 400.0,
-                child: Material(
-                  color: Colors.transparent,
-                  child: Container(
-                    width: 100,
-                    decoration: BoxDecoration(
-                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
-                      borderRadius: BorderRadius.circular(8.0),
-                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
-                          spreadRadius: 4, // Étendue de l'ombre
-                          blurRadius: 5, // Flou de l'ombre
-                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            "Sélection 11",
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black, // Couleur du texte blanche
-                            ),
-                          ),
-                        ),
-                        Divider(height: 1, color: Colors.grey),
-                        ListBody(
-                          children: <Widget>[
-                            ListTile(
-                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsQ";
-                                });
-                                getAccess("Q");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsS";
-                                });
-                                getAccess("S");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsE";
-                                });
-                                getAccess("E");
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Stack(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        // Inverse l'animation avant de fermer
+                        scaleValue = 0.0;
+                      });
+                      Future.delayed(Duration(milliseconds: 300), () {
+                        Navigator.of(context).pop();
+                        scaleValue = 1.0;
+                      });
+                    },
+                    child: Container(
+                      color: Colors.transparent, // Transparence pour capturer les clics
+                      child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
                     ),
                   ),
-                ),
-              ),
-            ],
+                  Positioned(
+                    left: 960.0,
+                    top: 410.0,
+                    right: 280.0,
+                    child: TweenAnimationBuilder(
+                      tween: Tween<double>(begin: 0.0, end: scaleValue),
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                      builder: (context, double scale, child) {
+                        return Align(
+                          alignment: Alignment.topLeft, // Définir le point d'origine
+                          child: Transform.scale(
+                            scale: scale,
+                            alignment: Alignment.topLeft, // Définir le point d'origine pour l'agrandissement
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Container(
+                          width: 250,
+                          decoration: BoxDecoration(
+                            color: Colors.white, //Color(0xFFD1DBE4), // Couleur de fond bleue
+                            borderRadius: BorderRadius.circular(8.0),
+                            // border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //     color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                            //     spreadRadius: 4, // Étendue de l'ombre
+                            //     blurRadius: 5, // Flou de l'ombre
+                            //     offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                            //   ),
+                            // ],
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/icons/gestion_processus1.png', // Remplacez par le chemin de votre image
+                                      width: 24.0, // Ajustez la taille de l'image selon vos besoins
+                                      height: 24.0,
+                                    ),
+                                    SizedBox(width: 8.0), // Espace entre l'image et le texte
+                                    Text(
+                                      "Sélection 6",
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Divider(height: 1, color: Colors.grey),
+                              ListBody(
+                                children: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsQ";
+                                      });
+                                      getAccess("Q");
+                                    },
+                                    child: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsS";
+                                      });
+                                      getAccess("S");
+                                    },
+                                    child: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsE";
+                                      });
+                                      getAccess("E");
+                                    },
+                                    child: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         );
       },
@@ -1190,97 +1600,133 @@ class _DashboardGestionState extends State<DashboardGestion> {
   void _showCustomDialog12(BuildContext context) {
     showDialog(
       context: context,
-      barrierColor: Colors.transparent, // Supprime l'effet sombre
+      barrierColor: Colors.black.withOpacity(0.5), // Rétablit l'effet sombre
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: Colors.transparent,
-          child: Stack(
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop(); // Ferme le dialogue lorsqu'on clique en dehors
-                },
-                child: Container(
-                  color: Colors.transparent, // Transparence pour capturer les clics
-                  child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
-                ),
-              ),
-              Positioned(
-                left: 1090.0,
-                top: 450.0,
-                right: 160.0,
-                child: Material(
-                  color: Colors.transparent,
-                  child: Container(
-                    width: 100,
-                    decoration: BoxDecoration(
-                      //color: Color(0xFFD1DBE4), // Couleur de fond bleue
-                      borderRadius: BorderRadius.circular(8.0),
-                      border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
-                          spreadRadius: 4, // Étendue de l'ombre
-                          blurRadius: 5, // Flou de l'ombre
-                          offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            "Sélection 12",
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black, // Couleur du texte blanche
-                            ),
-                          ),
-                        ),
-                        Divider(height: 1, color: Colors.grey),
-                        ListBody(
-                          children: <Widget>[
-                            ListTile(
-                              title: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsQ";
-                                });
-                                getAccess("Q");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsS";
-                                });
-                                getAccess("S");
-                              },
-                            ),
-                            ListTile(
-                              title: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  //chemin = "/audit/gestion-auditsE";
-                                });
-                                getAccess("E");
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Stack(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        // Inverse l'animation avant de fermer
+                        scaleValue = 0.0;
+                      });
+                      Future.delayed(Duration(milliseconds: 300), () {
+                        Navigator.of(context).pop();
+                        scaleValue = 1.0;
+                      });
+                    },
+                    child: Container(
+                      color: Colors.transparent, // Transparence pour capturer les clics
+                      child: SizedBox.expand(), // Remplit l'écran pour capturer tous les clics
                     ),
                   ),
-                ),
-              ),
-            ],
+                  Positioned(
+                    left: 1180.0,
+                    top: 410.0,
+                    right: 60.0,
+                    child: TweenAnimationBuilder(
+                      tween: Tween<double>(begin: 0.0, end: scaleValue),
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                      builder: (context, double scale, child) {
+                        return Align(
+                          alignment: Alignment.topLeft, // Définir le point d'origine
+                          child: Transform.scale(
+                            scale: scale,
+                            alignment: Alignment.topLeft, // Définir le point d'origine pour l'agrandissement
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Container(
+                          width: 250,
+                          decoration: BoxDecoration(
+                            color: Colors.white, //Color(0xFFD1DBE4), // Couleur de fond bleue
+                            borderRadius: BorderRadius.circular(8.0),
+                            // border: Border.all(color: Colors.grey, width: 1.0), // Bordure blanche
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //     color: Colors.grey.withOpacity(0.0), // Couleur de l'ombre
+                            //     spreadRadius: 4, // Étendue de l'ombre
+                            //     blurRadius: 5, // Flou de l'ombre
+                            //     offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                            //   ),
+                            // ],
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/icons/gestion_processus1.png', // Remplacez par le chemin de votre image
+                                      width: 24.0, // Ajustez la taille de l'image selon vos besoins
+                                      height: 24.0,
+                                    ),
+                                    SizedBox(width: 8.0), // Espace entre l'image et le texte
+                                    Text(
+                                      "Sélection 6",
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Divider(height: 1, color: Colors.grey),
+                              ListBody(
+                                children: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsQ";
+                                      });
+                                      getAccess("Q");
+                                    },
+                                    child: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsS";
+                                      });
+                                      getAccess("S");
+                                    },
+                                    child: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        //chemin = "/audit/gestion-auditsE";
+                                      });
+                                      getAccess("E");
+                                    },
+                                    child: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         );
       },
@@ -1354,7 +1800,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage(
-                              "assets/images/barre_qse.jpg"),
+                              "assets/images/Banière_Performance_QSE.png"),
                           fit: BoxFit.fitWidth),
                       color: Colors.grey, // Changez la couleur de fond selon vos besoins
                       border: Border.all(color: Colors.white, width: 2), // Bordure grise
@@ -1431,10 +1877,10 @@ class _DashboardGestionState extends State<DashboardGestion> {
               right: 898,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
-                  _isHoveringBox1 = true;
+                  _isHoveringBox7 = true;
                 }),
                 onExit: (_) => setState(() {
-                  _isHoveringBox1 = false;
+                  _isHoveringBox7 = false;
                 }),
                 child: InkWell(
                   onTap: () {
@@ -1447,9 +1893,9 @@ class _DashboardGestionState extends State<DashboardGestion> {
                     width: 200,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: _isHoveringBox1 ? Colors.white38 : Colors.white, // Couleur de fond
+                        color: _isHoveringBox7 ? Colors.white38 : Colors.white, // Change la couleur de fond lorsqu'on survole
                         border: Border.all(color: Colors.grey, width: 0), // Bordure grise
-                        borderRadius: BorderRadius.circular(18), // Bordure circulaire
+                        borderRadius: BorderRadius.circular(20), // Bordure circulaire
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.5), // Couleur de l'ombre
@@ -1462,21 +1908,22 @@ class _DashboardGestionState extends State<DashboardGestion> {
                       child: Stack(
                         children: [
                           Positioned(
-                            top: 5, // Positionner l'image en haut
+                            top: 10, // Positionner l'image en haut
                             left: 0,
-                            right: 140, // Centrer horizontalement
+                            right: 145, // Centrer horizontalement
                             child: SizedBox(
                               height: 30,
-                              width: 50,
-                              child: Image.asset("assets/images/gestion_QSE.png", fit: BoxFit.contain),
+                              width: 40,
+                              child: Image.asset("assets/images/analyse-exploratoire.png", fit: BoxFit.contain),
                             ),
                           ),
                           Positioned(
-                            bottom: 10, // Positionner le texte en bas avec un padding de 10
-                            left: 60,
+                            bottom: 13, // Positionner le texte en bas avec un padding de 10
+                            left: 52,
                             right: 0,
                             child: Text(
-                              'Politique QSE',
+                              'Contexte',
+                              //textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 16,
@@ -1563,79 +2010,9 @@ class _DashboardGestionState extends State<DashboardGestion> {
             ),
 
             // 3
-
             Positioned(
               top: 230,
-              right: 436,//480,
-              child: MouseRegion(
-                onEnter: (_) => setState(() {
-                  _isHoveringBox2 = true;
-                }),
-                onExit: (_) => setState(() {
-                  _isHoveringBox2 = false;
-                }),
-                child: InkWell(
-                  onTap: () {
-                    // action à effectuer
-                    _showCustomDialog3(context);
-                    //context.go("/gestion/profil");
-                  },
-                  child: SizedBox(
-                    height: 50,
-                    width: 200,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: _isHoveringBox2 ? Colors.white38 : Colors.white, // Change la couleur de fond lorsqu'on survole
-                        border: Border.all(color: Colors.grey, width: 0), // Bordure grise
-                        borderRadius: BorderRadius.circular(20), // Bordure circulaire
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5), // Couleur de l'ombre
-                            spreadRadius: 2, // Étendue de l'ombre
-                            blurRadius: 5, // Flou de l'ombre
-                            offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
-                          ),
-                        ],
-                      ),
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            top: 9, // Positionner l'image en haut
-                            left: 0,
-                            right: 150, // Centrer horizontalement
-                            child: SizedBox(
-                              height: 25,
-                              width: 25,
-                              child: Image.asset("assets/images/respo_autorites1.jpg", fit: BoxFit.contain),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 2, // Positionner le texte en bas avec un padding de 10
-                            left: 50,
-                            right: 0,
-                            child: Text(
-                              "Ressources et responsabilités",
-                              //textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                //fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            // 4
-
-            Positioned(
-              top: 230,
-              right: 205,//480,
+              right: 436,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
                   _isHoveringBox5 = true;
@@ -1646,7 +2023,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    _showCustomDialog4(context);
+                    _showCustomDialog3(context);
                     //context.go("/gestion/profil");
                   },
                   child: SizedBox(
@@ -1700,6 +2077,76 @@ class _DashboardGestionState extends State<DashboardGestion> {
               ),
             ),
 
+
+            // 4
+
+            Positioned(
+              top: 230,
+              right: 205,
+              child: MouseRegion(
+                onEnter: (_) => setState(() {
+                  _isHoveringBox1 = true;
+                }),
+                onExit: (_) => setState(() {
+                  _isHoveringBox1 = false;
+                }),
+                child: InkWell(
+                  onTap: () {
+                    // action à effectuer
+                    _showCustomDialog4(context);
+                    //context.go("/gestion/profil");
+                  },
+                  child: SizedBox(
+                    height: 50,
+                    width: 200,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: _isHoveringBox1 ? Colors.white38 : Colors.white, // Couleur de fond
+                        border: Border.all(color: Colors.grey, width: 0), // Bordure grise
+                        borderRadius: BorderRadius.circular(18), // Bordure circulaire
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5), // Couleur de l'ombre
+                            spreadRadius: 2, // Étendue de l'ombre
+                            blurRadius: 5, // Flou de l'ombre
+                            offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                          ),
+                        ],
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: 5, // Positionner l'image en haut
+                            left: 0,
+                            right: 140, // Centrer horizontalement
+                            child: SizedBox(
+                              height: 30,
+                              width: 50,
+                              child: Image.asset("assets/images/gestion_QSE.png", fit: BoxFit.contain),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 10, // Positionner le texte en bas avec un padding de 10
+                            left: 60,
+                            right: 0,
+                            child: Text(
+                              'Politique QSE',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                //fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+
             //5
 
             Positioned(
@@ -1707,10 +2154,10 @@ class _DashboardGestionState extends State<DashboardGestion> {
               right: 898,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
-                  _isHoveringBox4 = true;
+                  _isHoveringBox2 = true;
                 }),
                 onExit: (_) => setState(() {
-                  _isHoveringBox4 = false;
+                  _isHoveringBox2 = false;
                 }),
                 child: InkWell(
                   onTap: () {
@@ -1723,7 +2170,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                     width: 200,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: _isHoveringBox4 ? Colors.white38 : Colors.white, // Change la couleur de fond lorsqu'on survole
+                        color: _isHoveringBox2 ? Colors.white38 : Colors.white, // Change la couleur de fond lorsqu'on survole
                         border: Border.all(color: Colors.grey, width: 0), // Bordure grise
                         borderRadius: BorderRadius.circular(20), // Bordure circulaire
                         boxShadow: [
@@ -1738,22 +2185,22 @@ class _DashboardGestionState extends State<DashboardGestion> {
                       child: Stack(
                         children: [
                           Positioned(
-                            top: 08, // Positionner l'image en haut
+                            top: 9, // Positionner l'image en haut
                             left: 0,
                             right: 150, // Centrer horizontalement
                             child: SizedBox(
-                              height: 30,
-                              width: 40,
-                              child: Image.asset("assets/images/non_conformes_et_actions_cor.jpg", fit: BoxFit.contain),
+                              height: 25,
+                              width: 25,
+                              child: Image.asset("assets/images/respo_autorites1.jpg", fit: BoxFit.contain),
                             ),
                           ),
                           Positioned(
-                            bottom: 11, // Positionner le texte en bas avec un padding de 10
-                            left: 0,
+                            bottom: 2, // Positionner le texte en bas avec un padding de 10
+                            left: 50,
                             right: 0,
                             child: Text(
-                              'Améliorations',
-                              textAlign: TextAlign.center,
+                              "Ressources et responsabilités",
+                              //textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 16,
@@ -1839,79 +2286,9 @@ class _DashboardGestionState extends State<DashboardGestion> {
             ),
 
             // 7
-
             Positioned(
               top: 295,
-              right: 436,//50,
-              child: MouseRegion(
-                onEnter: (_) => setState(() {
-                  _isHoveringBox7 = true;
-                }),
-                onExit: (_) => setState(() {
-                  _isHoveringBox7 = false;
-                }),
-                child: InkWell(
-                  onTap: () {
-                    // action à effectuer
-                    _showCustomDialog7(context);
-                    //context.go("/gestion/profil");
-                  },
-                  child: SizedBox(
-                    height: 50,
-                    width: 200,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: _isHoveringBox7 ? Colors.white38 : Colors.white, // Change la couleur de fond lorsqu'on survole
-                        border: Border.all(color: Colors.grey, width: 0), // Bordure grise
-                        borderRadius: BorderRadius.circular(20), // Bordure circulaire
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5), // Couleur de l'ombre
-                            spreadRadius: 2, // Étendue de l'ombre
-                            blurRadius: 5, // Flou de l'ombre
-                            offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
-                          ),
-                        ],
-                      ),
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            top: 10, // Positionner l'image en haut
-                            left: 0,
-                            right: 145, // Centrer horizontalement
-                            child: SizedBox(
-                              height: 30,
-                              width: 40,
-                              child: Image.asset("assets/images/analyse-exploratoire.png", fit: BoxFit.contain),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 13, // Positionner le texte en bas avec un padding de 10
-                            left: 52,
-                            right: 0,
-                            child: Text(
-                              'Contexte',
-                              //textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                //fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            // 8
-
-            Positioned(
-              top: 295,
-              right: 205,//50,
+              right: 436,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
                   _isHoveringBox8 = true;
@@ -1922,7 +2299,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    _showCustomDialog8(context);
+                    _showCustomDialog7(context);
                     //context.go("/gestion/profil");
                   },
                   child: SizedBox(
@@ -1977,11 +2354,11 @@ class _DashboardGestionState extends State<DashboardGestion> {
             ),
 
 
-            // 9
 
+            // 8
             Positioned(
-              top: 360,
-              right: 898,
+              top: 295,
+              right: 205,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
                   _isHoveringBox9 = true;
@@ -1992,7 +2369,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    _showCustomDialog9(context);
+                    _showCustomDialog8(context);
                     //context.go("/gestion/profil");
                   },
                   child: SizedBox(
@@ -2025,15 +2402,15 @@ class _DashboardGestionState extends State<DashboardGestion> {
                             ),
                           ),
                           Positioned(
-                            bottom: 11, // Positionner le texte en bas avec un padding de 10
+                            bottom: 3, // Positionner le texte en bas avec un padding de 10
                             left: 45,
                             right: 0,
                             child: Text(
-                              'IES',
+                              'Impact environnemental et social',
                               //textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 16,
+                                fontSize: 13,
                                 //fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -2047,12 +2424,10 @@ class _DashboardGestionState extends State<DashboardGestion> {
             ),
 
 
-
-            // 10
-
+            // 9
             Positioned(
               top: 360,
-              right: 667,//50,
+              right: 898,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
                   _isHoveringBox10 = true;
@@ -2063,7 +2438,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    _showCustomDialog10(context);
+                    _showCustomDialog9(context);
                     //context.go("/gestion/profil");
                   },
                   child: SizedBox(
@@ -2117,11 +2492,11 @@ class _DashboardGestionState extends State<DashboardGestion> {
               ),
             ),
 
-            // 11
 
+            // 10
             Positioned(
               top: 360,
-              right: 436,//50,
+              right: 667,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
                   _isHoveringBox11 = true;
@@ -2132,7 +2507,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    _showCustomDialog11(context);
+                    _showCustomDialog10(context);
                     //context.go("/gestion/profil");
                   },
                   child: SizedBox(
@@ -2186,11 +2561,11 @@ class _DashboardGestionState extends State<DashboardGestion> {
               ),
             ),
 
-            // 12
 
+            // 11
             Positioned(
               top: 360,
-              right: 205,//50,
+              right: 436,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
                   _isHoveringBox12 = true;
@@ -2201,7 +2576,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    _showCustomDialog12(context);
+                    _showCustomDialog11(context);
                     //context.go("/gestion/profil");
                   },
                   child: SizedBox(
@@ -2240,6 +2615,75 @@ class _DashboardGestionState extends State<DashboardGestion> {
                             child: Text(
                               'Moyens de maîtrise',
                               //textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                //fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+
+            // 12
+            Positioned(
+              top: 360,
+              right: 205,
+              child: MouseRegion(
+                onEnter: (_) => setState(() {
+                  _isHoveringBox4 = true;
+                }),
+                onExit: (_) => setState(() {
+                  _isHoveringBox4 = false;
+                }),
+                child: InkWell(
+                  onTap: () {
+                    // action à effectuer
+                    _showCustomDialog12(context);
+                    //context.go("/gestion/profil");
+                  },
+                  child: SizedBox(
+                    height: 50,
+                    width: 200,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: _isHoveringBox4 ? Colors.white38 : Colors.white, // Change la couleur de fond lorsqu'on survole
+                        border: Border.all(color: Colors.grey, width: 0), // Bordure grise
+                        borderRadius: BorderRadius.circular(20), // Bordure circulaire
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5), // Couleur de l'ombre
+                            spreadRadius: 2, // Étendue de l'ombre
+                            blurRadius: 5, // Flou de l'ombre
+                            offset: Offset(0, 3), // Décalage de l'ombre (horizontal, vertical)
+                          ),
+                        ],
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: 08, // Positionner l'image en haut
+                            left: 0,
+                            right: 150, // Centrer horizontalement
+                            child: SizedBox(
+                              height: 30,
+                              width: 40,
+                              child: Image.asset("assets/images/non_conformes_et_actions_cor.jpg", fit: BoxFit.contain),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 11, // Positionner le texte en bas avec un padding de 10
+                            left: 0,
+                            right: 0,
+                            child: Text(
+                              'Améliorations',
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 16,
