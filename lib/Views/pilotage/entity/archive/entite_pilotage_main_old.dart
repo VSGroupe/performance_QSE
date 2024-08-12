@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 import '../admin/admin_pilotage.dart';
 import '../overview/overview_pilotage.dart';
 import '../performs/perform_pilotage.dart';
-import '../profil/profil_pilotage.dart';
+import '../profil/perimetres_et_domaines_d_application.dart';
 import '../suivi/monitoring_pilotage.dart';
 import '../tableau_bord/tableau_bord_pilotage..dart';
 import 'entete_pilotage_home_old.dart';

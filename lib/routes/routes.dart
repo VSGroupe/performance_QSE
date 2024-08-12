@@ -28,7 +28,10 @@ import '../Views/common/forgot_password/forgot_password.dart';
 import '../Views/common/login_page/login_page.dart';
 import '../Views/common/main_page/common_home_page.dart';
 import '../Views/common/reload_page/reload_page.dart';
+import '../Views/gestion/contexte/screen_contexte.dart';
 import '../Views/gestion/home_gestion.dart';
+import '../Views/gestion/parties_interessees/screen_partie_interessees.dart';
+import '../Views/gestion/perimetres_et_domaines_d_application/screen_perimetres_et_domaines_d_application.dart';
 import '../Views/gestion/widgets/dashboard_gestion.dart';
 import '../Views/pilotage/entity/admin/screen_admin_pilotage.dart';
 import '../Views/pilotage/entity/entity_piloatage_main.dart';
@@ -200,6 +203,27 @@ class RouteClass {
             pageBuilder: (context, state) => NoTransitionPage<void>(
                 key: state.pageKey,
                 child: ScreenPilotageProfil()
+            ),
+          ),
+          GoRoute(
+            path: '/gestion/contexte',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenContexte()
+            ),
+          ),
+          GoRoute(
+            path: '/gestion/partiesInteressees',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenPartieInteressees()
+            ),
+          ),
+          GoRoute(
+            path: '/gestion/perimetresEt/domaines/Dapplication',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenPerimetresEtDomainesDApplication()
             ),
           ),
         ],

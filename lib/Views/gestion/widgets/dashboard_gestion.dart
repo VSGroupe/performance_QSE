@@ -78,6 +78,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
     });
   }
 
+
   //box 1
 
   void _showCustomDialog1(BuildContext context) {
@@ -566,13 +567,13 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                 child: Row(
                                   children: [
                                     Image.asset(
-                                      'assets/icons/gestion_processus1.png', // Remplacez par le chemin de votre image
-                                      width: 24.0, // Ajustez la taille de l'image selon vos besoins
-                                      height: 24.0,
+                                      'assets/images/gestion_QSE.png', // Remplacez par le chemin de votre image
+                                      width: 50.0, // Ajustez la taille de l'image selon vos besoins
+                                      height: 30.0,
                                     ),
                                     SizedBox(width: 8.0), // Espace entre l'image et le texte
                                     Text(
-                                      "Sélection 6",
+                                      "Politique QSE",
                                       style: TextStyle(
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.bold,
@@ -593,7 +594,13 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                       });
                                       getAccess("Q");
                                     },
-                                    child: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Format PDF',
+                                        style: TextStyle(color: Colors.black, fontSize: 15),
+                                      ),
+                                    ),
                                   ),
                                   TextButton(
                                     onPressed: () {
@@ -603,7 +610,13 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                       });
                                       getAccess("S");
                                     },
-                                    child: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Format image',
+                                        style: TextStyle(color: Colors.black, fontSize: 15),
+                                      ),
+                                    ),
                                   ),
                                   TextButton(
                                     onPressed: () {
@@ -613,7 +626,13 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                       });
                                       getAccess("E");
                                     },
-                                    child: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Modifier la politique',
+                                        style: TextStyle(color: Colors.black, fontSize: 15),
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -1885,8 +1904,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    _showCustomDialog1(context);
-                    //context.go("/gestion/profil");
+                    //_showCustomDialog1(context);
+                    context.go("/gestion/contexte");
                   },
                   child: SizedBox(
                     height: 50,
@@ -1955,8 +1974,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    _showCustomDialog2(context);
-                    //context.go("/gestion/profil");
+                    //_showCustomDialog2(context);
+                    context.go("/gestion/partiesInteressees");
                   },
                   child: SizedBox(
                     height: 50,
@@ -2023,8 +2042,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    _showCustomDialog3(context);
-                    //context.go("/gestion/profil");
+                    //_showCustomDialog3(context);
+                    context.go("/gestion/perimetresEt/domaines/Dapplication");
                   },
                   child: SizedBox(
                     height: 50,
