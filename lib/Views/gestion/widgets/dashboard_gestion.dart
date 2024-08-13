@@ -1,8 +1,16 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:perfqse/Views/audit/controller/controller_audit.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:universal_html/html.dart' as html;
 
 class DashboardGestion extends StatefulWidget {
   const DashboardGestion({super.key});
@@ -78,6 +86,74 @@ class _DashboardGestionState extends State<DashboardGestion> {
     });
   }
 
+  // Affichage de la politique QSE au format PDF
+
+
+  void _openPDFInBrowser(BuildContext context) async {
+    try {
+      // Charger le PDF depuis les assets
+      final pdfData = await rootBundle.load('assets/pdf_Politique_QSE/planning_de_travail.pdf');
+
+      if (kIsWeb) {
+        // Pour le Web : ouvrir le PDF en utilisant un Blob
+        _openPDFInWeb(pdfData);
+      } else {
+        // Pour Windows : enregistrer le PDF temporairement et l'ouvrir
+        final pdfPath = await _storePdfTemporarily(pdfData);
+        await _openPDF(pdfPath);
+      }
+    } catch (e) {
+      // Afficher le message d'erreur dans la console
+      print('Erreur: $e');
+
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Erreur'),
+          content: Text('Impossible d\'ouvrir le PDF.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  Future<String> _storePdfTemporarily(ByteData pdfData) async {
+    final tempDir = await getTemporaryDirectory();
+    final file = File('${tempDir.path}/planning_de_travail.pdf');
+    await file.writeAsBytes(pdfData.buffer.asUint8List());
+    return file.path;
+  }
+
+  Future<void> _openPDF(String path) async {
+    final Uri uri = Uri.file(path);
+    if (await canLaunch(uri.toString())) {
+      await launch(uri.toString());
+    } else {
+      throw 'Could not open $path';
+    }
+  }
+
+  void _openPDFInWeb(ByteData pdfData) {
+    // Convertir le ByteData en Uint8List
+    final pdfBytes = pdfData.buffer.asUint8List();
+
+    // Créer un blob à partir des données PDF
+    final blob = html.Blob([pdfBytes], 'application/pdf');
+
+    // Créer une URL à partir du blob
+    final url = html.Url.createObjectUrlFromBlob(blob);
+
+    // Ouvrir l'URL dans un nouvel onglet ou une nouvelle fenêtre
+    html.window.open(url, '_blank');
+
+    // Libérer l'URL après usage
+    html.Url.revokeObjectUrl(url);
+  }
 
   //box 1
 
@@ -589,10 +665,11 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                   TextButton(
                                     onPressed: () {
                                       Navigator.of(context).pop();
-                                      setState(() {
-                                        //chemin = "/audit/gestion-auditsQ";
-                                      });
-                                      getAccess("Q");
+                                      _openPDFInBrowser(context);
+                                      // setState(() {
+                                      //   //chemin = "/audit/gestion-auditsQ";
+                                      // });
+                                      // getAccess("Q");
                                     },
                                     child: Align(
                                       alignment: Alignment.centerLeft,

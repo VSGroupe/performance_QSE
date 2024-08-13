@@ -34,8 +34,10 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  flutter_pdfview: ^1.0.7
-  path_provider: ^2.0.11
+  flutter_pdfview: ^1.2.4
+  path_provider: ^2.0.15
+  universal_html: ^2.0.1
+  open_file: ^3.2.1
   cupertino_icons: ^1.0.2
   go_router: ^8.0.3
   marquee_text: ^2.5.0+1
@@ -118,6 +120,7 @@ flutter:
         - assets/images/
         - assets/logos/
         - assets/icons/
+        - assets/pdf_Politique_QSE/planning_de_travail.pdf
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
