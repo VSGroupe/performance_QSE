@@ -682,10 +682,11 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                   TextButton(
                                     onPressed: () {
                                       Navigator.of(context).pop();
-                                      setState(() {
-                                        //chemin = "/audit/gestion-auditsS";
-                                      });
-                                      getAccess("S");
+                                      context.go("/gestion/politiqueQSE");
+                                      // setState(() {
+                                      //   //chemin = "/audit/gestion-auditsS";
+                                      // });
+                                      // getAccess("S");
                                     },
                                     child: Align(
                                       alignment: Alignment.centerLeft,

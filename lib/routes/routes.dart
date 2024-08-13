@@ -32,6 +32,7 @@ import '../Views/gestion/contexte/screen_contexte.dart';
 import '../Views/gestion/home_gestion.dart';
 import '../Views/gestion/parties_interessees/screen_partie_interessees.dart';
 import '../Views/gestion/perimetres_et_domaines_d_application/screen_perimetres_et_domaines_d_application.dart';
+import '../Views/gestion/politique_qse/politique_qse.dart';
 import '../Views/gestion/widgets/dashboard_gestion.dart';
 import '../Views/pilotage/entity/admin/screen_admin_pilotage.dart';
 import '../Views/pilotage/entity/entity_piloatage_main.dart';
@@ -224,6 +225,13 @@ class RouteClass {
             pageBuilder: (context, state) => NoTransitionPage<void>(
                 key: state.pageKey,
                 child: ScreenPerimetresEtDomainesDApplication()
+            ),
+          ),
+          GoRoute(
+            path: '/gestion/politiqueQSE',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: PolitiqueQse()
             ),
           ),
         ],

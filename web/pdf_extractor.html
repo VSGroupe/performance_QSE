@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PDF Text Extractor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.5.141/pdf.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          window.addEventListener('message', async (event) => {
+            if (event.data.type === 'extractText') {
+              const url = event.data.url;
+              const loadingTask = pdfjsLib.getDocument(url);
+              try {
+                const pdf = await loadingTask.promise;
+                let text = '';
+                for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                  const page = await pdf.getPage(pageNum);
+                  const textContent = await page.getTextContent();
+                  text += textContent.items.map(item => item.str).join(' ');
+                }
+                window.parent.postMessage({ type: 'textExtracted', text: text }, '*');
+              } catch (error) {
+                console.error('Error extracting text:', error);
+              }
+            }
+          });
+        });
+    </script>
+</head>
+<body>
+<iframe id="pdfExtractor" style="width:0;height:0;"></iframe>
+</body>
+</html>
