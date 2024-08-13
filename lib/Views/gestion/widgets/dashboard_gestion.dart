@@ -122,6 +122,17 @@ class _DashboardGestionState extends State<DashboardGestion> {
     }
   }
 
+  //Ouvrir le fichier pdf pour le modifier directement via un outil en ligne
+
+  void _openPDFforModification(BuildContext context) {
+    final pdfUrl = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'; // URL publique du fichier PDF
+    final acrobatUrl = 'https://acrobat.adobe.com/link/acrobat/pdf-viewer?url=$pdfUrl';
+
+    launch(acrobatUrl);
+  }
+
+
+
   Future<String> _storePdfTemporarily(ByteData pdfData) async {
     final tempDir = await getTemporaryDirectory();
     final file = File('${tempDir.path}/planning_de_travail.pdf');
@@ -267,10 +278,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                   TextButton(
                                     onPressed: () {
                                       Navigator.of(context).pop();
-                                      setState(() {
-                                        //chemin = "/audit/gestion-auditsS";
-                                      });
-                                      context.go("");
+                                      // _openPDFforModifiation(context);
                                     },
                                     child: Align(
                                       alignment: Alignment.centerLeft,
@@ -665,6 +673,23 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                   TextButton(
                                     onPressed: () {
                                       Navigator.of(context).pop();
+                                      context.go("/gestion/politiqueQSE");
+                                      // setState(() {
+                                      //   //chemin = "/audit/gestion-auditsS";
+                                      // });
+                                      // getAccess("S");
+                                    },
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Consulter',
+                                        style: TextStyle(color: Colors.black, fontSize: 15),
+                                      ),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
                                       _openPDFInBrowser(context);
                                       // setState(() {
                                       //   //chemin = "/audit/gestion-auditsQ";
@@ -681,28 +706,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                   ),
                                   TextButton(
                                     onPressed: () {
-                                      Navigator.of(context).pop();
-                                      context.go("/gestion/politiqueQSE");
-                                      // setState(() {
-                                      //   //chemin = "/audit/gestion-auditsS";
-                                      // });
-                                      // getAccess("S");
-                                    },
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Format image',
-                                        style: TextStyle(color: Colors.black, fontSize: 15),
-                                      ),
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      setState(() {
-                                        //chemin = "/audit/gestion-auditsE";
-                                      });
-                                      getAccess("E");
+                                      _openPDFforModification(context);
                                     },
                                     child: Align(
                                       alignment: Alignment.centerLeft,

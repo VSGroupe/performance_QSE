@@ -231,7 +231,7 @@ class RouteClass {
             path: '/gestion/politiqueQSE',
             pageBuilder: (context, state) => NoTransitionPage<void>(
                 key: state.pageKey,
-                child: PolitiqueQse()
+                child: PolitiqueQSE()
             ),
           ),
         ],
