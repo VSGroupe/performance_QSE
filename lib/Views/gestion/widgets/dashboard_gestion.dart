@@ -611,7 +611,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                   Positioned(
                     left: 1180.0,
                     top: 280.0,
-                    right: 60.0,
+                    right: 30.0,
                     child: TweenAnimationBuilder(
                       tween: Tween<double>(begin: 0.0, end: scaleValue),
                       duration: Duration(milliseconds: 300),
@@ -629,7 +629,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                       child: Material(
                         color: Colors.transparent,
                         child: Container(
-                          width: 250,
+                          width: 300,
                           decoration: BoxDecoration(
                             color: Colors.white, //Color(0xFFD1DBE4), // Couleur de fond bleue
                             borderRadius: BorderRadius.circular(8.0),
@@ -902,7 +902,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                   Positioned(
                     left: 720.0,
                     top: 347.0,
-                    right: 520.0,
+                    right: 460.0,
                     child: TweenAnimationBuilder(
                       tween: Tween<double>(begin: 0.0, end: scaleValue),
                       duration: Duration(milliseconds: 300),
@@ -920,7 +920,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                       child: Material(
                         color: Colors.transparent,
                         child: Container(
-                          width: 250,
+                          width: 300,
+                          height: 230,
                           decoration: BoxDecoration(
                             color: Colors.white, //Color(0xFFD1DBE4), // Couleur de fond bleue
                             borderRadius: BorderRadius.circular(8.0),
@@ -943,12 +944,12 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                   children: [
                                     Image.asset(
                                       'assets/icons/gestion_processus1.png', // Remplacez par le chemin de votre image
-                                      width: 24.0, // Ajustez la taille de l'image selon vos besoins
-                                      height: 24.0,
+                                      width: 30.0, // Ajustez la taille de l'image selon vos besoins
+                                      height: 40.0,
                                     ),
                                     SizedBox(width: 8.0), // Espace entre l'image et le texte
                                     Text(
-                                      "Sélection 6",
+                                      "Gestion des processus",
                                       style: TextStyle(
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.bold,
@@ -969,8 +970,15 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                       });
                                       getAccess("Q");
                                     },
-                                    child: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Cartographie Générale des processus',
+                                        style: TextStyle(color: Colors.black, fontSize: 15),
+                                      ),
+                                    ),
                                   ),
+                                  const SizedBox(height: 10),
                                   TextButton(
                                     onPressed: () {
                                       Navigator.of(context).pop();
@@ -979,8 +987,15 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                       });
                                       getAccess("S");
                                     },
-                                    child: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Liste des processus et\nleurs responsabilités',
+                                        style: TextStyle(color: Colors.black, fontSize: 15),
+                                      ),
+                                    ),
                                   ),
+                                  const SizedBox(height: 10),
                                   TextButton(
                                     onPressed: () {
                                       Navigator.of(context).pop();
@@ -989,7 +1004,13 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                       });
                                       getAccess("E");
                                     },
-                                    child: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Fiche d\'identité des processus',
+                                        style: TextStyle(color: Colors.black, fontSize: 15),
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -1041,7 +1062,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                   Positioned(
                     left: 960.0,
                     top: 347.0,
-                    right: 280.0,
+                    right: 200.0,
                     child: TweenAnimationBuilder(
                       tween: Tween<double>(begin: 0.0, end: scaleValue),
                       duration: Duration(milliseconds: 300),
@@ -1059,7 +1080,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                       child: Material(
                         color: Colors.transparent,
                         child: Container(
-                          width: 250,
+                          width: 300,
+                          height: 180,
                           decoration: BoxDecoration(
                             color: Colors.white, //Color(0xFFD1DBE4), // Couleur de fond bleue
                             borderRadius: BorderRadius.circular(8.0),
@@ -1081,13 +1103,13 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                 child: Row(
                                   children: [
                                     Image.asset(
-                                      'assets/icons/gestion_processus1.png', // Remplacez par le chemin de votre image
-                                      width: 24.0, // Ajustez la taille de l'image selon vos besoins
-                                      height: 24.0,
+                                      'assets/icons/environnement.png', // Remplacez par le chemin de votre image
+                                      width: 30.0, // Ajustez la taille de l'image selon vos besoins
+                                      height: 40.0,
                                     ),
                                     SizedBox(width: 8.0), // Espace entre l'image et le texte
                                     Text(
-                                      "Sélection 6",
+                                      "Aspects environnementaux",
                                       style: TextStyle(
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.bold,
@@ -1108,8 +1130,15 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                       });
                                       getAccess("Q");
                                     },
-                                    child: Text('Audit Qualité [ Q ]', style: TextStyle(color: Colors.black)),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Consulter',
+                                        style: TextStyle(color: Colors.black, fontSize: 15),
+                                      ),
+                                    ),
                                   ),
+                                  const SizedBox(height: 10),
                                   TextButton(
                                     onPressed: () {
                                       Navigator.of(context).pop();
@@ -1118,17 +1147,13 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                       });
                                       getAccess("S");
                                     },
-                                    child: Text('Audit Sécurité [ S ]', style: TextStyle(color: Colors.black)),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      setState(() {
-                                        //chemin = "/audit/gestion-auditsE";
-                                      });
-                                      getAccess("E");
-                                    },
-                                    child: Text('Audit Environnement [ E ]', style: TextStyle(color: Colors.black)),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Ajouter ou modifier un aspect environnemental',
+                                        style: TextStyle(color: Colors.black, fontSize: 15),
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -2263,8 +2288,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    _showCustomDialog5(context);
-                    //context.go("/gestion/profil");
+                    //_showCustomDialog5(context);
+                    context.go("/gestion/ressources/et/responsabiltes");
                   },
                   child: SizedBox(
                     height: 50,
@@ -2470,8 +2495,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    _showCustomDialog8(context);
-                    //context.go("/gestion/profil");
+                    //_showCustomDialog8(context);
+                    context.go("/gestion/ies");
                   },
                   child: SizedBox(
                     height: 50,
@@ -2539,8 +2564,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    _showCustomDialog9(context);
-                    //context.go("/gestion/profil");
+                    //_showCustomDialog9(context);
+                    context.go("/gestion/dangers/et/incidents");
                   },
                   child: SizedBox(
                     height: 50,
@@ -2608,8 +2633,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    _showCustomDialog10(context);
-                    //context.go("/gestion/profil");
+                    //_showCustomDialog10(context);
+                    context.go("/gestion/situations/d/urgence");
                   },
                   child: SizedBox(
                     height: 50,

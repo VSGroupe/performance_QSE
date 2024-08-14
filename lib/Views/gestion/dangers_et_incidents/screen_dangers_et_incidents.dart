@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'contexte.dart';
+import 'dangers_et_incidents.dart';
 
-class ScreenContexte extends StatefulWidget {
-  /// Constructs a [ScreenContexte] widget.
-  const ScreenContexte({Key? key}) : super(key: key);
+class ScreenDangersEtIncidents extends StatefulWidget {
+  /// Constructs a [ScreenDangersEtIncidents] widget.
+  const ScreenDangersEtIncidents({Key? key}) : super(key: key);
 
   @override
-  State<ScreenContexte> createState() => _ScreenContexteState();
+  State<ScreenDangersEtIncidents> createState() => _ScreenDangersEtIncidentsState();
 }
 
-class _ScreenContexteState extends State<ScreenContexte> {
+class _ScreenDangersEtIncidentsState extends State<ScreenDangersEtIncidents> {
   @override
   void initState() {
     super.initState();
@@ -52,7 +52,7 @@ class _ScreenContexteState extends State<ScreenContexte> {
                 // ),
                 const SizedBox(width: 420), // Espacement entre l'image et le texte
                 const Text(
-                  "Contexte",
+                  "Dangers et incidents",
                   style: TextStyle(
                     fontSize: 20,
                     color: Color(0xFF3C3D3F),
@@ -63,7 +63,7 @@ class _ScreenContexteState extends State<ScreenContexte> {
             ),
             const SizedBox(height: 5),
             Expanded(
-              child: Contexte(),
+              child: DangersEtIncidents(),
             ),
           ],
         ),

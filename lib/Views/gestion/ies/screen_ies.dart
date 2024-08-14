@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'contexte.dart';
+import 'package:perfqse/routes/routes.dart';
+import 'ies.dart';
 
-class ScreenContexte extends StatefulWidget {
-  /// Constructs a [ScreenContexte] widget.
-  const ScreenContexte({Key? key}) : super(key: key);
+class ScreenIes extends StatefulWidget {
+  /// Constructs a [ScreenIes] widget.
+  const ScreenIes({Key? key}) : super(key: key);
 
   @override
-  State<ScreenContexte> createState() => _ScreenContexteState();
+  State<ScreenIes> createState() => _ScreenIesState();
 }
 
-class _ScreenContexteState extends State<ScreenContexte> {
+class _ScreenIesState extends State<ScreenIes> {
   @override
   void initState() {
     super.initState();
@@ -50,9 +51,9 @@ class _ScreenContexteState extends State<ScreenContexte> {
                 //   width: 30, // Ajustez la taille de l'image si nécessaire
                 //   height: 40,
                 // ),
-                const SizedBox(width: 420), // Espacement entre l'image et le texte
+                const SizedBox(width: 330), // Espacement entre l'image et le texte
                 const Text(
-                  "Contexte",
+                  "Impacts environnementaux et sociétaux",
                   style: TextStyle(
                     fontSize: 20,
                     color: Color(0xFF3C3D3F),
@@ -61,9 +62,8 @@ class _ScreenContexteState extends State<ScreenContexte> {
                 ),
               ],
             ),
-            const SizedBox(height: 5),
             Expanded(
-              child: Contexte(),
+              child: Ies(),
             ),
           ],
         ),

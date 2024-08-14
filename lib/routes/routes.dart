@@ -29,10 +29,14 @@ import '../Views/common/login_page/login_page.dart';
 import '../Views/common/main_page/common_home_page.dart';
 import '../Views/common/reload_page/reload_page.dart';
 import '../Views/gestion/contexte/screen_contexte.dart';
+import '../Views/gestion/dangers_et_incidents/screen_dangers_et_incidents.dart';
 import '../Views/gestion/home_gestion.dart';
+import '../Views/gestion/ies/screen_ies.dart';
 import '../Views/gestion/parties_interessees/screen_partie_interessees.dart';
 import '../Views/gestion/perimetres_et_domaines_d_application/screen_perimetres_et_domaines_d_application.dart';
 import '../Views/gestion/politique_qse/politique_qse.dart';
+import '../Views/gestion/ressources_et_responsabilites/screen_ressources_et_responsabilites.dart';
+import '../Views/gestion/situations_d_urgence/screen_situations_d_urgence.dart';
 import '../Views/gestion/widgets/dashboard_gestion.dart';
 import '../Views/pilotage/entity/admin/screen_admin_pilotage.dart';
 import '../Views/pilotage/entity/entity_piloatage_main.dart';
@@ -232,6 +236,34 @@ class RouteClass {
             pageBuilder: (context, state) => NoTransitionPage<void>(
                 key: state.pageKey,
                 child: PolitiqueQSE()
+            ),
+          ),
+          GoRoute(
+            path: '/gestion/ressources/et/responsabiltes',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenRessourcesEtResponsabilites()
+            ),
+          ),
+          GoRoute(
+            path: '/gestion/ies',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenIes()
+            ),
+          ),
+          GoRoute(
+            path: '/gestion/dangers/et/incidents',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenDangersEtIncidents()
+            ),
+          ),
+          GoRoute(
+            path: '/gestion/situations/d/urgence',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenSituationsDUrgence()
             ),
           ),
         ],

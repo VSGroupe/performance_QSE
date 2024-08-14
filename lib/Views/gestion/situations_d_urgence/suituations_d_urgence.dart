@@ -9,17 +9,17 @@ import '../../../../models/pilotage/acces_pilotage_model.dart';
 import '../../../../widgets/customtext.dart';
 import 'widgets/export_widgets_contexte.dart';
 
-class Contexte extends StatefulWidget {
+class SuituationsDUrgence extends StatefulWidget {
 
   @override
-  State<Contexte> createState() => _ContexteState();
+  State<SuituationsDUrgence> createState() => _ContexteState();
 }
 
-class _ContexteState extends State<Contexte> with SingleTickerProviderStateMixin {
+class _ContexteState extends State<SuituationsDUrgence> with SingleTickerProviderStateMixin {
   static const List<Tab> myTabs = <Tab>[
-    Tab(text: 'Analyse du contexte'),
-    Tab(text: 'Rapport du risque'),
-    Tab(text: 'Fonctions générales'),
+    Tab(text: 'Aperçu'),
+    Tab(text: 'Faire une modification'),
+    //Tab(text: 'Fonctions générales'),
   ];
 
   late TabController _tabController;
@@ -40,7 +40,6 @@ class _ContexteState extends State<Contexte> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(right: defaultPadding,bottom: defaultPadding),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -65,22 +64,22 @@ class _ContexteState extends State<Contexte> with SingleTickerProviderStateMixin
                     )),
                 tabs: const [
                   CustomText(
-                    text: "Analyse du contexte",
+                    text: "Aperçu",
                     size: 15,
                   ),
                   CustomText(
-                    text: "Rapport du risque",
+                    text: "Ajouter une situation",
                     size: 15,
                   ),
-                  CustomText(
-                    text: "Les fonctions générales",
-                    size: 15,
-                  ),
+                  // CustomText(
+                  //   text: "Les fonctions générales",
+                  //   size: 15,
+                  // ),
                 ],
                 views: [
-                  Container(child: AnalyseDuContexte(),),
-                  Container(child: RapportDuRisque(),),
-                  Container(child: FonctionsGenerales(),)
+                  Container(child: ApercuSituationsDUrgence(),),
+                  Container(child: Ajouter(),),
+                  //Container(child: WidgetReserve3(),)
                 ],
               ),
             ),

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'contexte.dart';
+import 'ressources_et_responsabilites.dart';
 
-class ScreenContexte extends StatefulWidget {
+class ScreenRessourcesEtResponsabilites extends StatefulWidget {
   /// Constructs a [ScreenContexte] widget.
-  const ScreenContexte({Key? key}) : super(key: key);
+  const ScreenRessourcesEtResponsabilites({Key? key}) : super(key: key);
 
   @override
-  State<ScreenContexte> createState() => _ScreenContexteState();
+  State<ScreenRessourcesEtResponsabilites> createState() => _ScreenRessourcesEtResponsabilitesState();
 }
 
-class _ScreenContexteState extends State<ScreenContexte> {
+class _ScreenRessourcesEtResponsabilitesState extends State<ScreenRessourcesEtResponsabilites> {
   @override
   void initState() {
     super.initState();
@@ -25,7 +25,7 @@ class _ScreenContexteState extends State<ScreenContexte> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 15),
+            const SizedBox(height: 10),
             Row(
               children: [
                 TextButton.icon(
@@ -50,9 +50,9 @@ class _ScreenContexteState extends State<ScreenContexte> {
                 //   width: 30, // Ajustez la taille de l'image si nécessaire
                 //   height: 40,
                 // ),
-                const SizedBox(width: 420), // Espacement entre l'image et le texte
+                const SizedBox(width: 350), // Espacement entre l'image et le texte
                 const Text(
-                  "Contexte",
+                  "Ressources et responsabilités",
                   style: TextStyle(
                     fontSize: 20,
                     color: Color(0xFF3C3D3F),
@@ -63,7 +63,7 @@ class _ScreenContexteState extends State<ScreenContexte> {
             ),
             const SizedBox(height: 5),
             Expanded(
-              child: Contexte(),
+              child: RessourcesEtResponsabilites(),
             ),
           ],
         ),

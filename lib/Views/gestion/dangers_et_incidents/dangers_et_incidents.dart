@@ -7,15 +7,15 @@ import '../../../../constants/colors.dart';
 import '../../../../models/common/user_model.dart';
 import '../../../../models/pilotage/acces_pilotage_model.dart';
 import '../../../../widgets/customtext.dart';
-import 'widgets/export_widgets_contexte.dart';
+import 'widgets/export_widgets_dangers_et_incidents.dart';
 
-class Contexte extends StatefulWidget {
+class DangersEtIncidents extends StatefulWidget {
 
   @override
-  State<Contexte> createState() => _ContexteState();
+  State<DangersEtIncidents> createState() => _DangersEtIncidentsState();
 }
 
-class _ContexteState extends State<Contexte> with SingleTickerProviderStateMixin {
+class _DangersEtIncidentsState extends State<DangersEtIncidents> with SingleTickerProviderStateMixin {
   static const List<Tab> myTabs = <Tab>[
     Tab(text: 'Analyse du contexte'),
     Tab(text: 'Rapport du risque'),
@@ -65,22 +65,22 @@ class _ContexteState extends State<Contexte> with SingleTickerProviderStateMixin
                     )),
                 tabs: const [
                   CustomText(
-                    text: "Analyse du contexte",
+                    text: "Dangers",
                     size: 15,
                   ),
                   CustomText(
-                    text: "Rapport du risque",
+                    text: "Incidents",
                     size: 15,
                   ),
                   CustomText(
-                    text: "Les fonctions générales",
+                    text: "Modification, ajout ou suppression",
                     size: 15,
                   ),
                 ],
                 views: [
-                  Container(child: AnalyseDuContexte(),),
-                  Container(child: RapportDuRisque(),),
-                  Container(child: FonctionsGenerales(),)
+                  Container(child: Dangers(),),
+                  Container(child: Incidents(),),
+                  Container(child: ModifierDangerOuIncident(),),
                 ],
               ),
             ),

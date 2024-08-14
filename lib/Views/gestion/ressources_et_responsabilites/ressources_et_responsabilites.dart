@@ -7,19 +7,19 @@ import '../../../../constants/colors.dart';
 import '../../../../models/common/user_model.dart';
 import '../../../../models/pilotage/acces_pilotage_model.dart';
 import '../../../../widgets/customtext.dart';
-import 'widgets/export_widgets_contexte.dart';
+import 'widgets/export_widgets_budget.dart';
 
-class Contexte extends StatefulWidget {
+class RessourcesEtResponsabilites extends StatefulWidget {
 
   @override
-  State<Contexte> createState() => _ContexteState();
+  State<RessourcesEtResponsabilites> createState() => _RessourcesEtResponsabilitesState();
 }
 
-class _ContexteState extends State<Contexte> with SingleTickerProviderStateMixin {
+class _RessourcesEtResponsabilitesState extends State<RessourcesEtResponsabilites> with SingleTickerProviderStateMixin {
   static const List<Tab> myTabs = <Tab>[
-    Tab(text: 'Analyse du contexte'),
+    Tab(text: 'Budget'),
     Tab(text: 'Rapport du risque'),
-    Tab(text: 'Fonctions générales'),
+    //Tab(text: 'Modifier mon mot de passe'),
   ];
 
   late TabController _tabController;
@@ -65,22 +65,22 @@ class _ContexteState extends State<Contexte> with SingleTickerProviderStateMixin
                     )),
                 tabs: const [
                   CustomText(
-                    text: "Analyse du contexte",
+                    text: "Budget",
                     size: 15,
                   ),
                   CustomText(
-                    text: "Rapport du risque",
+                    text: "Responsabilités et autorités",
                     size: 15,
                   ),
-                  CustomText(
-                    text: "Les fonctions générales",
-                    size: 15,
-                  ),
+                  // CustomText(
+                  //   text: "Modifier mon mot de passe",
+                  //   size: 15,
+                  // ),
                 ],
                 views: [
-                  Container(child: AnalyseDuContexte(),),
-                  Container(child: RapportDuRisque(),),
-                  Container(child: FonctionsGenerales(),)
+                  Container(child: Budget(),),
+                  Container(child: ResponsabilitesEtAutorites(),),
+                  //Container(child: Password(),)
                 ],
               ),
             ),

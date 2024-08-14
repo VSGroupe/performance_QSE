@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'contexte.dart';
+import 'suituations_d_urgence.dart';
 
-class ScreenContexte extends StatefulWidget {
-  /// Constructs a [ScreenContexte] widget.
-  const ScreenContexte({Key? key}) : super(key: key);
+class ScreenSituationsDUrgence extends StatefulWidget {
+  /// Constructs a [ScreenSituationsDUrgence] widget.
+  const ScreenSituationsDUrgence({Key? key}) : super(key: key);
 
   @override
-  State<ScreenContexte> createState() => _ScreenContexteState();
+  State<ScreenSituationsDUrgence> createState() => _ScreenSituationsDUrgenceState();
 }
 
-class _ScreenContexteState extends State<ScreenContexte> {
+class _ScreenSituationsDUrgenceState extends State<ScreenSituationsDUrgence> {
   @override
   void initState() {
     super.initState();
@@ -50,11 +50,11 @@ class _ScreenContexteState extends State<ScreenContexte> {
                 //   width: 30, // Ajustez la taille de l'image si nécessaire
                 //   height: 40,
                 // ),
-                const SizedBox(width: 420), // Espacement entre l'image et le texte
+                const SizedBox(width: 395), // Espacement entre l'image et le texte
                 const Text(
-                  "Contexte",
+                  "Situations d'urgence",
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 22,
                     color: Color(0xFF3C3D3F),
                     fontWeight: FontWeight.bold,
                   ),
@@ -63,7 +63,7 @@ class _ScreenContexteState extends State<ScreenContexte> {
             ),
             const SizedBox(height: 5),
             Expanded(
-              child: Contexte(),
+              child: SuituationsDUrgence(),
             ),
           ],
         ),
