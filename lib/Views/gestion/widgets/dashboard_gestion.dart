@@ -11,6 +11,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:perfqse/Views/audit/controller/controller_audit.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:universal_html/html.dart' as html;
+import 'package:perfqse/Views/gestion/ae/controller/ae_controller.dart';
+
+import '../gestion_des_processus/controller/gestion_processus_controller.dart';
 
 class DashboardGestion extends StatefulWidget {
   const DashboardGestion({super.key});
@@ -21,7 +24,9 @@ class DashboardGestion extends StatefulWidget {
 
 class _DashboardGestionState extends State<DashboardGestion> {
 
+  final GestionProcessusController gestionProcessusController = Get.put(GestionProcessusController());
   final ControllerAudit controllerAudit = Get.put(ControllerAudit());
+  final AeController aeController = Get.put(AeController());
 
   final storage = FlutterSecureStorage();
 
@@ -41,6 +46,11 @@ class _DashboardGestionState extends State<DashboardGestion> {
   bool _isHoveringBox10 = false;
   bool _isHoveringBox11 = false;
   bool _isHoveringBox12 = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   Future<void> _showDialogNoAcces() async {
     return showDialog<void>(
@@ -966,9 +976,9 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                       setState(() {
-                                        //chemin = "/audit/gestion-auditsQ";
+                                        gestionProcessusController.aAfficher.value = 1;
                                       });
-                                      getAccess("Q");
+                                      context.go("/gestion/processus");
                                     },
                                     child: Align(
                                       alignment: Alignment.centerLeft,
@@ -983,9 +993,9 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                       setState(() {
-                                        //chemin = "/audit/gestion-auditsS";
+                                        gestionProcessusController.aAfficher.value = 2;
                                       });
-                                      getAccess("S");
+                                      context.go("/gestion/processus");
                                     },
                                     child: Align(
                                       alignment: Alignment.centerLeft,
@@ -1000,9 +1010,9 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                       setState(() {
-                                        //chemin = "/audit/gestion-auditsE";
+                                        gestionProcessusController.aAfficher.value = 3;
                                       });
-                                      getAccess("E");
+                                      context.go("/gestion/processus");
                                     },
                                     child: Align(
                                       alignment: Alignment.centerLeft,
@@ -1081,7 +1091,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                         color: Colors.transparent,
                         child: Container(
                           width: 300,
-                          height: 180,
+                          height: 200,
                           decoration: BoxDecoration(
                             color: Colors.white, //Color(0xFFD1DBE4), // Couleur de fond bleue
                             borderRadius: BorderRadius.circular(8.0),
@@ -1126,9 +1136,9 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                       setState(() {
-                                        //chemin = "/audit/gestion-auditsQ";
+                                        aeController.aAfficher.value=1;
                                       });
-                                      getAccess("Q");
+                                      context.go("/gestion/aspects/environnementaux");
                                     },
                                     child: Align(
                                       alignment: Alignment.centerLeft,
@@ -1138,19 +1148,36 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(height: 10),
+                                  const SizedBox(height: 7),
                                   TextButton(
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                       setState(() {
-                                        //chemin = "/audit/gestion-auditsS";
+                                        aeController.aAfficher.value=2;
                                       });
-                                      getAccess("S");
+                                      context.go("/gestion/aspects/environnementaux");
                                     },
                                     child: Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        'Ajouter ou modifier un aspect environnemental',
+                                        'Modifier un aspect environnemental',
+                                        style: TextStyle(color: Colors.black, fontSize: 15),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 7),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        aeController.aAfficher.value=3;
+                                      });
+                                      context.go("/gestion/aspects/environnementaux");
+                                    },
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Ajouter un aspect environnemental',
                                         style: TextStyle(color: Colors.black, fontSize: 15),
                                       ),
                                     ),
@@ -2104,13 +2131,13 @@ class _DashboardGestionState extends State<DashboardGestion> {
                       child: Stack(
                         children: [
                           Positioned(
-                            top: 5, // Positionner l'image en haut
+                            top: 7, // Positionner l'image en haut
                             left: 0,
-                            right: 150, // Centrer horizontalement
+                            right: 152, // Centrer horizontalement
                             child: SizedBox(
-                              height: 30,
-                              width: 50,
-                              child: Image.asset("assets/images/parties_interesses1.jpg", fit: BoxFit.contain),
+                              height: 35,
+                              width: 55,
+                              child: Image.asset("assets/icons/parties_prenantes1.png", fit: BoxFit.contain),
                             ),
                           ),
                           Positioned(
@@ -2176,9 +2203,9 @@ class _DashboardGestionState extends State<DashboardGestion> {
                             left: 0,
                             right: 150, // Centrer horizontalement
                             child: SizedBox(
-                              height: 30,
-                              width: 40,
-                              child: Image.asset("assets/images/firm.jpg", fit: BoxFit.contain),
+                              height: 35,
+                              width: 45,
+                              child: Image.asset("assets/icons/perimetres_d_d_app.png", fit: BoxFit.contain),
                             ),
                           ),
                           Positioned(
@@ -2315,9 +2342,9 @@ class _DashboardGestionState extends State<DashboardGestion> {
                             left: 0,
                             right: 150, // Centrer horizontalement
                             child: SizedBox(
-                              height: 25,
-                              width: 25,
-                              child: Image.asset("assets/images/respo_autorites1.jpg", fit: BoxFit.contain),
+                              height: 35,
+                              width: 45,
+                              child: Image.asset("assets/icons/responsabilites_et_ressources.png", fit: BoxFit.contain),
                             ),
                           ),
                           Positioned(
@@ -2702,8 +2729,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    _showCustomDialog11(context);
-                    //context.go("/gestion/profil");
+                    //_showCustomDialog11(context);
+                    context.go("/gestion/moyens/de/maitrise");
                   },
                   child: SizedBox(
                     height: 50,
@@ -2771,8 +2798,8 @@ class _DashboardGestionState extends State<DashboardGestion> {
                 child: InkWell(
                   onTap: () {
                     // action à effectuer
-                    _showCustomDialog12(context);
-                    //context.go("/gestion/profil");
+                    //_showCustomDialog12(context);
+                    context.go("/gestion/ameliorations");
                   },
                   child: SizedBox(
                     height: 50,
@@ -2798,9 +2825,9 @@ class _DashboardGestionState extends State<DashboardGestion> {
                             left: 0,
                             right: 150, // Centrer horizontalement
                             child: SizedBox(
-                              height: 30,
-                              width: 40,
-                              child: Image.asset("assets/images/non_conformes_et_actions_cor.jpg", fit: BoxFit.contain),
+                              height: 35,
+                              width: 45,
+                              child: Image.asset("assets/icons/gif_amelioratioins.gif", fit: BoxFit.contain),
                             ),
                           ),
                           Positioned(

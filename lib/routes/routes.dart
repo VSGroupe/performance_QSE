@@ -28,10 +28,14 @@ import '../Views/common/forgot_password/forgot_password.dart';
 import '../Views/common/login_page/login_page.dart';
 import '../Views/common/main_page/common_home_page.dart';
 import '../Views/common/reload_page/reload_page.dart';
+import '../Views/gestion/ae/screen_ae.dart';
+import '../Views/gestion/ameliorations/screen_ameliorations.dart';
 import '../Views/gestion/contexte/screen_contexte.dart';
 import '../Views/gestion/dangers_et_incidents/screen_dangers_et_incidents.dart';
+import '../Views/gestion/gestion_des_processus/screen_gestion_processus.dart';
 import '../Views/gestion/home_gestion.dart';
 import '../Views/gestion/ies/screen_ies.dart';
+import '../Views/gestion/moyens_de_maitrise/screen_moyens_de_maitrise.dart';
 import '../Views/gestion/parties_interessees/screen_partie_interessees.dart';
 import '../Views/gestion/perimetres_et_domaines_d_application/screen_perimetres_et_domaines_d_application.dart';
 import '../Views/gestion/politique_qse/politique_qse.dart';
@@ -264,6 +268,34 @@ class RouteClass {
             pageBuilder: (context, state) => NoTransitionPage<void>(
                 key: state.pageKey,
                 child: ScreenSituationsDUrgence()
+            ),
+          ),
+          GoRoute(
+            path: '/gestion/moyens/de/maitrise',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenMoyensDeMaitrise()
+            ),
+          ),
+          GoRoute(
+            path: '/gestion/aspects/environnementaux',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenAe()
+            ),
+          ),
+          GoRoute(
+            path: '/gestion/ameliorations',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenAmeliorations()
+            ),
+          ),
+          GoRoute(
+            path: '/gestion/processus',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenGestionProcessus()
             ),
           ),
         ],

@@ -69,7 +69,7 @@ class _AjouterState extends State<Ajouter> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Text(
-                        'Renseigner les informations',
+                        'Renseignez les informations',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
