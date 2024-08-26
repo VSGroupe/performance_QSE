@@ -103,8 +103,8 @@ class RouteClass {
           ),
           routes: [
             GoRoute(
-                path: 'espace/Bouafle',
-                name: "Bouaflé",
+                path: 'espace/Com',
+                name: "Com",
                 pageBuilder: (context, state) => NoTransitionPage<void>(
                     key: state.pageKey,
                     restorationId: state.pageKey.value,

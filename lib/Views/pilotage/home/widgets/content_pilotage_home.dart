@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
-import 'package:perfqse/Views/pilotage/home/widgets/expand_element.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../../../module/styled_scrollview.dart';
 import '../../../../widgets/customtext.dart';
 import '../../entity/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
 import 'contentbox.dart';
-import 'listefilliale.dart';
-import 'overview_card.dart';
-import 'overview_item.dart';
+import 'listeProcessus.dart';
 
 class ContentPilotageHome extends StatefulWidget {
   const ContentPilotageHome({Key? key}) : super(key: key);
@@ -24,40 +18,68 @@ class ContentPilotageHome extends StatefulWidget {
 
 class _ContentPilotageHomeState extends State<ContentPilotageHome> {
   ScrollController scrollController = ScrollController();
+  List<Map<String, dynamic>> _filliale = [];
+  List<Map<String, dynamic>> _management = [];
+  List<Map<String, dynamic>> _operationnels = [];
 
-  final List<Map<String, dynamic>> _filliale = List.generate(
-    filliale.length,
-        (index) => {
-      'commune': filliale[index]["commune"],
-    },
-  );
-  final List<Map<String, dynamic>> _processTrans = List.generate(
-    processTrans.length,
-        (index) => {
-      'processTrans': processTrans[index]["name"],
-      "prefix": processTrans[index]["prefix"]
-    },
-  );
-  final List<Map<String, dynamic>> _processGene = List.generate(
-    processGene.length,
-        (index) => {
-      'processGene': processGene[index]["name"],
-      "prefix": processGene[index]["prefix"]
-    },
-  );
+  @override
+  void initState() {
+    super.initState();
+    _loadSupportProcessus();
+    _loadManagementProcessus();
+    _loadOperationnelsProcessus();
+  }
+
+  // Récupération des processus Support
+  Future<void> _loadSupportProcessus() async {
+    try {
+      final fillialeData = await getSupportProcessus();
+      setState(() {
+        _filliale = fillialeData;
+      });
+    } catch (e) {
+      print('Erreur lors du chargement des processus: $e');
+    }
+  }
+
+  // Récupération des processus Management
+  Future<void> _loadManagementProcessus() async {
+    try {
+      final managementProcess = await getManagementProcessus();
+      setState(() {
+        _management = managementProcess;
+      });
+    } catch (e) {
+      print('Erreur lors du chargement des processus: $e');
+    }
+  }
+
+
+  // Récupération des processus Operationnels
+  Future<void> _loadOperationnelsProcessus() async {
+    try {
+      final operationnelsProcess = await getOperationnelsProcessus();
+      setState(() {
+        _operationnels = operationnelsProcess;
+      });
+    } catch (e) {
+      print('Erreur lors du chargement des processus: $e');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 382,top: 30), // Ajout de padding top pour ajuster vers le haut
+      padding: EdgeInsets.only(left: 370, top: 30),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start, // Changer de center à start
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Column(
-            mainAxisAlignment: MainAxisAlignment.start, // Changer de center à start
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                width: 750,
+                width: 775,
                 padding: EdgeInsets.all(3),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(60),
@@ -76,7 +98,7 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
                   ),
                   child: Center(
                     child: Text(
-                      "Processus et  Indicateurs",
+                      "Processus et Indicateurs",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 23,
@@ -88,86 +110,85 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
               ),
               const SizedBox(height: 10),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start, // Changer de center à start
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(width: 3),
                   ContentBox(
                     title: Text(
-                      "PROCESSUS GENERAUX",
+                      "PROCESSUS MANAGEMENT",
                       style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
-                    width: 210,
+                    width: 250,
                     height: 211,
-                    children: _processGene.map((item) {
+                    children: _management.map((item) {
                       return TextButton(
                         onPressed: () {},
-                        child: Text(
-                          item["processGene"]!,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                            fontSize: 16,
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                  SizedBox(width: 10),
-                  ContentBox(
-                    title: Text(
-                      "PROCESSUS TRANSVERSEAUX",
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    width: 260,
-                    height: 210,
-                    children: _processTrans.map((item) {
-                      return TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          item["processTrans"]!,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                            fontSize: 16,
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                  SizedBox(width: 10),
-                  ContentBox(
-                    width: 200,
-                    height: 211,
-                    title: Text(
-                      "PROCESSUS MI",
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    children: [
-                      Center(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: _filliale.map((item) {
-                            return EspaceTextButton(
-                              title: item["commune"],
-                              espaceID: item["commune"],
+                        child: Align(
+                          alignment: Alignment.centerLeft, // Alignement du texte à gauche
+                          child: Text(
+                            item['management']!,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
                               color: Colors.black,
-                            );
-                          }).toList(),
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
+                      );
+                    }).toList(),
+                  ),
+                  SizedBox(width: 10),
+                  ContentBox(
+                    title: Text(
+                      "PROCESSUS OPÉRATIONNELS",
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
-                    ],
+                    ),
+                    width: 280,
+                    height: 210,
+                    children: _operationnels.map((item) {
+                      return TextButton(
+                        onPressed: () {},
+                        child: Align(
+                          alignment: Alignment.centerLeft, // Alignement du texte à gauche
+                          child: Text(
+                            item['operationnels']!,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  SizedBox(width: 10),
+                  ContentBox(
+                    width: 220,
+                    height: 211,
+                    title: Text(
+                      "PROCESSUS SUPPORT",
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    children: _filliale.map((item) {
+                      return EspaceTextButton(
+                        title: item["support"]!,
+                        espaceID: item["support"]!,
+                        color: Colors.black,
+                      );
+                    }).toList(),
                   ),
                 ],
               ),
@@ -185,6 +206,7 @@ class EspaceTextButton extends StatefulWidget {
   final String espaceID;
   final Color color;
   final Function()? onTap;
+
   const EspaceTextButton({
     super.key,
     required this.title,
@@ -206,7 +228,7 @@ class _EspaceTextButtonState extends State<EspaceTextButton> {
   Future<void> _showMyDialog() async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: true, // user must tap button!
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Accès refusé'),
@@ -283,11 +305,14 @@ class _EspaceTextButtonState extends State<EspaceTextButton> {
       onPressed: widget.onTap ?? () async {
         goToEspaceEntitePilotage(widget.espaceID);
       },
-      child: CustomText(
-        text: "${widget.title}",
-        color: widget.color,
-        weight: FontWeight.bold,
-        size: 16,
+      child: Align(
+        alignment: Alignment.centerLeft, // Alignement du texte à gauche
+        child: CustomText(
+          text: widget.title,
+          color: widget.color,
+          weight: FontWeight.bold,
+          size: 16,
+        ),
       ),
     );
   }
