@@ -17,7 +17,7 @@ class PerimetresEtDomainesDApplication extends StatefulWidget {
 
 class _PerimetresEtDomainesDApplicationState extends State<PerimetresEtDomainesDApplication> with SingleTickerProviderStateMixin {
   static const List<Tab> myTabs = <Tab>[
-    Tab(text: "Domaines d'application"),
+    Tab(text: "Périmètre, domaines d'application"),
     Tab(text: 'Exclusions et justifications'),
     //Tab(text: 'Modifier mon mot de passe'),
   ];
@@ -65,7 +65,7 @@ class _PerimetresEtDomainesDApplicationState extends State<PerimetresEtDomainesD
                     )),
                 tabs: const [
                   CustomText(
-                    text: "Domaines d'application",
+                    text: "Périmètre, domaines d'application",
                     size: 15,
                   ),
                   CustomText(

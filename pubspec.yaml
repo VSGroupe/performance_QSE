@@ -125,7 +125,8 @@ flutter:
         - assets/images/
         - assets/logos/
         - assets/icons/
-        - assets/pdf_Politique_QSE/planning_de_travail.pdf
+        - assets/pdf_Politique_QSE/politique_QSE_Solibra.pdf
+        - assets/animations/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

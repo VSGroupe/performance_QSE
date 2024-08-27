@@ -25,7 +25,7 @@ class Banniere extends StatelessWidget {
             child: ClipRRect(
                 borderRadius: BorderRadius.circular(15.0),
                 child: Image.asset(
-                  'assets/images/banniereQSE.png',
+                  'assets/images/Banière_Performance_QSE.png',
                   fit: BoxFit.contain,
                 )),
           ),

@@ -17,7 +17,7 @@ class TableauBord extends StatefulWidget {
 class _TableauBordState extends State<TableauBord> {
   final storage =FlutterSecureStorage();
   final ControllerTableauBord controllerTb =Get.find();
-  final Location="/pilotage/espace/Bouafle/tableau-de-bord/transite-tableau-bord";
+  final Location="/pilotage/espace/Com/tableau-de-bord/transite-tableau-bord";
 
   Future<void> _showDialogNoAcces() async {
     return showDialog<void>(

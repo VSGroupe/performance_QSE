@@ -102,7 +102,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
   void _openPDFInBrowser(BuildContext context) async {
     try {
       // Charger le PDF depuis les assets
-      final pdfData = await rootBundle.load('assets/pdf_Politique_QSE/planning_de_travail.pdf');
+      final pdfData = await rootBundle.load('assets/pdf_Politique_QSE/politique_QSE_Solibra.pdf');
 
       if (kIsWeb) {
         // Pour le Web : ouvrir le PDF en utilisant un Blob
@@ -709,7 +709,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                     child: Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        'Format PDF',
+                                        'Télécharger',
                                         style: TextStyle(color: Colors.black, fontSize: 15),
                                       ),
                                     ),

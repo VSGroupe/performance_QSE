@@ -53,7 +53,7 @@ class _MenuNavPilotageState extends State<MenuNavPilotage> {
               icon: Icons.home,
               label: "Accueil",
               isExtended: isExtended),
-          //SizedBox(height: 10),
+          SizedBox(height: 5),
           CustomMenuButton(
               pathMenu: '/tableau-de-bord',
               image: "assets/icons/table.png",
@@ -61,7 +61,7 @@ class _MenuNavPilotageState extends State<MenuNavPilotage> {
               isFullPath:false,
               label: "Tableau de bord",
               isExtended: isExtended),
-          //SizedBox(height: 10),
+          SizedBox(height: 5),
           CustomMenuButton(
               pathMenu: '/performances',
               image: "assets/icons/performance.png",
@@ -69,7 +69,7 @@ class _MenuNavPilotageState extends State<MenuNavPilotage> {
               isFullPath:false,
               label: "Performances",
               isExtended: isExtended),
-          //SizedBox(height: 10),
+          SizedBox(height: 5),
           CustomMenuButton(
               pathMenu: '/suivi-des-donnees',
               image: "assets/icons/monitoring.png",
@@ -78,13 +78,13 @@ class _MenuNavPilotageState extends State<MenuNavPilotage> {
               label: "Suivi des données",
               isExtended: isExtended
           ),
-          //SizedBox(height: 10),
+          //SizedBox(height: 5),
           CustomMenuButton(
-              pathMenu: '/profil',
-              image: "assets/icons/profil.png",
-              icon: Icons.person,
+              pathMenu: '/rapport',
+              image: "assets/icons/rapport.png",
+              icon: Icons.report,
               isFullPath:false,
-              label: "Profil",
+              label: "Rapport",
               isExtended: isExtended),
           SizedBox(
             height: 5,
@@ -100,30 +100,29 @@ class _MenuNavPilotageState extends State<MenuNavPilotage> {
               isFullPath:false,
               label: "Paramètres",
               isExtended: isExtended),
-          //SizedBox(height: 10),
-          CustomMenuButton(
-              pathMenu: '/d',
-              image: "",
-              icon: Icons.track_changes_outlined,
-              label: "Historiques",
-              isFullPath:false,
-              isExtended: isExtended),
-          //SizedBox(height: 10),
-          CustomMenuButton(
-              pathMenu: '/d',
-              image: "",
-              icon: Icons.help,
-              isFullPath:false,
-              label: "Aide",
-              isExtended: isExtended),
-          //SizedBox(height: 10),
-          CustomMenuButton(
-              pathMenu: '/d',
-              image: "",
-              icon: Icons.comment,
-              isFullPath:false,
-              label: "Commentaires",
-              isExtended: isExtended),
+          // CustomMenuButton(
+          //     pathMenu: '/d',
+          //     image: "",
+          //     icon: Icons.track_changes_outlined,
+          //     label: "Historiques",
+          //     isFullPath:false,
+          //     isExtended: isExtended),
+          // //SizedBox(height: 10),
+          // CustomMenuButton(
+          //     pathMenu: '/d',
+          //     image: "",
+          //     icon: Icons.help,
+          //     isFullPath:false,
+          //     label: "Aide",
+          //     isExtended: isExtended),
+          // //SizedBox(height: 10),
+          // CustomMenuButton(
+          //     pathMenu: '/d',
+          //     image: "",
+          //     icon: Icons.comment,
+          //     isFullPath:false,
+          //     label: "Commentaires",
+          //     isExtended: isExtended),
           SizedBox(
             height: 5,
           ),
@@ -146,39 +145,39 @@ class _MenuNavPilotageState extends State<MenuNavPilotage> {
               label: "Accueil Pilotage",
               isExtended: isExtended),
           SizedBox(height: 10),
-          isExtended ? Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.sunny,
-                  color: Colors.yellow,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Switcher(
-                    value: false,
-                    onTap: () {},
-                    size: SwitcherSize.medium,
-                    switcherButtonRadius: 50,
-                    enabledSwitcherButtonRotate: true,
-                    iconOff: Icons.circle_outlined,
-                    iconOn: Icons.circle_outlined,
-                    colorOff: Colors.yellow,
-                    colorOn: Colors.black,
-                    onChanged: (bool state) {
-                      //
-                    },
-                  ),
-                ),
-                Icon(
-                  Iconsax.moon,
-                  color: Colors.black,
-                )
-              ],
-            ),
-          ) : Container(),
+          // isExtended ? Padding(
+          //   padding: const EdgeInsets.symmetric(vertical: 20),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.center,
+          //     children: [
+          //       Icon(
+          //         Icons.sunny,
+          //         color: Colors.yellow,
+          //       ),
+          //       Padding(
+          //         padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          //         child: Switcher(
+          //           value: false,
+          //           onTap: () {},
+          //           size: SwitcherSize.medium,
+          //           switcherButtonRadius: 50,
+          //           enabledSwitcherButtonRotate: true,
+          //           iconOff: Icons.circle_outlined,
+          //           iconOn: Icons.circle_outlined,
+          //           colorOff: Colors.yellow,
+          //           colorOn: Colors.black,
+          //           onChanged: (bool state) {
+          //             //
+          //           },
+          //         ),
+          //       ),
+          //       Icon(
+          //         Iconsax.moon,
+          //         color: Colors.black,
+          //       )
+          //     ],
+          //   ),
+          // ) : Container(),
         ],
       ),
     );
@@ -213,7 +212,7 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
   final SideMenuController sideMenuController = Get.find();
 
   bool calculateSelectedIndex(BuildContext context) {
-     _rootLocation = "/pilotage/espace/Bouafle";
+     _rootLocation = "/pilotage/espace/Com";
     final String location = GoRouterState.of(context).location;
     if (location.endsWith(widget.pathMenu)) {
       return true;
@@ -223,7 +222,7 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
 
   @override
   Widget build(BuildContext context) {
-    _rootLocation = "/pilotage/espace/Bouafle";
+    _rootLocation = "/pilotage/espace/Com";
     isSelected = calculateSelectedIndex(context);
     return widget.isExtended ? InkWell(
       overlayColor: MaterialStateProperty.all(Colors.transparent),

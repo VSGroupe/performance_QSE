@@ -20,7 +20,7 @@ class NewTableauBord extends StatefulWidget {
 class _NewTableauBordState extends State<NewTableauBord> {
 
   final ControllerTableauBord _controllerTb=Get.find();
-  final Location="/pilotage/espace/Bouafle/tableau-de-bord/transite-tableau-bord/indicateurs";
+  final Location="/pilotage/espace/Com/tableau-de-bord/transite-tableau-bord/indicateurs";
 
   double elevation = 10;
  Map<String,Color> listColor={
@@ -47,7 +47,7 @@ class _NewTableauBordState extends State<NewTableauBord> {
                   quarterTurns: 2,
                   child: IconButton(onPressed:(){
                     _controllerTb.centerCicle.value ="";
-                    context.go("/pilotage/espace/Bouafle/tableau-de-bord");
+                    context.go("/pilotage/espace/Com/tableau-de-bord");
                   },
                       icon: Icon(Icons.east_outlined,size: 30,)),
                 ),

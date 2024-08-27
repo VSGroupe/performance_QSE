@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import '../../../../widgets/customtext.dart';
 
 const double defaultPadding = 16.0;
+const String apiUrl = 'http://127.0.0.1:5000/urgences'; // Remplacez par l'URL de votre API
 
 class ApercuSituationsDUrgence extends StatefulWidget {
   const ApercuSituationsDUrgence({Key? key}) : super(key: key);
@@ -22,18 +24,14 @@ class _ApercuSituationsDUrgenceState extends State<ApercuSituationsDUrgence> {
   }
 
   Future<List<Map<String, dynamic>>> fetchUrgences() async {
-    final response = await Supabase.instance.client
-        .from('Urgences')
-        .select('nom_urgence, poids_urgence')
-        .order('poids_urgence', ascending: false)
-        .order('nom_urgence', ascending: true)
-        .execute();
+    final response = await http.get(Uri.parse(apiUrl));
 
-    if (response.data == null) {
-      throw Exception('Erreur lors de la récupération des données : ${response.data!.message}');
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      return List<Map<String, dynamic>>.from(data);
+    } else {
+      throw Exception('Erreur lors de la récupération des données');
     }
-
-    return List<Map<String, dynamic>>.from(response.data ?? []);
   }
 
   @override

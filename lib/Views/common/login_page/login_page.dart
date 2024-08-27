@@ -134,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                                   height:400,
                                   decoration: BoxDecoration(
                                     image:DecorationImage(
-                                      image: AssetImage("assets/logos/banniereQSE.png"),
+                                      image: AssetImage("assets/logos/Image_page d_accueil_PERF_QSE-01.png"),
                                       fit: BoxFit.contain
                                     )
                                   ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
+import 'dart:convert';
 
 class Ajouter extends StatefulWidget {
   const Ajouter({Key? key}) : super(key: key);
@@ -17,26 +18,26 @@ class _AjouterState extends State<Ajouter> {
 
   Future<void> ajouterUrgence() async {
     if (_formKey.currentState!.validate()) {
-      final response = await Supabase.instance.client
-          .from('Urgences')
-          .insert({
-        'nom_urgence': nomController.text,
-        'poids_urgence': double.parse(poidsController.text),
-      })
-          .execute();
+      final uri = Uri.parse('http://127.0.0.1:5000/ajouter_urgence'); // URL de votre serveur Flask local
+      final response = await http.post(
+        uri,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'nom_urgence': nomController.text,
+          'poids_urgence': double.parse(poidsController.text),
+        }),
+      );
 
-      if (response.data == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur : ${response.data!.message}')),
-        );
-      } else {
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 201) {
         setState(() {
           _showSuccessAnimation = true;
-        });
 
-        // Vidage des champs de texte
-        nomController.clear();
-        poidsController.clear();
+          // Vidage des champs de texte
+          nomController.clear();
+          poidsController.clear();
+        });
 
         // Afficher l'animation pendant 2 secondes
         await Future.delayed(const Duration(seconds: 2));
@@ -44,6 +45,10 @@ class _AjouterState extends State<Ajouter> {
         setState(() {
           _showSuccessAnimation = false;
         });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erreur : ${responseData['message']}')),
+        );
       }
     }
   }

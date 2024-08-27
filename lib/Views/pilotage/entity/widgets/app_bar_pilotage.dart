@@ -62,13 +62,13 @@ class _AppBarPilotageState extends State<AppBarPilotage> {
             20,
           ),
           //responsive == "cas-0" ? Container() :
-          Text("Bouafle",style: TextStyle(fontSize: 18,color:Colors.red,fontWeight: FontWeight.bold),),
+          Text("Processus Com",style: TextStyle(fontSize: 18,color:Colors.red,fontWeight: FontWeight.bold),),
           SizedBox(
             width: //responsive == "cas-0" ? 10 :
             20,
           ),
           //responsive == "cas-0" ? Text("Bouafle",style: TextStyle(fontSize: 18),) :
-          const EntityWidget(),
+          // const EntityWidget(),
           Expanded(child: Container()),
           const Icon(
             Icons.notifications_none_outlined,
@@ -81,7 +81,7 @@ class _AppBarPilotageState extends State<AppBarPilotage> {
           ),
           InkWell(
             onTap: (){
-              context.go("/pilotage/espace/Bouafle/profil");
+              context.go("/pilotage/espace/Com/profil");
             },
             radius: 20,
               child: CircleAvatar( backgroundColor: Colors.red,

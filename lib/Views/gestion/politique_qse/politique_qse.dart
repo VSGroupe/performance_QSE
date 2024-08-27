@@ -16,7 +16,7 @@ class PolitiqueQSE extends StatelessWidget {
         ),
       ),
       body: SfPdfViewer.asset(
-        'assets/pdf_Politique_QSE/planning_de_travail.pdf',
+        'assets/pdf_Politique_QSE/politique_QSE_Solibra.pdf',
       ),
     );
   }
