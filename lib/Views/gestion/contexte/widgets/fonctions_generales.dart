@@ -129,7 +129,7 @@ class _FonctionsGeneralesState extends State<FonctionsGenerales> {
                     border: InputBorder.none,
                   ),
                   style: const TextStyle(
-                    fontSize: 20,
+                    fontSize: 18,
                   ),
                 )
                     : Align(
@@ -137,7 +137,7 @@ class _FonctionsGeneralesState extends State<FonctionsGenerales> {
                   child: Text(
                     _textController.text,
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                     ),
                   ),
                 ),

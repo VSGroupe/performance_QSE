@@ -47,54 +47,94 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Table(
-          border: TableBorder.all(),
-          children: [
-            TableRow(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: SizedBox(
+            // width: 600, // largeur fixe du tableau
+            child: Table(
+              border: TableBorder.all(),
+              columnWidths: const {
+                0: FixedColumnWidth(150.0),
+                1: FixedColumnWidth(350.0),
+                2: FixedColumnWidth(350.0),
+                3: FixedColumnWidth(350.0),
+              },
               children: [
-                tableCell("Type", isHeader: true),
-                tableCell("Enjeux", isHeader: true),
-                tableCell("Risques", isHeader: true),
-                tableCell("Opportunités", isHeader: true),
-              ],
-            ),
-            TableRow(
-              children: [
-                tableCell("Interne", isHeader: true, rowSpan: 3),
-                nonEditableTableCell(
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: _interneEnjeux
-                        .map((enjeu) => Padding(
-                      padding: const EdgeInsets.only(bottom: 4.0),
-                      child: Text(enjeu['libelle']),
-                    ))
-                        .toList(),
-                  ),
+                TableRow(
+                  children: [
+                    tableCell("Type", isHeader: true),
+                    tableCell("Enjeux", isHeader: true),
+                    tableCell("Risques", isHeader: true),
+                    tableCell("Opportunités", isHeader: true),
+                  ],
                 ),
-                nonEditableTableCell(Text("")),
-                nonEditableTableCell(Text("")),
-              ],
-            ),
-            TableRow(
-              children: [
-                tableCell("Externe", isHeader: true, rowSpan: 3),
-                nonEditableTableCell(
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: _externeEnjeux
-                        .map((enjeu) => Padding(
-                      padding: const EdgeInsets.only(bottom: 4.0),
-                      child: Text(enjeu['libelle']),
-                    ))
-                        .toList(),
-                  ),
+                TableRow(
+                  children: [
+                    tableCell("Interne", isHeader: true, rowSpan: 3),
+                    scrollableTableCell(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: _interneEnjeux
+                            .map((enjeu) => Padding(
+                          padding: const EdgeInsets.only(bottom: 4.0),
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                const TextSpan(
+                                  text: "-  ",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                TextSpan(
+                                  text: enjeu['libelle'],
+                                  style: const TextStyle(color: Colors.black),
+                                ),
+                                const TextSpan(text: "\n"),
+                              ],
+                            ),
+                          ),
+                        ))
+                            .toList(),
+                      ),
+                    ),
+                    scrollableTableCell(Text("")),
+                    scrollableTableCell(Text("")),
+                  ],
                 ),
-                nonEditableTableCell(Text("")),
-                nonEditableTableCell(Text("")),
+                TableRow(
+                  children: [
+                    tableCell("Externe", isHeader: true, rowSpan: 3),
+                    scrollableTableCell(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: _externeEnjeux
+                            .map((enjeu) => Padding(
+                          padding: const EdgeInsets.only(bottom: 4.0),
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                const TextSpan(
+                                  text: "-  ",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                TextSpan(
+                                  text: enjeu['libelle'],
+                                  style: const TextStyle(color: Colors.black),
+                                ),
+                                const TextSpan(text: "\n"),
+                              ],
+                            ),
+                          ),
+                        ))
+                            .toList(),
+                      ),
+                    ),
+                    scrollableTableCell(Text("")),
+                    scrollableTableCell(Text("")),
+                  ],
+                ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -117,10 +157,15 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
     );
   }
 
-  Widget nonEditableTableCell(Widget child) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: child,
+  Widget scrollableTableCell(Widget child) {
+    return SizedBox(
+      height: 200, // hauteur fixe de chaque cellule
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: child,
+        ),
+      ),
     );
   }
 }
