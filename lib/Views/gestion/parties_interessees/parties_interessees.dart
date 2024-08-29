@@ -17,8 +17,8 @@ class PartiesInteressees extends StatefulWidget {
 
 class _PartiesInteresseesState extends State<PartiesInteressees> with SingleTickerProviderStateMixin {
   static const List<Tab> myTabs = <Tab>[
-    Tab(text: 'Aperçu des informations'),
-    Tab(text: 'Faire une modification'),
+    Tab(text: 'Cartographie des parties intéressées'),
+    Tab(text: 'Attentes des parties intéressées'),
     //Tab(text: 'Modifier mon mot de passe'),
   ];
 
@@ -65,11 +65,11 @@ class _PartiesInteresseesState extends State<PartiesInteressees> with SingleTick
                     )),
                 tabs: const [
                   CustomText(
-                    text: "Aperçu des informations",
+                    text: "Cartographie des parties intéressées",
                     size: 15,
                   ),
                   CustomText(
-                    text: "Faire une modification",
+                    text: "Attentes des parties intéressées",
                     size: 15,
                   ),
                   // CustomText(

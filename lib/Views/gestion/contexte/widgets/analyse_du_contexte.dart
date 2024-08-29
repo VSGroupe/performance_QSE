@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class AnalyseDuContexte extends StatefulWidget {
   const AnalyseDuContexte({Key? key}) : super(key: key);
@@ -9,7 +10,6 @@ class AnalyseDuContexte extends StatefulWidget {
 }
 
 class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
-  final SupabaseClient _supabaseClient = Supabase.instance.client;
   List<Map<String, dynamic>> _interneEnjeux = [];
   List<Map<String, dynamic>> _externeEnjeux = [];
   Map<int, List<Map<String, dynamic>>> _risquesParEnjeu = {};
@@ -22,32 +22,22 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
   }
 
   Future<void> _fetchEnjeuxEtRisquesEtOpportunites() async {
-    final enjeuxResponse = await _supabaseClient
-        .from('EnjeuTable')
-        .select()
-        .execute();
-
-    if (enjeuxResponse.data != null) {
-      final enjeuxData = enjeuxResponse.data as List<dynamic>;
+    final enjeuxResponse = await http.get(Uri.parse('http://localhost:5000/enjeux'));
+    if (enjeuxResponse.statusCode == 200) {
+      final List<dynamic> enjeuxData = json.decode(enjeuxResponse.body);
       final List<Map<String, dynamic>> enjeuxList =
       enjeuxData.map((item) => item as Map<String, dynamic>).toList();
 
-      // Filtrer les enjeux en fonction du type
       _interneEnjeux = enjeuxList.where((item) => item['type_enjeu'] == 'interne').toList();
       _externeEnjeux = enjeuxList.where((item) => item['type_enjeu'] == 'externe').toList();
 
-      // Récupérer les risques associés à chaque enjeu
-      final risquesResponse = await _supabaseClient
-          .from('Risques')
-          .select()
-          .execute();
-
-      if (risquesResponse.data != null) {
-        final risquesData = risquesResponse.data as List<dynamic>;
+      // Récupérer les risques
+      final risquesResponse = await http.get(Uri.parse('http://localhost:5000/risques'));
+      if (risquesResponse.statusCode == 200) {
+        final List<dynamic> risquesData = json.decode(risquesResponse.body);
         final List<Map<String, dynamic>> risquesList =
         risquesData.map((item) => item as Map<String, dynamic>).toList();
 
-        // Organiser les risques par id_enjeu
         for (var risque in risquesList) {
           int idEnjeu = risque['id_enjeu'];
           if (_risquesParEnjeu.containsKey(idEnjeu)) {
@@ -57,21 +47,16 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
           }
         }
       } else {
-        print('Error fetching risks: Erreur sur la récupération du risque');
+        print('Error fetching risks: ${risquesResponse.body}');
       }
 
-      // Récupérer les opportunités associées à chaque enjeu
-      final opportunitesResponse = await _supabaseClient
-          .from('Opportunites')
-          .select()
-          .execute();
-
-      if (opportunitesResponse.data != null) {
-        final opportunitesData = opportunitesResponse.data as List<dynamic>;
+      // Récupérer les opportunités
+      final opportunitesResponse = await http.get(Uri.parse('http://localhost:5000/opportunites'));
+      if (opportunitesResponse.statusCode == 200) {
+        final List<dynamic> opportunitesData = json.decode(opportunitesResponse.body);
         final List<Map<String, dynamic>> opportunitesList =
         opportunitesData.map((item) => item as Map<String, dynamic>).toList();
 
-        // Organiser les opportunités par id_enjeu
         for (var opportunite in opportunitesList) {
           int idEnjeu = opportunite['id_enjeu'];
           if (_opportunitesParEnjeu.containsKey(idEnjeu)) {
@@ -81,12 +66,12 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
           }
         }
       } else {
-        print('Error fetching opportunities: Erreur sur la récupération des opportunités');
+        print('Error fetching opportunities: ${opportunitesResponse.body}');
       }
 
       setState(() {});
     } else {
-      print('Error fetching enjeux: Erreur sur la récupération de l\'enjeu');
+      print('Error fetching enjeux: ${enjeuxResponse.body}');
     }
   }
 
@@ -184,7 +169,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                             .map((enjeu) => Padding(
                           padding: const EdgeInsets.only(bottom: 4.0),
                           child: Text(
-                            "-  ${enjeu['libelle'] ?? 'N/A'}",
+                            "-  ${enjeu['libelle'] ?? 'N/A'}\n",
                             style: const TextStyle(color: Colors.black),
                           ),
                         ))
@@ -261,7 +246,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                             .map((enjeu) => Padding(
                           padding: const EdgeInsets.only(bottom: 4.0),
                           child: Text(
-                            "-  ${enjeu['libelle'] ?? 'N/A'}",
+                            "-  ${enjeu['libelle'] ?? 'N/A'}\n",
                             style: const TextStyle(color: Colors.black),
                           ),
                         ))
@@ -340,19 +325,22 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
     return TableCell(
       verticalAlignment: TableCellVerticalAlignment.middle,
       child: Container(
+        color: isHeader ? Colors.amber : Colors.white, // Choisis une couleur sombre pour l'en-tête
         padding: const EdgeInsets.all(8.0),
-        color: isHeader ? Colors.grey[300] : Colors.white,
         child: Text(
           text,
           style: TextStyle(
+            color: isHeader ? Colors.white : Colors.black, // Texte blanc pour les en-têtes
             fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
-            color: Colors.black,
+            fontSize: isHeader ? 18 : 16,
           ),
+          textAlign: TextAlign.center,
         ),
       ),
     );
   }
-  
+
+
   Widget scrollableTableCell(Widget child) {
     return SizedBox(
       height: 200, // hauteur fixe de chaque cellule
