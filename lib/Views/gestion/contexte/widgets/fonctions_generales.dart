@@ -93,7 +93,7 @@ class _FonctionsGeneralesState extends State<FonctionsGenerales> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    'Fonction Générale',
+                    'Environnement de l\'entreprise',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,

@@ -619,7 +619,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                     ),
                   ),
                   Positioned(
-                    left: 1180.0,
+                    left: 1170.0,
                     top: 280.0,
                     right: 30.0,
                     child: TweenAnimationBuilder(

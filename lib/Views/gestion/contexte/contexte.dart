@@ -17,9 +17,9 @@ class Contexte extends StatefulWidget {
 
 class _ContexteState extends State<Contexte> with SingleTickerProviderStateMixin {
   static const List<Tab> myTabs = <Tab>[
+    Tab(text: 'Environnement de l\'entreprise'),
     Tab(text: 'Analyse du contexte'),
     Tab(text: 'Rapport du risque'),
-    Tab(text: 'Fonctions générales'),
   ];
 
   late TabController _tabController;
@@ -65,6 +65,10 @@ class _ContexteState extends State<Contexte> with SingleTickerProviderStateMixin
                     )),
                 tabs: const [
                   CustomText(
+                    text: "Environnement de l'entreprise",
+                    size: 15,
+                  ),
+                  CustomText(
                     text: "Analyse du contexte",
                     size: 15,
                   ),
@@ -72,15 +76,11 @@ class _ContexteState extends State<Contexte> with SingleTickerProviderStateMixin
                     text: "Rapport du risque",
                     size: 15,
                   ),
-                  CustomText(
-                    text: "Les fonctions générales",
-                    size: 15,
-                  ),
                 ],
                 views: [
+                  Container(child: FonctionsGenerales(),),
                   Container(child: AnalyseDuContexte(),),
                   Container(child: RapportDuRisque(),),
-                  Container(child: FonctionsGenerales(),)
                 ],
               ),
             ),

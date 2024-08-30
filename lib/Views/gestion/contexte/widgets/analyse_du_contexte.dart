@@ -12,8 +12,8 @@ class AnalyseDuContexte extends StatefulWidget {
 class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
   List<Map<String, dynamic>> _interneEnjeux = [];
   List<Map<String, dynamic>> _externeEnjeux = [];
-  Map<int, List<Map<String, dynamic>>> _risquesParEnjeu = {};
-  Map<int, List<Map<String, dynamic>>> _opportunitesParEnjeu = {};
+  Map<String, List<Map<String, dynamic>>> _risquesParEnjeu = {};
+  Map<String, List<Map<String, dynamic>>> _opportunitesParEnjeu = {};
 
   @override
   void initState() {
@@ -22,7 +22,14 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
   }
 
   Future<void> _fetchEnjeuxEtRisquesEtOpportunites() async {
+
+    // Récupérer les enjeux
     final enjeuxResponse = await http.get(Uri.parse('http://localhost:5000/enjeux'));
+    // Récupérer les risques
+    final risquesResponse = await http.get(Uri.parse('http://localhost:5000/risques'));
+    // Récupérer les opportunités
+    final opportunitesResponse = await http.get(Uri.parse('http://localhost:5000/opportunites'));
+
     if (enjeuxResponse.statusCode == 200) {
       final List<dynamic> enjeuxData = json.decode(enjeuxResponse.body);
       final List<Map<String, dynamic>> enjeuxList =
@@ -31,17 +38,28 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
       _interneEnjeux = enjeuxList.where((item) => item['type_enjeu'] == 'interne').toList();
       _externeEnjeux = enjeuxList.where((item) => item['type_enjeu'] == 'externe').toList();
 
-      // Récupérer les risques
-      final risquesResponse = await http.get(Uri.parse('http://localhost:5000/risques'));
+      // Traitement de la réponse sur la récupération des risques
       if (risquesResponse.statusCode == 200) {
+
         final List<dynamic> risquesData = json.decode(risquesResponse.body);
+
+        print("\nrisqueData:\n");
+        print(risquesData);
+        print("\n");
+
         final List<Map<String, dynamic>> risquesList =
         risquesData.map((item) => item as Map<String, dynamic>).toList();
 
+        print("\nrisqueList:\n");
+        print(risquesList);
+        print("\n");
+
         for (var risque in risquesList) {
-          int idEnjeu = risque['id_enjeu'];
+          String idEnjeu = risque['id_enjeu'];
           if (_risquesParEnjeu.containsKey(idEnjeu)) {
             _risquesParEnjeu[idEnjeu]?.add(risque);
+            print("Bonjour");
+            print(_risquesParEnjeu[idEnjeu]);
           } else {
             _risquesParEnjeu[idEnjeu] = [risque];
           }
@@ -50,15 +68,14 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
         print('Error fetching risks: ${risquesResponse.body}');
       }
 
-      // Récupérer les opportunités
-      final opportunitesResponse = await http.get(Uri.parse('http://localhost:5000/opportunites'));
+      //Traitement de la réponse sur la récupération des opportunités
       if (opportunitesResponse.statusCode == 200) {
         final List<dynamic> opportunitesData = json.decode(opportunitesResponse.body);
         final List<Map<String, dynamic>> opportunitesList =
         opportunitesData.map((item) => item as Map<String, dynamic>).toList();
 
         for (var opportunite in opportunitesList) {
-          int idEnjeu = opportunite['id_enjeu'];
+          String idEnjeu = opportunite['id_enjeu'];
           if (_opportunitesParEnjeu.containsKey(idEnjeu)) {
             _opportunitesParEnjeu[idEnjeu]?.add(opportunite);
           } else {
@@ -181,7 +198,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: _interneEnjeux
                             .map((enjeu) {
-                          final risques = _risquesParEnjeu[enjeu['id']];
+                          final risques = _risquesParEnjeu[enjeu['id_enjeu']];
                           if (risques != null) {
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,7 +208,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                                   child: TextButton(
                                     onPressed: () => _showRisqueDetails(risque),
                                     child: Text(
-                                      "-  ${risque['libelle'] ?? 'N/A'}",
+                                      "${risque['libelle'] ?? 'N/A'}",
                                       style: const TextStyle(color: Colors.black),
                                     ),
                                   ),
@@ -210,7 +227,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: _interneEnjeux
                             .map((enjeu) {
-                          final opportunites = _opportunitesParEnjeu[enjeu['id']];
+                          final opportunites = _opportunitesParEnjeu[enjeu['id_enjeu']];
                           if (opportunites != null) {
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,7 +237,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                                   child: TextButton(
                                     onPressed: () => _showOpportuniteDetails(opportunite),
                                     child: Text(
-                                      "-  ${opportunite['libelle'] ?? 'N/A'}",
+                                      "${opportunite['libelle'] ?? 'N/A'}",
                                       style: const TextStyle(color: Colors.black),
                                     ),
                                   ),
@@ -258,7 +275,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: _externeEnjeux
                             .map((enjeu) {
-                          final risques = _risquesParEnjeu[enjeu['id']];
+                          final risques = _risquesParEnjeu[enjeu['id_enjeu']];
                           if (risques != null) {
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -268,7 +285,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                                   child: TextButton(
                                     onPressed: () => _showRisqueDetails(risque),
                                     child: Text(
-                                      "-  ${risque['libelle'] ?? 'N/A'}",
+                                      "${risque['libelle'] ?? 'N/A'}",
                                       style: const TextStyle(color: Colors.black),
                                     ),
                                   ),
@@ -287,7 +304,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: _externeEnjeux
                             .map((enjeu) {
-                          final opportunites = _opportunitesParEnjeu[enjeu['id']];
+                          final opportunites = _opportunitesParEnjeu[enjeu['id_enjeu']];
                           if (opportunites != null) {
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -297,7 +314,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                                   child: TextButton(
                                     onPressed: () => _showOpportuniteDetails(opportunite),
                                     child: Text(
-                                      "-  ${opportunite['libelle'] ?? 'N/A'}",
+                                      "${opportunite['libelle'] ?? 'N/A'}",
                                       style: const TextStyle(color: Colors.black),
                                     ),
                                   ),
