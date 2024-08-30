@@ -15,6 +15,9 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
   Map<String, List<Map<String, dynamic>>> _risquesParEnjeu = {};
   Map<String, List<Map<String, dynamic>>> _opportunitesParEnjeu = {};
 
+  // Créer une liste associative pour stocker les libellés avec leur id_enjeu comme clé
+  Map<String, String> libellesEnjeux = {};
+
   @override
   void initState() {
     super.initState();
@@ -34,6 +37,17 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
       final List<dynamic> enjeuxData = json.decode(enjeuxResponse.body);
       final List<Map<String, dynamic>> enjeuxList =
       enjeuxData.map((item) => item as Map<String, dynamic>).toList();
+
+      // Remplir la liste associative
+      for (var item in enjeuxList) {
+        String idEnjeu = item['id_enjeu'];
+        String libelle = item['libelle'];
+        libellesEnjeux[idEnjeu] = libelle;
+      }
+
+      print("\nenjeuList:\n");
+      print(enjeuxList);
+      print("\n");
 
       _interneEnjeux = enjeuxList.where((item) => item['type_enjeu'] == 'interne').toList();
       _externeEnjeux = enjeuxList.where((item) => item['type_enjeu'] == 'externe').toList();
@@ -92,61 +106,167 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
     }
   }
 
+  // Les détails sur le risque cliqué
   void _showRisqueDetails(Map<String, dynamic> risque) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(risque['libelle'] ?? 'Détails du Risque'),
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text("Gravité: ${risque['gravite'] ?? 'N/A'}"),
-              Text("Fréquence: ${risque['frequence'] ?? 'N/A'}"),
-              Text("Enjeu associé: ${risque['id_enjeu']}"),
-            ],
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Quitter'),
+          child: Container(
+            width: 300,  // Fixe la largeur
+            height: 250, // Fixe la hauteur
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10.0), // Arrondir les coins
             ),
-          ],
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start, // Aligner à gauche
+              children: [
+                // En-tête avec couleur de fond
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(15.0),
+                  decoration: BoxDecoration(
+                    color: Colors.amber, // Couleur de fond de l'entête
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(10.0), // Arrondir les coins supérieurs
+                    ),
+                  ),
+                  child: Text(
+                    risque['libelle'] ?? 'Détails du Risque',
+                    style: TextStyle(
+                      fontSize: 18, // Taille de police de l'entête
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white, // Couleur du texte de l'entête
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.all(15.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start, // Aligner à gauche
+                      children: [
+                        Text(
+                          "Poids du risque: ${risque['gravite'] ?? 'N/A'}",
+                          style: TextStyle(fontSize: 16), // Taille de police du corps
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          "Fréquence: ${risque['frequence'] ?? 'N/A'}",
+                          style: TextStyle(fontSize: 16), // Taille de police du corps
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          "Enjeu associé: ${libellesEnjeux[risque['id_enjeu']]}",
+                          style: TextStyle(fontSize: 16), // Taille de police du corps
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Quitter'),
+                  ),
+                ),
+              ],
+            ),
+          ),
         );
       },
     );
   }
 
+  // Les détails sur l'opportunité cliqué
   void _showOpportuniteDetails(Map<String, dynamic> opportunite) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(opportunite['libelle'] ?? 'Détails de l\'Opportunité'),
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text("Gravité: ${opportunite['gravite'] ?? 'N/A'}"),
-              Text("Fréquence: ${opportunite['frequence'] ?? 'N/A'}"),
-              Text("Enjeu associé: ${opportunite['id_enjeu']}"),
-            ],
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Quitter'),
+          child: Container(
+            width: 300,  // Fixe la largeur
+            height: 250, // Fixe la hauteur
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10.0), // Arrondir les coins
             ),
-          ],
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start, // Aligner à gauche
+              children: [
+                // En-tête avec couleur de fond
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(15.0),
+                  decoration: BoxDecoration(
+                    color: Colors.green, // Couleur de fond de l'entête
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(10.0), // Arrondir les coins supérieurs
+                    ),
+                  ),
+                  child: Text(
+                    opportunite['libelle'] ?? 'Détails de l\'Opportunité',
+                    style: TextStyle(
+                      fontSize: 18, // Taille de police de l'entête
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white, // Couleur du texte de l'entête
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.all(15.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start, // Aligner à gauche
+                      children: [
+                        Text(
+                          "Poids de l'opportunité: ${opportunite['gravite'] ?? 'N/A'}",
+                          style: TextStyle(fontSize: 16), // Taille de police du corps
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          "Fréquence: ${opportunite['frequence'] ?? 'N/A'}",
+                          style: TextStyle(fontSize: 16), // Taille de police du corps
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          "Enjeu associé: ${libellesEnjeux[opportunite['id_enjeu']]}",
+                          style: TextStyle(fontSize: 16), // Taille de police du corps
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Quitter'),
+                  ),
+                ),
+              ],
+            ),
+          ),
         );
       },
     );
   }
+
+
 
   @override
   Widget build(BuildContext context) {
