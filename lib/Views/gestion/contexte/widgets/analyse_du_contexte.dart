@@ -266,6 +266,96 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
     );
   }
 
+  void _showAddEnjeuDialog() {
+    // Afficher une boîte de dialogue pour ajouter un enjeu
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Ajouter un Enjeu'),
+          content: const TextField(
+            decoration: InputDecoration(hintText: "Libellé de l'enjeu"),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Annuler'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Ajouter'),
+              onPressed: () {
+                // Ajoutez la logique pour ajouter l'enjeu ici
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showAddRisqueDialog() {
+    // Afficher une boîte de dialogue pour ajouter un risque
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Ajouter un Risque'),
+          content: const TextField(
+            decoration: InputDecoration(hintText: "Libellé du risque"),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Annuler'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Ajouter'),
+              onPressed: () {
+                // Ajoutez la logique pour ajouter le risque ici
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showAddOpportuniteDialog() {
+    // Afficher une boîte de dialogue pour ajouter une opportunité
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Ajouter une Opportunité'),
+          content: const TextField(
+            decoration: InputDecoration(hintText: "Libellé de l'opportunité"),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Annuler'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Ajouter'),
+              onPressed: () {
+                // Ajoutez la logique pour ajouter l'opportunité ici
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
 
   @override
@@ -291,9 +381,9 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                 TableRow(
                   children: [
                     tableCell("Type", isHeader: true),
-                    tableCell("Enjeux", isHeader: true),
-                    tableCell("Risques", isHeader: true),
-                    tableCell("Opportunités", isHeader: true),
+                    headerCellWithButton("Enjeux", _showAddEnjeuDialog),
+                    headerCellWithButton("Risques", _showAddRisqueDialog),
+                    headerCellWithButton("Opportunités", _showAddOpportuniteDialog),
                   ],
                 ),
                 TableRow(
@@ -472,6 +562,35 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
             fontSize: isHeader ? 18 : 16,
           ),
           textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+
+  Widget headerCellWithButton(String headerText, VoidCallback onPressed) {
+    return TableCell(
+      verticalAlignment: TableCellVerticalAlignment.middle,
+      child: Container(
+        color: Colors.amber, // Couleur de fond
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center, // Centre le texte
+          children: [
+            Expanded(
+              child: Text(
+                headerText,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.add, color: Colors.white),
+              onPressed: onPressed,
+            ),
+          ],
         ),
       ),
     );
