@@ -130,8 +130,8 @@ class _AjouterState extends State<Ajouter> {
                           padding: const EdgeInsets.only(top: 16.0),
                           child: Lottie.asset(
                             'assets/animations/success.json', // Assurez-vous d'avoir ce fichier d'animation
-                            width: 100,
-                            height: 100,
+                            width: 200,
+                            height: 150,
                             repeat: false,
                           ),
                         ),
