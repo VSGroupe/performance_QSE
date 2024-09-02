@@ -61,66 +61,148 @@ class _ApercuSituationsDUrgenceState extends State<ApercuSituationsDUrgence> {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: const Text('Modifier l\'urgence'),
-          content: TextField(
-            controller: _controller,
-            decoration: const InputDecoration(
-              labelText: 'Nom de l\'urgence',
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          child: SizedBox(
+            width: 350.0, // Largeur fixe de la boîte de dialogue
+            height: 200.0,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Modifier l\'urgence',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: TextField(
+                    controller: _controller,
+                    decoration: InputDecoration(
+                      labelText: 'Nom de l\'urgence',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 40.0), // Espacement entre le champ de texte et les boutons
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Ferme la boîte de dialogue sans sauvegarder
+                        },
+                        child: const Text('Annuler'),
+                      ),
+                      const SizedBox(width: 8.0), // Espacement entre les boutons
+                      ElevatedButton(
+                        onPressed: () async {
+                          await updateUrgence(urgence['id'], _controller.text);
+                          setState(() {
+                            urgencesFuture = fetchUrgences();
+                          });
+                          Navigator.of(context).pop(); // Ferme la boîte de dialogue après sauvegarde
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.blue, // Couleur du texte et du fond du bouton
+                          minimumSize: const Size(100, 45), // Taille minimale du bouton
+                        ),
+                        child: const Text('Sauvegarder'),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Annuler'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                await updateUrgence(urgence['id'], _controller.text);
-                setState(() {
-                  urgencesFuture = fetchUrgences();
-                });
-                Navigator.of(context).pop();
-              },
-              child: const Text('Sauvegarder'),
-            ),
-          ],
         );
       },
     );
   }
 
+
   void _showDeleteConfirmationDialog(int id) {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: const Text('Confirmer la suppression'),
-          content: const Text('Voulez-vous vraiment supprimer cette urgence ?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Ferme la boîte de dialogue sans supprimer
-              },
-              child: const Text('Annuler'),
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          child: SizedBox(
+            width: 350.0,  // Largeur souhaitée
+            height: 200.0,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Confirmer la suppression',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    'Voulez-vous vraiment supprimer cette urgence ?',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    textAlign: TextAlign.left, // Aligner le texte à gauche
+                  ),
+                ),
+                const SizedBox(height: 70.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0), // Ajoute du padding horizontal
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Ferme la boîte de dialogue sans supprimer
+                        },
+                        child: const Text('Annuler'),
+                      ),
+                      const SizedBox(width: 8.0), // Espacement entre les boutons
+                      ElevatedButton(
+                        onPressed: () async {
+                          await deleteUrgence(id);
+                          setState(() {
+                            urgencesFuture = fetchUrgences();
+                          });
+                          Navigator.of(context).pop(); // Ferme la boîte de dialogue après suppression
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white, backgroundColor: Colors.red, // Couleur du texte blanc
+                          minimumSize: const Size(90, 40), // Taille minimale du bouton
+                        ),
+                        child: const Text('Oui, supprimer'),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            ElevatedButton(
-              onPressed: () async {
-                await deleteUrgence(id);
-                setState(() {
-                  urgencesFuture = fetchUrgences();
-                });
-                Navigator.of(context).pop(); // Ferme la boîte de dialogue après suppression
-              },
-              child: const Text('Oui, supprimer'),
-            ),
-          ],
+          ),
         );
       },
     );
   }
+
+
 
   @override
   Widget build(BuildContext context) {
