@@ -156,7 +156,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                           ),
                           IconButton(
                             icon: const Icon(Icons.close, color: Colors.red),
-                            onPressed: () => _showDeleteRisqueConfirmationDialog(context, risque['id_opportunite'], risque['libelle']),
+                            onPressed: () => _showDeleteRisqueConfirmationDialog(context, risque['id_risque'], risque['libelle']),
                           ),
                         ],
                       ),
@@ -254,7 +254,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                     TextButton(
                       onPressed: () async {
                         print('Enregistrement en cours...');  // Journalisation
-                        await _updateRisque(risque['id_opportunite'], _libelleController.text);
+                        await _updateRisque(risque['id_risque'], _libelleController.text);
                         setState(() {
                           risque['libelle'] = _libelleController.text;
                         });
@@ -282,9 +282,9 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
     );
 
     if (response.statusCode == 200) {
-      print('Opportunité mise à jour avec succès : $idRisque');
+      print('Risque mis à jour avec succès : $idRisque');
     } else {
-      print('Erreur lors de la mise à jour de l\'opportunité');
+      print('Erreur lors de la mise à jour du risque');
     }
   }
 
@@ -360,9 +360,9 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
     final response = await http.delete(Uri.parse(url));
 
     if (response.statusCode == 200) {
-      print('Opportunité supprimée avec succès : $idRisque');
+      print('Risque supprimé avec succès : $idRisque');
     } else {
-      print('Erreur lors de la suppression de l\'opportunité');
+      print('Erreur lors de la suppression du risque');
     }
   }
 
