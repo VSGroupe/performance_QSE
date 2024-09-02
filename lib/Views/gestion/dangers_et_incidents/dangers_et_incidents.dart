@@ -1,6 +1,7 @@
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:perfqse/Views/gestion/dangers_et_incidents/widgets/incidents.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 
 import '../../../../constants/colors.dart';
@@ -40,7 +41,6 @@ class _DangersEtIncidentsState extends State<DangersEtIncidents> with SingleTick
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(right: defaultPadding,bottom: defaultPadding),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -73,7 +73,7 @@ class _DangersEtIncidentsState extends State<DangersEtIncidents> with SingleTick
                     size: 15,
                   ),
                   CustomText(
-                    text: "Modification, ajout ou suppression",
+                    text: "Ajout d'incident ou d'enjeu",
                     size: 15,
                   ),
                 ],
