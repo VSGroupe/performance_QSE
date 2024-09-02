@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../../../../widgets/customtext.dart';
@@ -15,47 +15,46 @@ class Dangers extends StatefulWidget {
 }
 
 class _DangersState extends State<Dangers> {
-  late Future<List<Map<String, dynamic>>> urgencesFuture;
+  late Future<List<Map<String, dynamic>>> dangersFuture;
 
   @override
   void initState() {
     super.initState();
-    urgencesFuture = fetchDangers();
+    dangersFuture = fetchDangers();
   }
 
   Future<List<Map<String, dynamic>>> fetchDangers() async {
-    final response = await Supabase.instance.client
-        .from('Aleas')
-        .select()
-        .gt('poids_incident_danger', 5) // Condition sur poids_incident_danger
-        .order('poids_incident_danger', ascending: false)
-        .order('libelle', ascending: true)
-        .execute();
+    final response = await http.get(Uri.parse('http://127.0.0.1:5000/get_dangers'));
 
-
-    if (response.data == null) {
-      throw Exception('Erreur lors de la récupération des données : ${response.data!.message}');
+    if (response.statusCode == 200) {
+      return List<Map<String, dynamic>>.from(json.decode(response.body));
+    } else {
+      throw Exception('Erreur lors de la récupération des données');
     }
-
-    return List<Map<String, dynamic>>.from(response.data);
   }
 
   Future<void> updateDanger(int id, String newName) async {
-    final response = await Supabase.instance.client
-        .from('Aleas')
-        .update({'libelle': newName})
-        .eq('id_alea', id)
-        .execute();
+    final response = await http.put(
+      Uri.parse('http://127.0.0.1:5000/update_danger/$id'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'libelle': newName}),
+    );
+
+    if (response.statusCode == 200) {
+      print('Mise à jour réussie : ${response.body}');
+    } else {
+      print('Erreur : ${response.body}');
+      throw Exception('Erreur lors de la mise à jour du danger');
+    }
   }
 
   Future<void> deleteDanger(int id) async {
-    final response = await Supabase.instance.client
-        .from('Aleas')
-        .delete()
-        .eq('id_alea', id)
-        .execute();
-  }
+    final response = await http.delete(Uri.parse('http://127.0.0.1:5000/delete_danger/$id'));
 
+    if (response.statusCode != 200) {
+      throw Exception('Erreur lors de la suppression du danger');
+    }
+  }
 
   void _showEditDialog(Map<String, dynamic> danger) {
     final TextEditingController _controller = TextEditingController(text: danger['libelle']);
@@ -82,7 +81,7 @@ class _DangersState extends State<Dangers> {
               onPressed: () async {
                 await updateDanger(danger['id_alea'], _controller.text);
                 setState(() {
-                  urgencesFuture = fetchDangers();
+                  dangersFuture = fetchDangers();
                 });
                 Navigator.of(context).pop();
               },
@@ -112,7 +111,7 @@ class _DangersState extends State<Dangers> {
               onPressed: () async {
                 await deleteDanger(id);
                 setState(() {
-                  urgencesFuture = fetchDangers();
+                  dangersFuture = fetchDangers();
                 });
                 Navigator.of(context).pop(); // Ferme la boîte de dialogue après suppression
               },
@@ -149,7 +148,7 @@ class _DangersState extends State<Dangers> {
                 const SizedBox(height: 16.0),
                 Expanded(
                   child: FutureBuilder<List<Map<String, dynamic>>>(
-                    future: urgencesFuture,
+                    future: dangersFuture,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
