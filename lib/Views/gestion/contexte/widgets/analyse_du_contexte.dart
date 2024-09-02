@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:lottie/lottie.dart';
 
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AnalyseDuContexte extends StatefulWidget {
   const AnalyseDuContexte({Key? key}) : super(key: key);
@@ -107,88 +106,111 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
     }
   }
 
+  // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
   // Les détails sur le risque cliqué
   void _showRisqueDetails(Map<String, dynamic> risque) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Container(
-            width: 300,  // Fixe la largeur
-            height: 250, // Fixe la hauteur
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10.0), // Arrondir les coins
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start, // Aligner à gauche
-              children: [
-                // En-tête avec couleur de fond
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(15.0),
-                  decoration: BoxDecoration(
-                    color: Colors.amber, // Couleur de fond de l'entête
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(10.0), // Arrondir les coins supérieurs
-                    ),
-                  ),
-                  child: Text(
-                    risque['libelle'] ?? 'Détails du Risque',
-                    style: TextStyle(
-                      fontSize: 18, // Taille de police de l'entête
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white, // Couleur du texte de l'entête
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.all(15.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start, // Aligner à gauche
-                      children: [
-                        Text(
-                          "Poids du risque: ${risque['gravite'] ?? 'N/A'}",
-                          style: TextStyle(fontSize: 16), // Taille de police du corps
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Container(
+                width: 400, // Fixer la largeur de la boîte de dialogue
+                height: 300,
+                child: Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: 60, // Fixer la hauteur de la barre de titre
+                      padding: EdgeInsets.all(15.0),
+                      decoration: BoxDecoration(
+                        color: Colors.amber,
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(10.0),
                         ),
-                        SizedBox(height: 10),
-                        Text(
-                          "Fréquence: ${risque['frequence'] ?? 'N/A'}",
-                          style: TextStyle(fontSize: 16), // Taille de police du corps
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          "Enjeu associé: ${libellesEnjeux[risque['id_enjeu']]}",
-                          style: TextStyle(fontSize: 16), // Taille de police du corps
-                        ),
-                      ],
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Text(
+                                risque['libelle'] ?? 'Détails de l\'Opportunité',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                                overflow: TextOverflow.visible,
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.edit, color: Colors.blue),
+                            onPressed: () => _showEditRisqueDialog(context, risque, setState),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.close, color: Colors.red),
+                            onPressed: () => _showDeleteRisqueConfirmationDialog(context, risque['id_opportunite'], risque['libelle']),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        padding: EdgeInsets.all(15.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Poids du risque: ${risque['gravite'] ?? 'N/A'}",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              "Fréquence: ${risque['frequence'] ?? 'N/A'}",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              "Enjeu associé: ${libellesEnjeux[risque['id_enjeu']]}",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(15.0),
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Quitter'),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('Quitter'),
-                  ),
-                ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
   }
 
-  // Les détails sur l'opportunité cliqué
-  void _showOpportuniteDetails(Map<String, dynamic> opportunite) {
+  void _showEditRisqueDialog(BuildContext context, Map<String, dynamic> risque, StateSetter setState) {
+    final TextEditingController _libelleController = TextEditingController(text: risque['libelle']);
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -197,67 +219,50 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: Container(
-            width: 300,  // Fixe la largeur
-            height: 250, // Fixe la hauteur
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10.0), // Arrondir les coins
-            ),
+            width: 400, // Fixer la largeur de la boîte de dialogue
+            height: 300, // Fixer la hauteur de la boîte de dialogue
+            padding: EdgeInsets.all(16.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start, // Aligner à gauche
               children: [
-                // En-tête avec couleur de fond
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(15.0),
-                  decoration: BoxDecoration(
-                    color: Colors.green, // Couleur de fond de l'entête
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(10.0), // Arrondir les coins supérieurs
-                    ),
-                  ),
-                  child: Text(
-                    opportunite['libelle'] ?? 'Détails de l\'Opportunité',
-                    style: TextStyle(
-                      fontSize: 18, // Taille de police de l'entête
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white, // Couleur du texte de l'entête
-                    ),
+                Text(
+                  'Modifier le libelle',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.all(15.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start, // Aligner à gauche
-                      children: [
-                        Text(
-                          "Poids de l'opportunité: ${opportunite['gravite'] ?? 'N/A'}",
-                          style: TextStyle(fontSize: 16), // Taille de police du corps
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          "Fréquence: ${opportunite['frequence'] ?? 'N/A'}",
-                          style: TextStyle(fontSize: 16), // Taille de police du corps
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          "Enjeu associé: ${libellesEnjeux[opportunite['id_enjeu']]}",
-                          style: TextStyle(fontSize: 16), // Taille de police du corps
-                        ),
-                      ],
-                    ),
+                SizedBox(height: 40),
+                TextField(
+                  controller: _libelleController,
+                  decoration: InputDecoration(
+                    hintText: "Nouveau libelle",
+                    border: OutlineInputBorder(),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('Quitter'),
-                  ),
+                SizedBox(height: 110),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Annuler'),
+                    ),
+                    SizedBox(width: 8),
+                    TextButton(
+                      onPressed: () async {
+                        print('Enregistrement en cours...');  // Journalisation
+                        await _updateRisque(risque['id_opportunite'], _libelleController.text);
+                        setState(() {
+                          risque['libelle'] = _libelleController.text;
+                        });
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Enregistrer'),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -267,6 +272,370 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
     );
   }
 
+
+  Future<void> _updateRisque(int idRisque, String nouveauLibelle) async {
+    final url = 'http://localhost:5000/update_risque/$idRisque';
+    final response = await http.put(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({'libelle': nouveauLibelle}),
+    );
+
+    if (response.statusCode == 200) {
+      print('Opportunité mise à jour avec succès : $idRisque');
+    } else {
+      print('Erreur lors de la mise à jour de l\'opportunité');
+    }
+  }
+
+  void _showDeleteRisqueConfirmationDialog(BuildContext context, int idRisque, String libelle) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Container(
+            width: 400, // Fixer la largeur de la boîte de dialogue
+            height: 300, // Fixer la hauteur de la boîte de dialogue
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Vous êtes sur le point de supprimer l\'élément suivant:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    // fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  '$libelle',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 60),
+                Text(
+                  'Cliquez sur Supprier pour continuer',
+                  style: TextStyle(fontSize: 16),
+                ),
+                Spacer(), // Espacement flexible entre le texte et les boutons
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Annuler'),
+                    ),
+                    SizedBox(width: 8),
+                    TextButton(
+                      onPressed: () async {
+                        print('Suppression en cours...');  // Journalisation
+                        await _deleteRisque(idRisque);
+                        Navigator.of(context).pop(); // Fermer la boîte de dialogue de confirmation
+                        Navigator.of(context).pop(); // Fermer la boîte de dialogue principale si nécessaire
+                      },
+                      child: Text('Supprimer', style: TextStyle(color: Colors.red)),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+  Future<void> _deleteRisque(int idRisque) async {
+    final url = 'http://localhost:5000/delete_risque/$idRisque';
+    final response = await http.delete(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      print('Opportunité supprimée avec succès : $idRisque');
+    } else {
+      print('Erreur lors de la suppression de l\'opportunité');
+    }
+  }
+
+
+  // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  // Les détails sur l'opportunité cliquée
+
+  void _showOpportuniteDetails(Map<String, dynamic> opportunite) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Container(
+                width: 400, // Fixer la largeur de la boîte de dialogue
+                height: 300,
+                child: Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: 60, // Fixer la hauteur de la barre de titre
+                      padding: EdgeInsets.all(15.0),
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(10.0),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Text(
+                                opportunite['libelle'] ?? 'Détails de l\'Opportunité',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                                overflow: TextOverflow.visible,
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.edit, color: Colors.blue),
+                            onPressed: () => _showEditDialog(context, opportunite, setState),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.close, color: Colors.red),
+                            onPressed: () => _showDeleteConfirmationDialog(context, opportunite['id_opportunite'], opportunite['libelle']),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        padding: EdgeInsets.all(15.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Poids de l'opportunité: ${opportunite['gravite'] ?? 'N/A'}",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              "Fréquence: ${opportunite['frequence'] ?? 'N/A'}",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              "Enjeu associé: ${libellesEnjeux[opportunite['id_enjeu']]}",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(15.0),
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Quitter'),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+
+
+  void _showEditDialog(BuildContext context, Map<String, dynamic> opportunite, StateSetter setState) {
+    final TextEditingController _libelleController = TextEditingController(text: opportunite['libelle']);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Container(
+            width: 400, // Fixer la largeur de la boîte de dialogue
+            height: 300, // Fixer la hauteur de la boîte de dialogue
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Modifier le libelle',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 40),
+                TextField(
+                  controller: _libelleController,
+                  decoration: InputDecoration(
+                    hintText: "Nouveau libelle",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 110),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Annuler'),
+                    ),
+                    SizedBox(width: 8),
+                    TextButton(
+                      onPressed: () async {
+                        print('Enregistrement en cours...');  // Journalisation
+                        await _updateOpportunite(opportunite['id_opportunite'], _libelleController.text);
+                        setState(() {
+                          opportunite['libelle'] = _libelleController.text;
+                        });
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Enregistrer'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+  Future<void> _updateOpportunite(int idOpportunite, String nouveauLibelle) async {
+    final url = 'http://localhost:5000/update_opportunite/$idOpportunite';
+    final response = await http.put(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({'libelle': nouveauLibelle}),
+    );
+
+    if (response.statusCode == 200) {
+      print('Opportunité mise à jour avec succès : $idOpportunite');
+    } else {
+      print('Erreur lors de la mise à jour de l\'opportunité');
+    }
+  }
+
+  void _showDeleteConfirmationDialog(BuildContext context, int idOpportunite, String libelle) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Container(
+            width: 400, // Fixer la largeur de la boîte de dialogue
+            height: 300, // Fixer la hauteur de la boîte de dialogue
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Vous êtes sur le point de supprimer l\'élément suivant:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    // fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  '$libelle',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 60),
+                Text(
+                  'Cliquez sur Supprier pour continuer',
+                  style: TextStyle(fontSize: 16),
+                ),
+                Spacer(), // Espacement flexible entre le texte et les boutons
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Annuler'),
+                    ),
+                    SizedBox(width: 8),
+                    TextButton(
+                      onPressed: () async {
+                        print('Suppression en cours...');  // Journalisation
+                        await _deleteOpportunite(idOpportunite);
+                        Navigator.of(context).pop(); // Fermer la boîte de dialogue de confirmation
+                        Navigator.of(context).pop(); // Fermer la boîte de dialogue principale si nécessaire
+                      },
+                      child: Text('Supprimer', style: TextStyle(color: Colors.red)),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+  Future<void> _deleteOpportunite(int idOpportunite) async {
+    final url = 'http://localhost:5000/delete_opportunite/$idOpportunite';
+    final response = await http.delete(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      print('Opportunité supprimée avec succès : $idOpportunite');
+    } else {
+      print('Erreur lors de la suppression de l\'opportunité');
+    }
+  }
+
+
+
+  // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+  // Ajout d'enjeu
   Future<void> _showAddEnjeuDialog(BuildContext context) async {
     final TextEditingController _idEnjeuController = TextEditingController();
     final TextEditingController _libelleController = TextEditingController();
@@ -352,75 +721,61 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
         return StatefulBuilder(
           builder: (context, setState) {
             return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               child: Container(
                 width: 600,
-                height: 450,
+                height: 500,
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Ajouter un Enjeu',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 16),
                     Expanded(
                       child: SingleChildScrollView(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TextField(
+                            _buildTextField(
                               controller: _idEnjeuController,
-                              decoration: InputDecoration(labelText: "Identifiant de l'enjeu: Ex (enjeu1, enjeu2, enjeu15, ...)"),
+                              labelText: "Identifiant de l'enjeu (Ex: enjeu1, enjeu2, enjeu15, ...)",
+                              errorText: _idEnjeuExists ? 'Cet identifiant existe déjà' : null,
                             ),
-                            if (_idEnjeuExists)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: Text(
-                                  'Cet identifiant existe déjà',
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              ),
-                            TextField(
+                            const SizedBox(height: 16),
+                            _buildTextField(
                               controller: _libelleController,
-                              decoration: InputDecoration(labelText: "Nom de l'enjeu"),
+                              labelText: "Nom de l'enjeu",
                             ),
-                            FutureBuilder<List<Map<String, dynamic>>>(
-                              future: _fetchAxes(),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return CircularProgressIndicator();
-                                }
-                                final axes = snapshot.data!;
-                                return DropdownButton<String>(
-                                  hint: Text("Sélectionner l'axe associé"),
-                                  value: _selectedAxeId,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      _selectedAxeId = newValue!;
-                                    });
-                                  },
-                                  items: axes.map((axe) {
-                                    return DropdownMenuItem<String>(
-                                      value: axe['id_axe'],
-                                      child: Text('${axe['libelle']} (${axe['id_axe']})'),
-                                    );
-                                  }).toList(),
-                                );
+                            const SizedBox(height: 16),
+                            _buildDropdown(
+                              labelText: "Sélectionner l'axe associé",
+                              value: _selectedAxeId,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _selectedAxeId = newValue;
+                                });
                               },
+                              itemsFuture: _fetchAxes,
+                              itemLabel: (axe) => '${axe['libelle']}',
                             ),
-                            DropdownButton<String>(
-                              hint: Text('Sélectionner le type de l\'enjeu'),
+                            const SizedBox(height: 16),
+                            _buildDropdown(
+                              labelText: "Sélectionner le type de l'enjeu",
                               value: _selectedType,
                               onChanged: (newValue) {
                                 setState(() {
                                   _selectedType = newValue!;
                                 });
                               },
-                              items: ['interne', 'externe'].map((type) {
-                                return DropdownMenuItem<String>(
-                                  value: type,
-                                  child: Text(type),
-                                );
-                              }).toList(),
+                              itemsFuture: () async => ['interne', 'externe']
+                                  .map((type) => {'type_enjeu': type})
+                                  .toList(),
+                              itemLabel: (item) => item['type_enjeu']!,
                             ),
                             const SizedBox(height: 16),
                             if (_showFieldError)
@@ -486,97 +841,557 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
     );
   }
 
-
-
-  void _showAddRisqueDialog() {
-    final TextEditingController _controller = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Ajouter un Risque'),
-          content: TextField(
-            controller: _controller,
-            decoration: const InputDecoration(hintText: "Libellé du risque"),
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String labelText,
+    String? errorText,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: Offset(0, 3),
           ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Annuler'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Ajouter'),
-              onPressed: () async {
-                final libelle = _controller.text;
-                if (libelle.isNotEmpty) {
-                  final response = await Supabase.instance.client
-                      .from('risques') // Remplacez par le nom de votre table
-                      .insert({'libelle': libelle}).execute();
+        ],
+      ),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: labelText,
+          errorText: errorText,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
+        ),
+      ),
+    );
+  }
 
-                  if (response.data != null) {
-                    // Gérez l'erreur
-                    print('Erreur : ${response.data!.message}');
-                  } else {
-                    // Réactualisez vos données ou faites d'autres actions
-                  }
-                }
-                Navigator.of(context).pop();
-              },
+  Widget _buildDropdown<T>({
+    required String labelText,
+    required T? value,
+    required void Function(T?) onChanged,
+    required Future<List<Map<String, dynamic>>> Function() itemsFuture,
+    required String Function(Map<String, dynamic>) itemLabel,
+  }) {
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: itemsFuture(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: CircularProgressIndicator());
+        }
+        final items = snapshot.data!;
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 1,
+                blurRadius: 5,
+                offset: Offset(0, 3),
+              ),
+            ],
+          ),
+          child: DropdownButtonFormField<T>(
+            decoration: InputDecoration(
+              labelText: labelText,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
             ),
-          ],
+            isExpanded: true,
+            value: value,
+            onChanged: onChanged,
+            items: items.map((item) {
+              return DropdownMenuItem<T>(
+                value: item['id_axe'] ?? item['type_enjeu'] as T?,
+                child: Text(itemLabel(item)),
+              );
+            }).toList(),
+          ),
         );
       },
     );
   }
 
 
-  void _showAddOpportuniteDialog() {
-    final TextEditingController _controller = TextEditingController();
 
-    showDialog(
+
+  Future<void> _showAddRisqueDialog(BuildContext context) async {
+    final TextEditingController _libelleController = TextEditingController();
+    String? _selectedGravite;
+    String? _selectedFrequence;
+    String? _selectedEnjeuId;
+    bool _showSuccessAnimation = false;
+    bool _showFieldError = false;
+
+    Future<List<Map<String, dynamic>>> _fetchEnjeux() async {
+      final response = await http.get(
+        Uri.parse('http://127.0.0.1:5000/enjeux'),
+      );
+
+      if (response.statusCode == 200) {
+        return List<Map<String, dynamic>>.from(jsonDecode(response.body));
+      } else {
+        print('Erreur lors de la récupération des enjeux: ${response.statusCode}');
+        return [];
+      }
+    }
+
+    Future<bool> _addRisque() async {
+      final libelle = _libelleController.text;
+
+      if (libelle.isNotEmpty && _selectedGravite != null && _selectedFrequence != null && _selectedEnjeuId != null) {
+        final response = await http.post(
+          Uri.parse('http://127.0.0.1:5000/add_risque'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'libelle': libelle,
+            'gravite': _selectedGravite,
+            'frequence': _selectedFrequence,
+            'id_enjeu': _selectedEnjeuId,
+          }),
+        );
+
+        if (response.statusCode == 201) {
+          print('Risque ajouté avec succès');
+          _libelleController.clear();
+          _selectedGravite = null;
+          _selectedFrequence = null;
+          _selectedEnjeuId = null;
+          return true;
+        } else {
+          print('Erreur lors de l\'ajout du risque: ${response.statusCode}');
+          return false;
+        }
+      } else {
+        return false;
+      }
+    }
+
+    await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Ajouter une Opportunité'),
-          content: TextField(
-            controller: _controller,
-            decoration: const InputDecoration(hintText: "Libellé de l'opportunité"),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Annuler'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Ajouter'),
-              onPressed: () async {
-                final libelle = _controller.text;
-                if (libelle.isNotEmpty) {
-                  final response = await Supabase.instance.client
-                      .from('opportunites') // Remplacez par le nom de votre table
-                      .insert({'libelle': libelle}).execute();
-
-                  if (response.data == null) {
-                    // Gérez l'erreur
-                    print('Erreur : ${response.data!.message}');
-                  } else {
-                    // Réactualisez vos données ou faites d'autres actions
-                  }
-                }
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Dialog(
+              child: Container(
+                width: 550,  // Largeur totale de la boîte de dialogue
+                height: 500,
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Ajouter un Risque',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 16),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextField(
+                              controller: _libelleController,
+                              decoration: InputDecoration(
+                                labelText: "Libellé du risque",
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            FutureBuilder<List<Map<String, dynamic>>>(
+                              future: _fetchEnjeux(),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData) {
+                                  return Center(child: CircularProgressIndicator());
+                                }
+                                final enjeux = snapshot.data!;
+                                return Container(
+                                  // width: 520, // Réduction de la largeur des boîtes déroulantes
+                                  child: DropdownButtonFormField<String>(
+                                    isExpanded: true,
+                                    value: _selectedEnjeuId,
+                                    decoration: InputDecoration(
+                                      labelText: "Sélectionner l'enjeu associé",
+                                      border: OutlineInputBorder(),
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
+                                    ),
+                                    items: enjeux.map((enjeu) {
+                                      return DropdownMenuItem<String>(
+                                        value: enjeu['id_enjeu'],
+                                        child: Text('${enjeu['libelle']}'),
+                                      );
+                                    }).toList(),
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        _selectedEnjeuId = newValue!;
+                                      });
+                                    },
+                                    dropdownColor: Colors.white,
+                                    menuMaxHeight: 200,
+                                  ),
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            Container(
+                              // width: 520, // Réduction de la largeur des boîtes déroulantes
+                              child: DropdownButtonFormField<String>(
+                                isExpanded: true,
+                                value: _selectedGravite,
+                                decoration: InputDecoration(
+                                  labelText: "Sélectionner le Poids risque",
+                                  border: OutlineInputBorder(),
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
+                                ),
+                                items: ['-1', '-3', '-5'].map((gravite) {
+                                  return DropdownMenuItem<String>(
+                                    value: gravite,
+                                    child: Text(gravite),
+                                  );
+                                }).toList(),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _selectedGravite = newValue!;
+                                  });
+                                },
+                                dropdownColor: Colors.white,
+                                menuMaxHeight: 200,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Container(
+                              // width: 520, // Réduction de la largeur des boîtes déroulantes
+                              child: DropdownButtonFormField<String>(
+                                isExpanded: true,
+                                value: _selectedFrequence,
+                                decoration: InputDecoration(
+                                  labelText: "Sélectionner la fréquence du risque",
+                                  border: OutlineInputBorder(),
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
+                                ),
+                                items: ['0.10', '0.25', '0.5', '0.75', '0.80', '0.90', '0.95'].map((frequence) {
+                                  return DropdownMenuItem<String>(
+                                    value: frequence,
+                                    child: Text('${(double.parse(frequence) * 100).toStringAsFixed(0)}%'),
+                                  );
+                                }).toList(),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _selectedFrequence = newValue!;
+                                  });
+                                },
+                                dropdownColor: Colors.white,
+                                menuMaxHeight: 200,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            if (_showFieldError)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  'Veuillez remplir tous les champs obligatoires',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            Visibility(
+                              visible: _showSuccessAnimation,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 16.0),
+                                child: Lottie.asset(
+                                  'assets/animations/success.json',
+                                  width: 200,
+                                  height: 150,
+                                  repeat: false,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('Annuler'),
+                        ),
+                        const SizedBox(width: 8),
+                        ElevatedButton(
+                          onPressed: () async {
+                            final success = await _addRisque();
+                            setState(() {
+                              _showSuccessAnimation = success;
+                              _showFieldError = !success;
+                            });
+                            if (success) {
+                              await Future.delayed(Duration(seconds: 2));
+                              Navigator.of(context).pop();
+                            }
+                          },
+                          child: Text('Ajouter'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         );
       },
     );
   }
 
+
+
+
+  void _showAddOpportuniteDialog(BuildContext context) async {
+    final TextEditingController _libelleController = TextEditingController();
+    String? _selectedEnjeuId;
+    String? _selectedGravite;
+    String? _selectedFrequence;
+    bool _showSuccessAnimation = false;
+    bool _showFieldError = false;
+
+    Future<List<Map<String, dynamic>>> _fetchEnjeux() async {
+      final response = await http.get(
+        Uri.parse('http://127.0.0.1:5000/enjeux'),
+      );
+
+      if (response.statusCode == 200) {
+        return List<Map<String, dynamic>>.from(jsonDecode(response.body));
+      } else {
+        print('Erreur lors de la récupération des enjeux: ${response.statusCode}');
+        return [];
+      }
+    }
+
+    Future<bool> _addOpportunite() async {
+      final libelle = _libelleController.text;
+      final gravite = int.tryParse(_selectedGravite ?? '');
+      final frequence = double.tryParse(_selectedFrequence ?? '');
+
+      print('Libellé: $libelle');
+      print('ID Enjeu: $_selectedEnjeuId');
+      print('Gravité: $gravite');
+      print('Fréquence: $frequence');
+
+      if (libelle.isNotEmpty && _selectedEnjeuId != null && gravite != null && frequence != null) {
+        final response = await http.post(
+          Uri.parse('http://127.0.0.1:5000/add_opportunite'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'libelle': libelle,
+            'id_enjeu': _selectedEnjeuId,
+            'gravite': gravite,
+            'frequence': frequence,
+          }),
+        );
+
+        if (response.statusCode == 201) {
+          print('Opportunité ajoutée avec succès');
+          _libelleController.clear();
+          _selectedEnjeuId = null;
+          _selectedGravite = null;
+          _selectedFrequence = null;
+          return true;
+        } else {
+          print('Erreur lors de l\'ajout de l\'opportunité: ${response.statusCode}');
+          return false;
+        }
+      } else {
+        return false;
+      }
+    }
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Dialog(
+              child: Container(
+                width: 550,  // Largeur totale de la boîte de dialogue
+                height: 500,
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Ajouter une Opportunité',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 16),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextField(
+                              controller: _libelleController,
+                              decoration: InputDecoration(
+                                labelText: "Libellé de l'opportunité",
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            FutureBuilder<List<Map<String, dynamic>>>(
+                              future: _fetchEnjeux(),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData) {
+                                  return Center(child: CircularProgressIndicator());
+                                }
+                                final enjeux = snapshot.data!;
+                                return Container(
+                                  child: DropdownButtonFormField<String>(
+                                    isExpanded: true,
+                                    value: _selectedEnjeuId,
+                                    decoration: InputDecoration(
+                                      labelText: "Sélectionner l'enjeu associé",
+                                      border: OutlineInputBorder(),
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
+                                    ),
+                                    items: enjeux.map((enjeu) {
+                                      return DropdownMenuItem<String>(
+                                        value: enjeu['id_enjeu'],
+                                        child: Text('${enjeu['libelle']}'),
+                                      );
+                                    }).toList(),
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        _selectedEnjeuId = newValue!;
+                                      });
+                                    },
+                                    dropdownColor: Colors.white,
+                                    menuMaxHeight: 200,
+                                  ),
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            Container(
+                              child: DropdownButtonFormField<String>(
+                                isExpanded: true,
+                                value: _selectedGravite,
+                                decoration: InputDecoration(
+                                  labelText: "Sélectionner le poids ",
+                                  border: OutlineInputBorder(),
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
+                                ),
+                                items: ['1', '3', '5'].map((gravite) {
+                                  return DropdownMenuItem<String>(
+                                    value: gravite,
+                                    child: Text(gravite),
+                                  );
+                                }).toList(),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _selectedGravite = newValue!;
+                                  });
+                                },
+                                dropdownColor: Colors.white,
+                                menuMaxHeight: 200,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Container(
+                              child: DropdownButtonFormField<String>(
+                                isExpanded: true,
+                                value: _selectedFrequence,
+                                decoration: InputDecoration(
+                                  labelText: "Sélectionner la fréquence",
+                                  border: OutlineInputBorder(),
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
+                                ),
+                                items: ['0.10', '0.25', '0.5', '0.75', '0.80', '0.90', '0.95'].map((frequence) {
+                                  return DropdownMenuItem<String>(
+                                    value: frequence,
+                                    child: Text('${(double.parse(frequence) * 100).toStringAsFixed(0)}%'),
+                                  );
+                                }).toList(),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _selectedFrequence = newValue!;
+                                  });
+                                },
+                                dropdownColor: Colors.white,
+                                menuMaxHeight: 200,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            if (_showFieldError)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  'Veuillez remplir tous les champs obligatoires',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            Visibility(
+                              visible: _showSuccessAnimation,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 16.0),
+                                child: Lottie.asset(
+                                  'assets/animations/success.json',
+                                  width: 200,
+                                  height: 150,
+                                  repeat: false,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('Annuler'),
+                        ),
+                        const SizedBox(width: 8),
+                        ElevatedButton(
+                          onPressed: () async {
+                            final success = await _addOpportunite();
+                            setState(() {
+                              _showSuccessAnimation = success;
+                              _showFieldError = !success;
+                            });
+                            if (success) {
+                              await Future.delayed(Duration(seconds: 2));
+                              Navigator.of(context).pop();
+                            }
+                          },
+                          child: Text('Ajouter'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
 
 
 
@@ -604,8 +1419,8 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                   children: [
                     tableCell("Type", isHeader: true),
                     headerCellWithButton("Enjeux", () => _showAddEnjeuDialog(context)),
-                    headerCellWithButton("Risques", () => _showAddRisqueDialog()),
-                    headerCellWithButton("Opportunités", () => _showAddOpportuniteDialog()),
+                    headerCellWithButton("Risques", () => _showAddRisqueDialog(context)),
+                    headerCellWithButton("Opportunités", () => _showAddOpportuniteDialog(context)),
                   ],
                 ),
                 TableRow(
