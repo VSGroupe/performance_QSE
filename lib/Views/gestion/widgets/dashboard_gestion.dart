@@ -1091,7 +1091,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                         color: Colors.transparent,
                         child: Container(
                           width: 300,
-                          height: 200,
+                          height: 170,
                           decoration: BoxDecoration(
                             color: Colors.white, //Color(0xFFD1DBE4), // Couleur de fond bleue
                             borderRadius: BorderRadius.circular(8.0),
@@ -1148,23 +1148,23 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(height: 7),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      setState(() {
-                                        aeController.aAfficher.value=2;
-                                      });
-                                      context.go("/gestion/aspects/environnementaux");
-                                    },
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Modifier un aspect environnemental',
-                                        style: TextStyle(color: Colors.black, fontSize: 15),
-                                      ),
-                                    ),
-                                  ),
+                                  // const SizedBox(height: 7),
+                                  // TextButton(
+                                  //   onPressed: () {
+                                  //     Navigator.of(context).pop();
+                                  //     setState(() {
+                                  //       aeController.aAfficher.value=2;
+                                  //     });
+                                  //     context.go("/gestion/aspects/environnementaux");
+                                  //   },
+                                  //   child: Align(
+                                  //     alignment: Alignment.centerLeft,
+                                  //     child: Text(
+                                  //       'Modifier un aspect environnemental',
+                                  //       style: TextStyle(color: Colors.black, fontSize: 15),
+                                  //     ),
+                                  //   ),
+                                  // ),
                                   const SizedBox(height: 7),
                                   TextButton(
                                     onPressed: () {

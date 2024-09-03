@@ -21,7 +21,7 @@ class _AeState extends State<Ae> with SingleTickerProviderStateMixin {
   final AeController aeController = Get.put(AeController());
   static const List<Tab> myTabs = <Tab>[
     Tab(text: 'aperçu'),
-    Tab(text: 'Modifier'),
+    // Tab(text: 'Modifier'),
     Tab(text: 'Ajouter'),
   ];
 
@@ -43,7 +43,6 @@ class _AeState extends State<Ae> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(right: defaultPadding,bottom: defaultPadding),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -70,20 +69,14 @@ class _AeState extends State<Ae> with SingleTickerProviderStateMixin {
                   if (aeController.aAfficher.value == 1) {
                     return const [
                       CustomText(text: "Aperçu", size: 15),
-                      CustomText(text: "Modifier", size: 15),
-                      CustomText(text: "Ajouter", size: 15),
-                    ];
-                  } else if (aeController.aAfficher.value == 2) {
-                    return const [
-                      CustomText(text: "Modifier", size: 15),
-                      CustomText(text: "Aperçu", size: 15),
+                      // CustomText(text: "Modifier", size: 15),
                       CustomText(text: "Ajouter", size: 15),
                     ];
                   } else {
                     return const [
                       CustomText(text: "Ajouter", size: 15),
                       CustomText(text: "Aperçu", size: 15),
-                      CustomText(text: "Modifier", size: 15),
+                      // CustomText(text: "Modifier", size: 15),
                     ];
                   }
                 }(),
@@ -91,20 +84,14 @@ class _AeState extends State<Ae> with SingleTickerProviderStateMixin {
                   if (aeController.aAfficher.value == 1) {
                     return [
                       Container(child: Apercu()),
-                      Container(child: Modifier()),
-                      Container(child: Ajouter()),
-                    ];
-                  } else if (aeController.aAfficher.value == 2) {
-                    return [
-                      Container(child: Modifier()),
-                      Container(child: Apercu()),
+                      // Container(child: Modifier()),
                       Container(child: Ajouter()),
                     ];
                   } else {
                     return [
                       Container(child: Ajouter()),
                       Container(child: Apercu()),
-                      Container(child: Modifier()),
+                      // Container(child: Modifier()),
                     ];
                   }
                 }(),

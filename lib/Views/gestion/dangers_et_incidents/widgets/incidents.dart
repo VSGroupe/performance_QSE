@@ -56,8 +56,8 @@ class _IncidentsState extends State<Incidents> {
     }
   }
 
-  void _showEditDialog(Map<String, dynamic> danger) {
-    final TextEditingController _controller = TextEditingController(text: danger['libelle']);
+  void _showEditDialog(Map<String, dynamic> incident) {
+    final TextEditingController _controller = TextEditingController(text: incident['libelle']);
 
     showDialog(
       context: context,
@@ -109,7 +109,7 @@ class _IncidentsState extends State<Incidents> {
                       const SizedBox(width: 8.0), // Espacement entre les boutons
                       ElevatedButton(
                         onPressed: () async {
-                          await updateIncident(danger['id_alea'], _controller.text);
+                          await updateIncident(incident['id_alea'], _controller.text);
                           setState(() {
                             incidentsFuture = fetchIncidents();
                           });
