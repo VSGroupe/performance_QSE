@@ -1,6 +1,7 @@
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:perfqse/Views/gestion/ies/widgets/impacts_societaux.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 
 import '../../../../constants/colors.dart';
@@ -19,7 +20,7 @@ class _IesState extends State<Ies> with SingleTickerProviderStateMixin {
   static const List<Tab> myTabs = <Tab>[
     Tab(text: 'Impacts envrironnementaux'),
     Tab(text: 'Impacts sociétaux'),
-    //Tab(text: 'Modifier mon mot de passe'),
+    Tab(text: 'Ajouter un impact'),
   ];
 
   late TabController _tabController;
@@ -40,7 +41,6 @@ class _IesState extends State<Ies> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(right: defaultPadding,bottom: defaultPadding),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -72,15 +72,15 @@ class _IesState extends State<Ies> with SingleTickerProviderStateMixin {
                     text: "Impacts sociétaux",
                     size: 15,
                   ),
-                  // CustomText(
-                  //   text: "Modifier mon mot de passe",
-                  //   size: 15,
-                  // ),
+                  CustomText(
+                    text: "Ajouter un impact",
+                    size: 15,
+                  ),
                 ],
                 views: [
                   Container(child: ImpactsEnvironnementaux(),),
                   Container(child: ImpactsSocietaux(),),
-                  //Container(child: Password(),)
+                  Container(child: AjoutImpacts(),)
                 ],
               ),
             ),

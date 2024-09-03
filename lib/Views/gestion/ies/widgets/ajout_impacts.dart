@@ -4,22 +4,22 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 
-class ModifierDangerOuIncident extends StatefulWidget {
-  const ModifierDangerOuIncident({Key? key}) : super(key: key);
+class AjoutImpacts extends StatefulWidget {
+  const AjoutImpacts({Key? key}) : super(key: key);
 
   @override
-  State<ModifierDangerOuIncident> createState() => _ModifierDangerOuIncidentState();
+  State<AjoutImpacts> createState() => _AjoutImpactsState();
 }
 
-class _ModifierDangerOuIncidentState extends State<ModifierDangerOuIncident> {
+class _AjoutImpactsState extends State<AjoutImpacts> {
   final TextEditingController nomController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _showSuccessAnimation = false;
-  int? selectedPoids;
+  int? selectedDegre;
 
-  Future<void> ajouterIncidentOuDanger() async {
+  Future<void> ajouterImpact() async {
     if (_formKey.currentState!.validate()) {
-      const url = 'http://localhost:5000/ajouter_incident_ou_danger';
+      const url = 'http://localhost:5000/ajouter_impact_environnemental_ou_societal';
 
       final response = await http.post(
         Uri.parse(url),
@@ -28,7 +28,7 @@ class _ModifierDangerOuIncidentState extends State<ModifierDangerOuIncident> {
         },
         body: jsonEncode(<String, dynamic>{
           'libelle': nomController.text,
-          'poids_incident_danger': selectedPoids,
+          'degre_impact': selectedDegre,
         }),
       );
 
@@ -39,7 +39,7 @@ class _ModifierDangerOuIncidentState extends State<ModifierDangerOuIncident> {
         // Clear fields after successful submission
         nomController.clear();
         setState(() {
-          selectedPoids = null;
+          selectedDegre = null;
         });
 
         // Reset _showSuccessAnimation after 2 seconds
@@ -78,7 +78,7 @@ class _ModifierDangerOuIncidentState extends State<ModifierDangerOuIncident> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Text(
-                        'Renseignez les informations',
+                        'Renseignez ces champs',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -88,13 +88,13 @@ class _ModifierDangerOuIncidentState extends State<ModifierDangerOuIncident> {
                       TextFormField(
                         controller: nomController,
                         decoration: const InputDecoration(
-                          labelText: 'Nom de l\'incident ou du danger',
+                          labelText: 'Nom de l\'impact (environnemental ou du sociétal)',
                           border: OutlineInputBorder(),
                           contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Veuillez entrer le nom de l\'incident ou du danger';
+                            return 'Veuillez entrer le nom de l\'impact';
                           }
                           return null;
                         },
@@ -102,24 +102,24 @@ class _ModifierDangerOuIncidentState extends State<ModifierDangerOuIncident> {
                       const SizedBox(height: 16.0),
                       CustomDropdown(
                         items: [
-                          {'label': 'Incident de poids 1', 'value': 1},
-                          {'label': 'Incident de poids 2', 'value': 2},
-                          {'label': 'Incident de poids 3', 'value': 3},
-                          {'label': 'Incident de poids 4', 'value': 4},
-                          {'label': 'Incident de poids 5', 'value': 5},
-                          {'label': 'Danger de poids 1', 'value': 6},
-                          {'label': 'Danger de poids 2', 'value': 7},
-                          {'label': 'Danger de poids 3', 'value': 8},
-                          {'label': 'Danger de poids 4', 'value': 9},
-                          {'label': 'Danger de poids 5', 'value': 10},
+                          {'label': 'Sociétal: 1', 'value': 1},
+                          {'label': 'Sociétal: 2', 'value': 2},
+                          {'label': 'Sociétal: 3', 'value': 3},
+                          {'label': 'Sociétal: 4', 'value': 4},
+                          {'label': 'Sociétal: 5', 'value': 5},
+                          {'label': 'Environnemental: 1', 'value': 6},
+                          {'label': 'Environnemental: 2', 'value': 7},
+                          {'label': 'Environnemental: 3', 'value': 8},
+                          {'label': 'Environnemental: 4', 'value': 9},
+                          {'label': 'Environnemental: 5', 'value': 10},
                         ],
-                        selectedValue: selectedPoids,
+                        selectedValue: selectedDegre,
                         onChanged: (value) {
                           setState(() {
-                            selectedPoids = value!;
+                            selectedDegre = value!;
                           });
                         },
-                        dropdownTitle: 'Veuillez sélectionner le poids de l\'élément',
+                        dropdownTitle: 'Veuillez sélectionner le degre d\'impact',
                         dropdownWidth: 250.0,
                         dropdownHeight: 225.0,
                         dropdownOffsetX: 10.0,
@@ -127,7 +127,7 @@ class _ModifierDangerOuIncidentState extends State<ModifierDangerOuIncident> {
                       ),
                       const SizedBox(height: 24.0),
                       ElevatedButton(
-                        onPressed: ajouterIncidentOuDanger,
+                        onPressed: ajouterImpact,
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),

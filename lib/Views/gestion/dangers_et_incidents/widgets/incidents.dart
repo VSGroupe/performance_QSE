@@ -35,7 +35,7 @@ class _IncidentsState extends State<Incidents> {
 
   Future<void> updateIncident(int id, String newName) async {
     final response = await http.put(
-      Uri.parse('http://127.0.0.1:5000/update_incident/$id'),
+      Uri.parse('http://127.0.0.1:5000/update_alea/$id'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'libelle': newName}),
     );
@@ -49,7 +49,7 @@ class _IncidentsState extends State<Incidents> {
   }
 
   Future<void> deleteIncident(int id) async {
-    final response = await http.delete(Uri.parse('http://127.0.0.1:5000/delete_incident/$id'));
+    final response = await http.delete(Uri.parse('http://127.0.0.1:5000/delete_alea/$id'));
 
     if (response.statusCode != 200) {
       throw Exception('Erreur lors de la suppression du danger');

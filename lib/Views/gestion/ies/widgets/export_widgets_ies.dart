@@ -1,3 +1,2 @@
 export 'impacts_environnementaux.dart';
-export 'impacts_societaux.dart';
-export 'password.dart';
+export 'ajout_impacts.dart';
