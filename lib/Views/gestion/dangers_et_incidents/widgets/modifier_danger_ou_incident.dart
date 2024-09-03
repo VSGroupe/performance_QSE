@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart'; // Assurez-vous d'ajouter lottie dans vos dépendances pubspec.yaml
 import 'package:http/http.dart' as http;
-import 'package:lottie/lottie.dart';
 import 'dart:convert';
+
 
 class ModifierDangerOuIncident extends StatefulWidget {
   const ModifierDangerOuIncident({Key? key}) : super(key: key);
@@ -12,42 +13,45 @@ class ModifierDangerOuIncident extends StatefulWidget {
 
 class _ModifierDangerOuIncidentState extends State<ModifierDangerOuIncident> {
   final TextEditingController nomController = TextEditingController();
-  final TextEditingController poidsController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _showSuccessAnimation = false;
+  int? selectedPoids;
 
-  Future<void> ajouterUrgence() async {
+  Future<void> ajouterIncidentOuDanger() async {
     if (_formKey.currentState!.validate()) {
-      final uri = Uri.parse('http://127.0.0.1:5000/ajouter_urgence'); // URL de votre serveur Flask local
+      const url = 'http://localhost:5000/ajouter_incident_ou_danger';
+
       final response = await http.post(
-        uri,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'nom_urgence': nomController.text,
-          'poids_urgence': double.parse(poidsController.text),
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'libelle': nomController.text,
+          'poids_incident_danger': selectedPoids,
         }),
       );
 
-      final responseData = jsonDecode(response.body);
-
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         setState(() {
           _showSuccessAnimation = true;
-
-          // Vidage des champs de texte
-          nomController.clear();
-          poidsController.clear();
+        });
+        // Clear fields after successful submission
+        nomController.clear();
+        setState(() {
+          selectedPoids = null;
         });
 
-        // Afficher l'animation pendant 2 secondes
-        await Future.delayed(const Duration(seconds: 2));
-
-        setState(() {
-          _showSuccessAnimation = false;
+        // Reset _showSuccessAnimation after 2 seconds
+        Future.delayed(const Duration(seconds: 2), () {
+          setState(() {
+            _showSuccessAnimation = false;
+          });
         });
       } else {
+        // Handle error (show a Snackbar, dialog, etc.)
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur : ${responseData['message']}')),
+          SnackBar(content: Text('Erreur: ${response.body}')),
         );
       }
     }
@@ -84,39 +88,46 @@ class _ModifierDangerOuIncidentState extends State<ModifierDangerOuIncident> {
                       TextFormField(
                         controller: nomController,
                         decoration: const InputDecoration(
-                          labelText: 'Nom de l\'urgence',
+                          labelText: 'Nom de l\'incident ou du danger',
                           border: OutlineInputBorder(),
                           contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Veuillez entrer un nom d\'urgence';
+                            return 'Veuillez entrer un nom d\'incident ou du danger';
                           }
                           return null;
                         },
                       ),
                       const SizedBox(height: 16.0),
-                      TextFormField(
-                        controller: poidsController,
-                        decoration: const InputDecoration(
-                          labelText: 'Poids de l\'urgence',
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
-                        ),
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          final poids = double.tryParse(value ?? '');
-                          if (value == null || value.isEmpty) {
-                            return 'Veuillez entrer un poids';
-                          } else if (poids == null || !(poids == 0.25 || poids == 0.5 || poids == 0.75 || poids == 1.0)) {
-                            return 'Veuillez entrer un poids valide (0.25, 0.5, 0.75, 1.0)';
-                          }
-                          return null;
+                      CustomDropdown(
+                        items: [
+                          {'label': 'Incident de poids 1', 'value': 1},
+                          {'label': 'Incident de poids 2', 'value': 2},
+                          {'label': 'Incident de poids 3', 'value': 3},
+                          {'label': 'Incident de poids 4', 'value': 4},
+                          {'label': 'Incident de poids 5', 'value': 5},
+                          {'label': 'Danger de poids 1', 'value': 6},
+                          {'label': 'Danger de poids 2', 'value': 7},
+                          {'label': 'Danger de poids 3', 'value': 8},
+                          {'label': 'Danger de poids 4', 'value': 9},
+                          {'label': 'Danger de poids 5', 'value': 10},
+                        ],
+                        selectedValue: selectedPoids,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedPoids = value!;
+                          });
                         },
+                        dropdownTitle: 'Veuillez sélectionner le poids de l\'élément',
+                        dropdownWidth: 250.0,
+                        dropdownHeight: 225.0,
+                        dropdownOffsetX: 10.0,
+                        dropdownOffsetY: 50.0,
                       ),
                       const SizedBox(height: 24.0),
                       ElevatedButton(
-                        onPressed: ajouterUrgence,
+                        onPressed: ajouterIncidentOuDanger,
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),
@@ -149,7 +160,155 @@ class _ModifierDangerOuIncidentState extends State<ModifierDangerOuIncident> {
   @override
   void dispose() {
     nomController.dispose();
-    poidsController.dispose();
     super.dispose();
   }
 }
+
+
+
+
+
+class CustomDropdown extends StatefulWidget {
+  final List<Map<String, dynamic>> items;
+  final int? selectedValue;
+  final ValueChanged<int?> onChanged;
+  final String dropdownTitle;
+  final double dropdownWidth;
+  final double dropdownHeight;
+  final double dropdownOffsetX;
+  final double dropdownOffsetY;
+
+  const CustomDropdown({
+    Key? key,
+    required this.items,
+    this.selectedValue,
+    required this.onChanged,
+    this.dropdownTitle = '',
+    this.dropdownWidth = 200.0,
+    this.dropdownHeight = 200.0,
+    this.dropdownOffsetX = 0.0,
+    this.dropdownOffsetY = 0.0,
+  }) : super(key: key);
+
+  @override
+  _CustomDropdownState createState() => _CustomDropdownState();
+}
+
+class _CustomDropdownState extends State<CustomDropdown> {
+  int? selectedValue;
+  bool isDropdownOpened = false;
+  OverlayEntry? floatingDropdown;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedValue = widget.selectedValue;
+  }
+
+  void toggleDropdown() {
+    if (isDropdownOpened) {
+      _closeDropdown();
+    } else {
+      floatingDropdown = _createFloatingDropdown();
+      Overlay.of(context).insert(floatingDropdown!);
+      isDropdownOpened = true;
+    }
+  }
+
+  void _closeDropdown() {
+    floatingDropdown?.remove();
+    isDropdownOpened = false;
+  }
+
+  OverlayEntry _createFloatingDropdown() {
+    return OverlayEntry(
+      builder: (context) {
+        return GestureDetector(
+          onTap: _closeDropdown,
+          behavior: HitTestBehavior.translucent,
+          child: Stack(
+            children: [
+              Positioned(
+                width: widget.dropdownWidth,
+                left: MediaQuery.of(context).size.width * 0.325 + widget.dropdownOffsetX,
+                top: MediaQuery.of(context).size.height * 0.53 + widget.dropdownOffsetY,
+                child: Material(
+                  elevation: 5,
+                  child: Container(
+                    height: widget.dropdownHeight,
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(12.0),
+                          color: Colors.grey[200],
+                          child: Text(
+                            widget.dropdownTitle,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: ListView(
+                            padding: EdgeInsets.zero,
+                            children: widget.items
+                                .map((item) => ListTile(
+                              title: Text(item['label']),
+                              onTap: () {
+                                setState(() {
+                                  selectedValue = item['value'];
+                                  widget.onChanged(selectedValue);
+                                  _closeDropdown();
+                                });
+                              },
+                            ))
+                                .toList(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: toggleDropdown,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(selectedValue != null
+                ? widget.items.firstWhere((item) => item['value'] == selectedValue)['label']
+                : widget.dropdownTitle),
+            const Icon(Icons.arrow_drop_down),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _closeDropdown();
+    super.dispose();
+  }
+}
+
+
+
+
+

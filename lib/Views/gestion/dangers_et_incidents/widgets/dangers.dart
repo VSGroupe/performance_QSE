@@ -220,7 +220,7 @@ class _DangersState extends State<Dangers> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const CustomText(
-                  text: 'Les incidents',
+                  text: 'Les dangers',
                   size: 20,
                   weight: FontWeight.bold,
                   color: Color(0xFFF6871A),
