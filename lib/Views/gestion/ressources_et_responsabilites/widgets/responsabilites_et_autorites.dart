@@ -67,14 +67,18 @@ class ModificationProvider with ChangeNotifier {
   }
 
   Future<void> saveModification(int rowIndex, int columnIndex, String cellValue) async {
+    await Future.delayed(Duration(seconds: 1)); // Délai de 1 seconde
     await apiService.saveModification(rowIndex, columnIndex, cellValue);
     await refreshModifications();
   }
 
+
   Future<void> deleteModification(String id) async {
+    await Future.delayed(Duration(seconds: 1)); // Délai de 1 seconde
     await apiService.deleteModification(id);
     await refreshModifications();
   }
+
 
   Future<void> refreshModifications() async {
     modifications = await apiService.getModifications();
