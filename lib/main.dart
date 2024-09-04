@@ -5,8 +5,10 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:perfqse/Views/pilotage/controllers/tableau_controller.dart';
 import 'package:perfqse/routes/routes.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'Views/common/forgot_password/controller/reset_password_controller.dart';
+import 'Views/gestion/ressources_et_responsabilites/widgets/responsabilites_et_autorites.dart';
 
 
 void main() async{
@@ -20,7 +22,14 @@ void main() async{
     url: "https://tqtweixnabhkxeyfarop.supabase.co",
     anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxdHdlaXhuYWJoa3hleWZhcm9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTQ4NzczODEsImV4cCI6MjAxMDQ1MzM4MX0.h-uqQjKCk8Fg254YyUKaG1yFhcX-ElJK8gfWp5sniuo",
   );
-  runApp(const MyApp());
+
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ModificationProvider(),
+      child: const MyApp(),
+    ),
+  );
+
 }
 
 class MyApp extends StatelessWidget {
