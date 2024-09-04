@@ -250,12 +250,11 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
         final focusNode = _focusNodes[rowIndex][columnIndex];
         final letter = controller.text.isNotEmpty ? controller.text : ' '; // Get the text for color
 
-        // Determine the color based on the letter
         final color = _getColorForLetter(letter);
 
         return TableCell(
           child: Container(
-            color: color.withOpacity(0.2), // Background color with some opacity
+            color: color.withOpacity(0.2),
             padding: const EdgeInsets.all(4.0),
             child: TextFormField(
               controller: controller,
@@ -264,8 +263,24 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
                 border: OutlineInputBorder(),
                 contentPadding: EdgeInsets.all(8.0),
               ),
-              onFieldSubmitted: (_) {
-                // Handle field submission
+              onFieldSubmitted: (value) async {
+                final provider = Provider.of<ModificationProvider>(context, listen: false);
+
+                if (value.isEmpty) {
+                  // Suppression si le champ est vide
+                  final id = provider.getIdForCell(rowIndex, columnIndex);
+                  if (id.isNotEmpty) {
+                    await provider.deleteModification(id);
+                  }
+                } else {
+                  // Enregistrement de la modification
+                  await provider.saveModification(rowIndex, columnIndex, value);
+                }
+
+                setState(() {
+                  // Update the controller text and color based on the new value
+                  controller.text = value;
+                });
               },
             ),
           ),
@@ -273,6 +288,7 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
       }).toList(),
     );
   }
+
 
   Color _getColorForLetter(String letter) {
     switch (letter) {
