@@ -78,7 +78,7 @@ class ModificationProvider with ChangeNotifier {
 
   Future<void> refreshModifications() async {
     modifications = await apiService.getModifications();
-    notifyListeners();
+    notifyListeners(); // Notifier les auditeurs pour mettre à jour les vues
   }
 
   String? getCellValue(int rowIndex, int columnIndex) {
@@ -111,14 +111,21 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
   @override
   void initState() {
     super.initState();
+    _controllers = List.generate(
+      3,
+          (i) => List.generate(
+        15,
+            (j) => TextEditingController(),
+      ),
+    );
 
-    _controllers = [
-      ['Mettre en place le Smé', 'A', 'R', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I', ''].map((text) => TextEditingController(text: text)).toList(),
-      ['Assurer le bon fonctionnement du Smé', 'R', 'C', 'C', 'C', 'C', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'A', ''].map((text) => TextEditingController(text: text)).toList(),
-      ['Former les acteurs clés', 'A', 'R', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I', '', ''].map((text) => TextEditingController(text: text)).toList(),
-    ];
-
-    _focusNodes = _controllers.map((row) => row.map((_) => FocusNode()).toList()).toList();
+    _focusNodes = List.generate(
+      3,
+          (i) => List.generate(
+        15,
+            (j) => FocusNode(),
+      ),
+    );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initializeControllers();
@@ -127,18 +134,36 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
 
   Future<void> _initializeControllers() async {
     final provider = Provider.of<ModificationProvider>(context, listen: false);
-    await provider.loadModifications(); // Charger les modifications
+
+    // Charger les modifications avec un délai
+    await Future.wait([
+      provider.loadModifications(),
+      Future.delayed(Duration(seconds: 2)), // Délai de 2 secondes
+    ]);
+
     setState(() {
-      for (var i = 0; i < _controllers.length; i++) {
-        for (var j = 0; j < _controllers[i].length; j++) {
-          final cellValue = provider.getCellValue(i, j);
-          if (cellValue != null) {
-            _controllers[i][j].text = cellValue;
-          }
+      // Effacer les contrôleurs existants
+      for (var row in _controllers) {
+        for (var controller in row) {
+          controller.dispose();
         }
       }
+
+      // Réinitialiser les contrôleurs avec les valeurs mises à jour
+      _controllers = List.generate(
+        3, // Nombre de lignes, ajustez selon votre structure
+            (i) => List.generate(
+          15, // Nombre de colonnes
+              (j) {
+            final cellValue = provider.getCellValue(i, j);
+            return TextEditingController(text: cellValue ?? '');
+          },
+        ),
+      );
     });
   }
+
+
 
   @override
   void dispose() {
@@ -289,7 +314,6 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
     );
   }
 
-
   Color _getColorForLetter(String letter) {
     switch (letter) {
       case 'R':
@@ -305,5 +329,6 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
     }
   }
 }
+
 
 
