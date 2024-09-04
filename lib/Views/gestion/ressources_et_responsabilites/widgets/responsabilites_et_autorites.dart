@@ -167,7 +167,22 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
     });
   }
 
-
+  void _addNewRow() {
+    setState(() {
+      _controllers.add(
+        List.generate(
+          15, // Nombre de colonnes
+              (j) => TextEditingController(text: 'R'), // Valeur par défaut
+        ),
+      );
+      _focusNodes.add(
+        List.generate(
+          15, // Nombre de colonnes
+              (j) => FocusNode(),
+        ),
+      );
+    });
+  }
 
   @override
   void dispose() {
@@ -191,6 +206,12 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
     return Scaffold(
       appBar: AppBar(
         title: const Text('Responsabilités et Autorités'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: _addNewRow,
+          ),
+        ],
       ),
       body: provider._isLoading
           ? Center(child: CircularProgressIndicator())
@@ -333,6 +354,7 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
     }
   }
 }
+
 
 
 
