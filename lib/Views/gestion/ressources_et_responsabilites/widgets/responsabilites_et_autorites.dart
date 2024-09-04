@@ -38,6 +38,25 @@ class ApiService {
       throw Exception("Failed to delete modification");
     }
   }
+
+  Future<void> addRow(int rowIndex, List<String> rowData) async {
+    final response = await http.post(
+      Uri.parse("$baseUrl/ajout_ligne_matrice_RACI"),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "row_number": rowIndex,
+        "row_data": rowData,
+      }),
+    );
+
+    if (response.statusCode != 201) {
+      print("Echec de l'ajout");
+      throw Exception("Failed to add row");
+    }
+    else if(response.statusCode == 201){
+      print("Ajout réussi");
+    }
+  }
 }
 
 class ModificationProvider with ChangeNotifier {
@@ -72,13 +91,11 @@ class ModificationProvider with ChangeNotifier {
     await refreshModifications();
   }
 
-
   Future<void> deleteModification(String id) async {
     await Future.delayed(Duration(seconds: 1)); // Délai de 1 seconde
     await apiService.deleteModification(id);
     await refreshModifications();
   }
-
 
   Future<void> refreshModifications() async {
     modifications = await apiService.getModifications();
@@ -102,7 +119,6 @@ class ModificationProvider with ChangeNotifier {
   }
 }
 
-
 class ResponsabilitesEtAutorites extends StatefulWidget {
   @override
   _ResponsabilitesEtAutoritesState createState() => _ResponsabilitesEtAutoritesState();
@@ -111,12 +127,13 @@ class ResponsabilitesEtAutorites extends StatefulWidget {
 class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites> {
   late List<List<TextEditingController>> _controllers;
   late List<List<FocusNode>> _focusNodes;
+  int _rowCount = 4; // Nombre initial de lignes
 
   @override
   void initState() {
     super.initState();
     _controllers = List.generate(
-      3,
+      _rowCount,
           (i) => List.generate(
         15,
             (j) => TextEditingController(),
@@ -124,7 +141,7 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
     );
 
     _focusNodes = List.generate(
-      3,
+      _rowCount,
           (i) => List.generate(
         15,
             (j) => FocusNode(),
@@ -155,7 +172,7 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
 
       // Réinitialiser les contrôleurs avec les valeurs mises à jour
       _controllers = List.generate(
-        3, // Nombre de lignes, ajustez selon votre structure
+        _rowCount, // Nombre de lignes, ajustez selon votre structure
             (i) => List.generate(
           15, // Nombre de colonnes
               (j) {
@@ -167,22 +184,36 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
     });
   }
 
-  void _addNewRow() {
+  Future<void> _addNewRow() async {
+    final provider = Provider.of<ModificationProvider>(context, listen: false);
+
+    // Créer une nouvelle ligne avec des contrôleurs et des focus nodes
+    List<TextEditingController> newControllers = List.generate(15, (j) => TextEditingController());
+    List<FocusNode> newFocusNodes = List.generate(15, (j) => FocusNode());
+
+    // Ajouter la nouvelle ligne à l'interface utilisateur
     setState(() {
-      _controllers.add(
-        List.generate(
-          15, // Nombre de colonnes
-              (j) => TextEditingController(text: 'R'), // Valeur par défaut
-        ),
-      );
-      _focusNodes.add(
-        List.generate(
-          15, // Nombre de colonnes
-              (j) => FocusNode(),
-        ),
-      );
+      _rowCount++;
+      _controllers.add(newControllers);
+      _focusNodes.add(newFocusNodes);
     });
+
+    try {
+      // Capturer les valeurs des contrôleurs pour la nouvelle ligne
+      List<String> newRowData = newControllers.map((controller) => controller.text).toList();
+
+      // Envoyer les données de la nouvelle ligne à l'API pour les stocker dans la base de données
+      await provider.apiService.addRow(_rowCount, newRowData);
+
+      // Recharger les modifications depuis l'API pour inclure la nouvelle ligne
+      await provider.refreshModifications();
+    } catch (e) {
+      // Gérer les erreurs
+      print("Error adding new row: $e");
+    }
   }
+
+
 
   @override
   void dispose() {
@@ -256,17 +287,21 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
                     tableCell('Responsable Comm', isHeader: true),
                     tableCell('Chargé Achat', isHeader: true),
                     tableCell('Chargé électroméca.', isHeader: true),
-                    tableCell('Chargé Matériel et Logistique', isHeader: true),
-                    tableCell('Chargé Audit et Méthodes', isHeader: true),
-                    tableCell('DG/ DGA', isHeader: true),
+                    tableCell('Chargé Matériel Roulant', isHeader: true),
+                    tableCell('Superviseur technique', isHeader: true),
+                    tableCell('Contrôleur technique', isHeader: true),
                   ],
                 ),
-                // Dynamically create rows with data from the controllers
-                ..._controllers.asMap().entries.map((rowEntry) {
-                  final rowIndex = rowEntry.key;
-                  final row = rowEntry.value;
-                  return tableRow(row, rowIndex);
-                }).toList(),
+                // Data Rows
+                for (var i = 0; i < _rowCount; i++)
+                  TableRow(
+                    children: [
+                      for (var j = 0; j < 15; j++)
+                        TableCell(
+                          child: _buildEditableCell(i, j, provider),
+                        ),
+                    ],
+                  ),
               ],
             ),
           ),
@@ -275,86 +310,61 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
     );
   }
 
-  TableCell tableCell(String text, {bool isHeader = false}) {
-    return TableCell(
-      child: Container(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: Text(
-            text,
-            style: TextStyle(
-              fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
-              fontSize: isHeader ? 16.0 : 14.0,
-            ),
-          ),
-        ),
+  Widget _buildEditableCell(int rowIndex, int columnIndex, ModificationProvider provider) {
+    final controller = _controllers[rowIndex][columnIndex];
+    final focusNode = _focusNodes[rowIndex][columnIndex];
+
+    return Container(
+      color: _getColorForLetter(controller.text), // Set the background color based on the cell value
+      child: TextField(
+        controller: controller,
+        focusNode: focusNode,
+        decoration: const InputDecoration(border: InputBorder.none),
+        textAlign: TextAlign.center,
+        onSubmitted: (value) async {
+          final provider = Provider.of<ModificationProvider>(context, listen: false);
+          final id = provider.getIdForCell(rowIndex, columnIndex);
+
+          if (value.isEmpty && id.isNotEmpty) {
+            await provider.deleteModification(id);
+          } else if (value.isNotEmpty) {
+            await provider.saveModification(rowIndex, columnIndex, value);
+          }
+
+          // Met à jour la couleur de fond après la soumission
+          setState(() {});
+        },
       ),
     );
   }
 
-  TableRow tableRow(List<TextEditingController> row, int rowIndex) {
-    return TableRow(
-      children: row.asMap().entries.map((cellEntry) {
-        final columnIndex = cellEntry.key;
-        final controller = cellEntry.value;
-        final focusNode = _focusNodes[rowIndex][columnIndex];
-        final letter = controller.text.isNotEmpty ? controller.text : ' '; // Get the text for color
-
-        final color = _getColorForLetter(letter);
-
-        return TableCell(
-          child: Container(
-            color: color.withOpacity(0.2),
-            padding: const EdgeInsets.all(4.0),
-            child: TextFormField(
-              controller: controller,
-              focusNode: focusNode,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.all(8.0),
-              ),
-              onFieldSubmitted: (value) async {
-                final provider = Provider.of<ModificationProvider>(context, listen: false);
-
-                if (value.isEmpty) {
-                  // Suppression si le champ est vide
-                  final id = provider.getIdForCell(rowIndex, columnIndex);
-                  if (id.isNotEmpty) {
-                    await provider.deleteModification(id);
-                  }
-                } else {
-                  // Enregistrement de la modification
-                  await provider.saveModification(rowIndex, columnIndex, value);
-                }
-
-                setState(() {
-                  // Update the controller text and color based on the new value
-                  controller.text = value;
-                });
-              },
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
-
   Color _getColorForLetter(String letter) {
-    switch (letter) {
+    switch (letter.toUpperCase()) {
       case 'R':
-        return Colors.red;
+        return Colors.red; // VerRot pour "R"
       case 'A':
-        return Colors.green;
+        return Colors.green; // Rouge pour "A"
       case 'C':
-        return Colors.blue;
+        return Colors.blueAccent; // Bleu pour "C"
       case 'I':
-        return Colors.orange;
+        return Colors.yellowAccent; // Jaune pour "I"
       default:
-        return Colors.black;
+        return Colors.grey; // Transparent pour les autres valeurs
     }
   }
+
+  Widget tableCell(String text, {bool isHeader = false}) {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      color: Colors.white,
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
+          color: isHeader ? Colors.black : Colors.grey,
+        ),
+      ),
+    );
+  }
 }
-
-
-
-
