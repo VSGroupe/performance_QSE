@@ -10,50 +10,53 @@ class ExclusionsEtJustifications extends StatefulWidget {
 }
 
 class _ExclusionsEtJustificationsState extends State<ExclusionsEtJustifications> {
-  final _textController1 = TextEditingController();
-  final _textController2 = TextEditingController();
-  final _focusNode1 = FocusNode();
-  final _focusNode2 = FocusNode();
-  bool _isEditing1 = false;
-  bool _isEditing2 = false;
-  int? _existingId1;
-  int? _existingId2;
 
-  Future<void> _fetchTextFromAPI1() async {
-    final response = await http.get(Uri.parse('http://localhost:5000/get-text-exclusions-domaines'));
+  final String baseUrl = "http://localhost:5000"; // URL de votre API Flask
+
+  final _textControllerExclusionDomaine = TextEditingController();
+  final _textControllerExclusionPerimetre = TextEditingController();
+  final _focusNodeExclusionDomaine = FocusNode();
+  final _focusNodeExclusionPerimetre = FocusNode();
+  bool _isEditingExclusionDomaine = false;
+  bool _isEditingExclusionPerimetre = false;
+  int? _existingIdExclusionDomaine;
+  int? _existingIdExclusionPerimetre;
+
+  Future<void> _fetchTextExclusionDomaineFromAPI() async {
+    final response = await http.get(Uri.parse('$baseUrl/get-text-exclusions-domaines'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       setState(() {
-        _existingId1 = data['id'];
-        _textController1.text = data['libelle'];
+        _existingIdExclusionDomaine = data['id'];
+        _textControllerExclusionDomaine.text = data['libelle'];
       });
     } else {
       throw Exception('Failed to load text for cadre 1');
     }
   }
 
-  Future<void> _fetchTextFromAPI2() async {
-    final response = await http.get(Uri.parse('http://localhost:5000/get-text-exclusions-perimetres'));
+  Future<void> _fetchTextExclusionPerimetreFromAPI() async {
+    final response = await http.get(Uri.parse('$baseUrl/get-text-exclusions-perimetres'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       setState(() {
-        _existingId2 = data['id'];
-        _textController2.text = data['libelle'];
+        _existingIdExclusionPerimetre = data['id'];
+        _textControllerExclusionPerimetre.text = data['libelle'];
       });
     } else {
       throw Exception('Failed to load text for cadre 2');
     }
   }
 
-  Future<void> _saveTextToAPI1(String newText) async {
-    if (_existingId1 == null) return;
+  Future<void> _saveTextExclusionDomaineToAPI(String newText) async {
+    if (_existingIdExclusionDomaine == null) return;
 
     final response = await http.post(
-      Uri.parse('http://localhost:5000/update-text-exclusions-domaines'),
+      Uri.parse('$baseUrl/update-text-exclusions-domaines'),
       headers: {'Content-Type': 'application/json'},
-      body: json.encode({'id': _existingId1, 'libelle': newText}),
+      body: json.encode({'id': _existingIdExclusionDomaine, 'libelle': newText}),
     );
 
     if (response.statusCode != 200) {
@@ -61,13 +64,13 @@ class _ExclusionsEtJustificationsState extends State<ExclusionsEtJustifications>
     }
   }
 
-  Future<void> _saveTextToAPI2(String newText) async {
-    if (_existingId2 == null) return;
+  Future<void> _saveTextExclusionPerimetreToAPI(String newText) async {
+    if (_existingIdExclusionPerimetre == null) return;
 
     final response = await http.post(
-      Uri.parse('http://localhost:5000/update-text-exclusions-perimetres'),
+      Uri.parse('$baseUrl/update-text-exclusions-perimetres'),
       headers: {'Content-Type': 'application/json'},
-      body: json.encode({'id': _existingId2, 'libelle': newText}),
+      body: json.encode({'id': _existingIdExclusionPerimetre, 'libelle': newText}),
     );
 
     if (response.statusCode != 200) {
@@ -78,28 +81,28 @@ class _ExclusionsEtJustificationsState extends State<ExclusionsEtJustifications>
   @override
   void initState() {
     super.initState();
-    _fetchTextFromAPI1();
-    _fetchTextFromAPI2();
+    _fetchTextExclusionDomaineFromAPI();
+    _fetchTextExclusionPerimetreFromAPI();
 
-    _focusNode1.addListener(() {
-      if (!_focusNode1.hasFocus) {
-        _saveTextToAPI1(_textController1.text);
+    _focusNodeExclusionDomaine.addListener(() {
+      if (!_focusNodeExclusionDomaine.hasFocus) {
+        _saveTextExclusionDomaineToAPI(_textControllerExclusionDomaine.text);
       }
     });
 
-    _focusNode2.addListener(() {
-      if (!_focusNode2.hasFocus) {
-        _saveTextToAPI2(_textController2.text);
+    _focusNodeExclusionPerimetre.addListener(() {
+      if (!_focusNodeExclusionPerimetre.hasFocus) {
+        _saveTextExclusionPerimetreToAPI(_textControllerExclusionPerimetre.text);
       }
     });
   }
 
   @override
   void dispose() {
-    _textController1.dispose();
-    _textController2.dispose();
-    _focusNode1.dispose();
-    _focusNode2.dispose();
+    _textControllerExclusionDomaine.dispose();
+    _textControllerExclusionPerimetre.dispose();
+    _focusNodeExclusionDomaine.dispose();
+    _focusNodeExclusionPerimetre.dispose();
     super.dispose();
   }
 
@@ -193,29 +196,29 @@ class _ExclusionsEtJustificationsState extends State<ExclusionsEtJustifications>
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           buildCadre(
-            'Environnement de l\'entreprise 1',
-            _textController1,
-            _focusNode1,
-            _isEditing1,
+            'Exclusions et justifications sur le domaine',
+            _textControllerExclusionDomaine,
+            _focusNodeExclusionDomaine,
+            _isEditingExclusionDomaine,
                 () {
               setState(() {
-                _isEditing1 = !_isEditing1;
-                if (!_isEditing1) {
-                  _saveTextToAPI1(_textController1.text);
+                _isEditingExclusionDomaine = !_isEditingExclusionDomaine;
+                if (!_isEditingExclusionDomaine) {
+                  _saveTextExclusionDomaineToAPI(_textControllerExclusionDomaine.text);
                 }
               });
             },
           ),
           buildCadre(
-            'Environnement de l\'entreprise 2',
-            _textController2,
-            _focusNode2,
-            _isEditing2,
+            'Exclusions et justifications sur le périmètre',
+            _textControllerExclusionPerimetre,
+            _focusNodeExclusionPerimetre,
+            _isEditingExclusionPerimetre,
                 () {
               setState(() {
-                _isEditing2 = !_isEditing2;
-                if (!_isEditing2) {
-                  _saveTextToAPI2(_textController2.text);
+                _isEditingExclusionPerimetre = !_isEditingExclusionPerimetre;
+                if (!_isEditingExclusionPerimetre) {
+                  _saveTextExclusionPerimetreToAPI(_textControllerExclusionPerimetre.text);
                 }
               });
             },

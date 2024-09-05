@@ -10,6 +10,9 @@ class DomainesDApplication extends StatefulWidget {
 }
 
 class _DomainesDApplicationState extends State<DomainesDApplication> {
+
+  final String baseUrl = "http://localhost:5000"; // URL de votre API Flask
+
   final _textDomainesController = TextEditingController();
   final _textPerimetresController = TextEditingController();
   final _focusNodeDomaines = FocusNode();
@@ -20,7 +23,7 @@ class _DomainesDApplicationState extends State<DomainesDApplication> {
   int? _existingIdPerimetres;
 
   Future<void> _fetchTextDomainesFromAPI() async {
-    final response = await http.get(Uri.parse('http://localhost:5000/get-text-domaines'));
+    final response = await http.get(Uri.parse('$baseUrl/get-text-domaines'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -34,7 +37,7 @@ class _DomainesDApplicationState extends State<DomainesDApplication> {
   }
 
   Future<void> _fetchTextPerimetresFromAPI() async {
-    final response = await http.get(Uri.parse('http://localhost:5000/get-text-perimetres'));
+    final response = await http.get(Uri.parse('$baseUrl/get-text-perimetres'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -51,7 +54,7 @@ class _DomainesDApplicationState extends State<DomainesDApplication> {
     if (_existingIdDomaines == null) return;
 
     final response = await http.post(
-      Uri.parse('http://localhost:5000/update-text-domaines'),
+      Uri.parse('$baseUrl/update-text-domaines'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({'id': _existingIdDomaines, 'libelle': newText}),
     );
@@ -65,7 +68,7 @@ class _DomainesDApplicationState extends State<DomainesDApplication> {
     if (_existingIdPerimetres == null) return;
 
     final response = await http.post(
-      Uri.parse('http://localhost:5000/update-text-perimetres'),
+      Uri.parse('$baseUrl/update-text-perimetres'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({'id': _existingIdPerimetres, 'libelle': newText}),
     );

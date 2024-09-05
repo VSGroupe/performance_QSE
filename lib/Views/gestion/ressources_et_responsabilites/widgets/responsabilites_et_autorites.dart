@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 class ApiService {
-  final String baseUrl = "http://localhost:5000"; // URL de votre API Flask
+  final String baseUrl = "http://localhost:5000"; // URL de l'API Flask
 
   Future<List<Map<String, dynamic>>> getModifications() async {
     final response = await http.get(Uri.parse("$baseUrl/modifications_matrice_RACI"));

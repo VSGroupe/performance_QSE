@@ -15,6 +15,9 @@ class ImpactsSocietaux extends StatefulWidget {
 }
 
 class _ImpactsSocietauxState extends State<ImpactsSocietaux> {
+
+  final String baseUrl = "http://localhost:5000"; // URL de l'API Flask
+
   late Future<List<Map<String, dynamic>>> impactsSocietauxFuture;
 
   @override
@@ -24,7 +27,7 @@ class _ImpactsSocietauxState extends State<ImpactsSocietaux> {
   }
 
   Future<List<Map<String, dynamic>>> fetchImpactsSocietaux() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:5000/get_impacts_societaux'));
+    final response = await http.get(Uri.parse('$baseUrl/get_impacts_societaux'));
 
     if (response.statusCode == 200) {
       return List<Map<String, dynamic>>.from(json.decode(response.body));
@@ -35,7 +38,7 @@ class _ImpactsSocietauxState extends State<ImpactsSocietaux> {
 
   Future<void> updateImpactSocietal(int id, String newName) async {
     final response = await http.put(
-      Uri.parse('http://127.0.0.1:5000/update_impact/$id'),
+      Uri.parse('$baseUrl/update_impact/$id'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'libelle': newName}),
     );
@@ -49,7 +52,7 @@ class _ImpactsSocietauxState extends State<ImpactsSocietaux> {
   }
 
   Future<void> deleteImpactSocietal(int id) async {
-    final response = await http.delete(Uri.parse('http://127.0.0.1:5000/delete_impact/$id'));
+    final response = await http.delete(Uri.parse('$baseUrl/delete_impact/$id'));
 
     if (response.statusCode != 200) {
       throw Exception('Erreur lors de la suppression du danger');

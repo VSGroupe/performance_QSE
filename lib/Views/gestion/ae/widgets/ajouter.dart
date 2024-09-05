@@ -12,6 +12,9 @@ class Ajouter extends StatefulWidget {
 }
 
 class _AjouterState extends State<Ajouter> {
+
+  final String baseUrl = "http://localhost:5000"; // URL de votre API Flask
+
   final TextEditingController nomController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _showSuccessAnimation = false;
@@ -20,10 +23,9 @@ class _AjouterState extends State<Ajouter> {
 
   Future<void> ajouterAspectEnvironnemental() async {
     if (_formKey.currentState!.validate()) {
-      const url = 'http://localhost:5000/ajouter_aspect_environnemental';
 
       final response = await http.post(
-        Uri.parse(url),
+        Uri.parse('$baseUrl/ajouter_aspect_environnemental'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -36,11 +38,9 @@ class _AjouterState extends State<Ajouter> {
       if (response.statusCode == 200) {
         setState(() {
           _showSuccessAnimation = true;
-        });
-        // Clear fields after successful submission
-        nomController.clear();
-        setState(() {
           selectedGraviteImpact = null;
+          // Clear fields after successful submission
+          nomController.clear();
         });
 
         // Reset _showSuccessAnimation after 2 seconds
@@ -50,9 +50,18 @@ class _AjouterState extends State<Ajouter> {
           });
         });
       } else {
-        // Handle error (show a Snackbar, dialog, etc.)
+        // Afficher comme un foot (pied de page)
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur: ${response.body}')),
+          SnackBar(
+            content: Container(
+              alignment: Alignment.center,
+              child: const Text(
+                'Veuillez sélectionner à nouveau un élément',
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+            ),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     }

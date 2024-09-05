@@ -11,6 +11,9 @@ class Ajouter extends StatefulWidget {
 }
 
 class _AjouterState extends State<Ajouter> {
+
+  final String baseUrl = "http://localhost:5000"; // URL de l'API Flask
+
   final TextEditingController nomController = TextEditingController();
   final TextEditingController poidsController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -18,7 +21,7 @@ class _AjouterState extends State<Ajouter> {
 
   Future<void> ajouterUrgence() async {
     if (_formKey.currentState!.validate()) {
-      final uri = Uri.parse('http://127.0.0.1:5000/ajouter_urgence'); // URL de votre serveur Flask local
+      final uri = Uri.parse('$baseUrl/ajouter_urgence'); // URL de votre serveur Flask local
       final response = await http.post(
         uri,
         headers: {'Content-Type': 'application/json'},
@@ -46,8 +49,18 @@ class _AjouterState extends State<Ajouter> {
           _showSuccessAnimation = false;
         });
       } else {
+        // Afficher comme un foot (pied de page)
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur : ${responseData['message']}')),
+          SnackBar(
+            content: Container(
+              alignment: Alignment.center,
+              child: const Text(
+                'Veuillez entrer de bonnes informations',
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+            ),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     }

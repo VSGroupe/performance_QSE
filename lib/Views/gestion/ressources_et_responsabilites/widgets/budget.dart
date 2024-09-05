@@ -10,13 +10,16 @@ class Budget extends StatefulWidget {
 }
 
 class _BudgetState extends State<Budget> {
+
+  final String baseUrl = "http://localhost:5000"; // URL de l'API Flask
+
   final _textController = TextEditingController();
   final _focusNode = FocusNode();
   bool _isEditing = false;
   int? _existingId;
 
   Future<void> _fetchTextBudgetFromAPI() async {
-    final response = await http.get(Uri.parse('http://localhost:5000/get-text-budgets'));
+    final response = await http.get(Uri.parse('$baseUrl/get-text-budgets'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -33,7 +36,7 @@ class _BudgetState extends State<Budget> {
     if (_existingId == null) return;
 
     final response = await http.post(
-      Uri.parse('http://localhost:5000/update-text-budgets'),
+      Uri.parse('$baseUrl/update-text-budgets'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({'id': _existingId, 'libelle': newText}),
     );
@@ -66,8 +69,8 @@ class _BudgetState extends State<Budget> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        width: 800,
-        height: 500,
+        width: 700,
+        height: 520,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),

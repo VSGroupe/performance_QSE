@@ -15,6 +15,9 @@ class Apercu extends StatefulWidget {
 }
 
 class _ApercuState extends State<Apercu> {
+
+  final String baseUrl = "http://localhost:5000"; // URL de votre API Flask
+
   late Future<List<Map<String, dynamic>>> aspectsEnvironnementauxFuture;
 
   @override
@@ -24,7 +27,7 @@ class _ApercuState extends State<Apercu> {
   }
 
   Future<List<Map<String, dynamic>>> fetchAspectsEnvironnementaux() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:5000/get_aspects_environnementaux'));
+    final response = await http.get(Uri.parse('$baseUrl/get_aspects_environnementaux'));
 
     if (response.statusCode == 200) {
       return List<Map<String, dynamic>>.from(json.decode(response.body));
@@ -35,7 +38,7 @@ class _ApercuState extends State<Apercu> {
 
   Future<void> updateAspectEnvironnemental(int id, String newName) async {
     final response = await http.put(
-      Uri.parse('http://127.0.0.1:5000/update_aspect_environnemental/$id'),
+      Uri.parse('$baseUrl/update_aspect_environnemental/$id'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'libelle': newName}),
     );
@@ -49,7 +52,7 @@ class _ApercuState extends State<Apercu> {
   }
 
   Future<void> deleteAspectsEnvironnemental(int id) async {
-    final response = await http.delete(Uri.parse('http://127.0.0.1:5000/delete_aspect_environnemental/$id'));
+    final response = await http.delete(Uri.parse('$baseUrl/delete_aspect_environnemental/$id'));
 
     if (response.statusCode != 200) {
       throw Exception('Erreur lors de la suppression du danger');

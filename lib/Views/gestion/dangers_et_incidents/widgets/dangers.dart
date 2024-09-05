@@ -15,6 +15,9 @@ class Dangers extends StatefulWidget {
 }
 
 class _DangersState extends State<Dangers> {
+
+  final String baseUrl = "http://localhost:5000"; // URL de l'API Flask
+
   late Future<List<Map<String, dynamic>>> dangersFuture;
 
   @override
@@ -24,7 +27,8 @@ class _DangersState extends State<Dangers> {
   }
 
   Future<List<Map<String, dynamic>>> fetchDangers() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:5000/get_dangers'));
+
+    final response = await http.get(Uri.parse('$baseUrl/get_dangers'));
 
     if (response.statusCode == 200) {
       return List<Map<String, dynamic>>.from(json.decode(response.body));
@@ -35,7 +39,7 @@ class _DangersState extends State<Dangers> {
 
   Future<void> updateDanger(int id, String newName) async {
     final response = await http.put(
-      Uri.parse('http://127.0.0.1:5000/update_alea/$id'),
+      Uri.parse('$baseUrl/update_alea/$id'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'libelle': newName}),
     );
@@ -49,7 +53,7 @@ class _DangersState extends State<Dangers> {
   }
 
   Future<void> deleteDanger(int id) async {
-    final response = await http.delete(Uri.parse('http://127.0.0.1:5000/delete_alea/$id'));
+    final response = await http.delete(Uri.parse('$baseUrl/delete_alea/$id'));
 
     if (response.statusCode != 200) {
       throw Exception('Erreur lors de la suppression du danger');

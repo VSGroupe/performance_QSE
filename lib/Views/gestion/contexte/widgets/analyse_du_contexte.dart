@@ -12,6 +12,9 @@ class AnalyseDuContexte extends StatefulWidget {
 }
 
 class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
+
+  final String baseUrl = "http://localhost:5000"; // URL de votre API Flask
+
   List<Map<String, dynamic>> _interneEnjeux = [];
   List<Map<String, dynamic>> _externeEnjeux = [];
   Map<String, List<Map<String, dynamic>>> _risquesParEnjeu = {};
@@ -27,11 +30,11 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
   Future<void> _fetchEnjeuxEtRisquesEtOpportunites() async {
 
     // Récupérer les enjeux
-    final enjeuxResponse = await http.get(Uri.parse('http://localhost:5000/enjeux'));
+    final enjeuxResponse = await http.get(Uri.parse('$baseUrl/enjeux'));
     // Récupérer les risques
-    final risquesResponse = await http.get(Uri.parse('http://localhost:5000/risques'));
+    final risquesResponse = await http.get(Uri.parse('$baseUrl/risques'));
     // Récupérer les opportunités
-    final opportunitesResponse = await http.get(Uri.parse('http://localhost:5000/opportunites'));
+    final opportunitesResponse = await http.get(Uri.parse('$baseUrl/opportunites'));
 
     if (enjeuxResponse.statusCode == 200) {
       final List<dynamic> enjeuxData = json.decode(enjeuxResponse.body);
@@ -274,7 +277,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
 
 
   Future<void> _updateRisque(int idRisque, String nouveauLibelle) async {
-    final url = 'http://localhost:5000/update_risque/$idRisque';
+    final url = '$baseUrl/update_risque/$idRisque';
     final response = await http.put(
       Uri.parse(url),
       headers: {"Content-Type": "application/json"},
@@ -356,7 +359,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
 
 
   Future<void> _deleteRisque(int idRisque) async {
-    final url = 'http://localhost:5000/delete_risque/$idRisque';
+    final url = '$baseUrl/delete_risque/$idRisque';
     final response = await http.delete(Uri.parse(url));
 
     if (response.statusCode == 200) {
@@ -471,7 +474,6 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
   }
 
 
-
   void _showEditDialog(BuildContext context, Map<String, dynamic> opportunite, StateSetter setState) {
     final TextEditingController _libelleController = TextEditingController(text: opportunite['libelle']);
 
@@ -538,7 +540,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
 
 
   Future<void> _updateOpportunite(int idOpportunite, String nouveauLibelle) async {
-    final url = 'http://localhost:5000/update_opportunite/$idOpportunite';
+    final url = '$baseUrl/update_opportunite/$idOpportunite';
     final response = await http.put(
       Uri.parse(url),
       headers: {"Content-Type": "application/json"},
@@ -620,7 +622,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
 
 
   Future<void> _deleteOpportunite(int idOpportunite) async {
-    final url = 'http://localhost:5000/delete_opportunite/$idOpportunite';
+    final url = '$baseUrl/delete_opportunite/$idOpportunite';
     final response = await http.delete(Uri.parse(url));
 
     if (response.statusCode == 200) {
@@ -647,7 +649,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
 
     Future<void> _checkIdEnjeuExists(String idEnjeu) async {
       final response = await http.get(
-        Uri.parse('http://127.0.0.1:5000/check_id_enjeu_exists?id_enjeu=$idEnjeu'),
+        Uri.parse('$baseUrl/check_id_enjeu_exists?id_enjeu=$idEnjeu'),
       );
 
       if (response.statusCode == 200) {
@@ -660,7 +662,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
 
     Future<List<Map<String, dynamic>>> _fetchAxes() async {
       final response = await http.get(
-        Uri.parse('http://127.0.0.1:5000/get_axes'),
+        Uri.parse('$baseUrl/get_axes'),
       );
 
       if (response.statusCode == 200) {
@@ -684,7 +686,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
 
       if (idEnjeu.isNotEmpty && libelle.isNotEmpty && _selectedAxeId != null && _selectedType != null) {
         final response = await http.post(
-          Uri.parse('http://127.0.0.1:5000/add_enjeu'),
+          Uri.parse('$baseUrl/add_enjeu'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({
             'id_enjeu': idEnjeu,
@@ -936,7 +938,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
 
     Future<List<Map<String, dynamic>>> _fetchEnjeux() async {
       final response = await http.get(
-        Uri.parse('http://127.0.0.1:5000/enjeux'),
+        Uri.parse('$baseUrl/enjeux'),
       );
 
       if (response.statusCode == 200) {
@@ -952,7 +954,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
 
       if (libelle.isNotEmpty && _selectedGravite != null && _selectedFrequence != null && _selectedEnjeuId != null) {
         final response = await http.post(
-          Uri.parse('http://127.0.0.1:5000/add_risque'),
+          Uri.parse('$baseUrl/add_risque'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({
             'libelle': libelle,
@@ -1004,7 +1006,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                             TextField(
                               controller: _libelleController,
                               decoration: InputDecoration(
-                                labelText: "Libellé du risque",
+                                labelText: "Désignation du risque",
                                 border: OutlineInputBorder(),
                               ),
                             ),
@@ -1169,7 +1171,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
 
     Future<List<Map<String, dynamic>>> _fetchEnjeux() async {
       final response = await http.get(
-        Uri.parse('http://127.0.0.1:5000/enjeux'),
+        Uri.parse('$baseUrl/enjeux'),
       );
 
       if (response.statusCode == 200) {
@@ -1192,7 +1194,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
 
       if (libelle.isNotEmpty && _selectedEnjeuId != null && gravite != null && frequence != null) {
         final response = await http.post(
-          Uri.parse('http://127.0.0.1:5000/add_opportunite'),
+          Uri.parse('$baseUrl/add_opportunite'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({
             'libelle': libelle,
@@ -1244,7 +1246,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                             TextField(
                               controller: _libelleController,
                               decoration: InputDecoration(
-                                labelText: "Libellé de l'opportunité",
+                                labelText: "Désignation de l'opportunité",
                                 border: OutlineInputBorder(),
                               ),
                             ),

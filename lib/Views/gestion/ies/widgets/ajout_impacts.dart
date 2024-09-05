@@ -12,6 +12,9 @@ class AjoutImpacts extends StatefulWidget {
 }
 
 class _AjoutImpactsState extends State<AjoutImpacts> {
+
+  final String baseUrl = "http://localhost:5000"; // URL de l'API Flask
+
   final TextEditingController nomController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _showSuccessAnimation = false;
@@ -19,10 +22,9 @@ class _AjoutImpactsState extends State<AjoutImpacts> {
 
   Future<void> ajouterImpact() async {
     if (_formKey.currentState!.validate()) {
-      const url = 'http://localhost:5000/ajouter_impact_environnemental_ou_societal';
 
       final response = await http.post(
-        Uri.parse(url),
+        Uri.parse('$baseUrl/ajouter_impact_environnemental_ou_societal'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -35,10 +37,8 @@ class _AjoutImpactsState extends State<AjoutImpacts> {
       if (response.statusCode == 200) {
         setState(() {
           _showSuccessAnimation = true;
-        });
-        // Clear fields after successful submission
-        nomController.clear();
-        setState(() {
+          nomController.clear();
+          // Clear fields after successful submission
           selectedDegre = null;
         });
 
@@ -49,9 +49,18 @@ class _AjoutImpactsState extends State<AjoutImpacts> {
           });
         });
       } else {
-        // Handle error (show a Snackbar, dialog, etc.)
+        // Afficher comme un foot (pied de page)
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur: ${response.body}')),
+          SnackBar(
+            content: Container(
+              alignment: Alignment.center,
+              child: const Text(
+                'Veuillez sélectionner à nouveau un élément',
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+            ),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     }

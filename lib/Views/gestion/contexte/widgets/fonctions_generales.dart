@@ -66,8 +66,8 @@ class _FonctionsGeneralesState extends State<FonctionsGenerales> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        width: 800,
-        height: 500,
+        width: 700,
+        height: 520,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
