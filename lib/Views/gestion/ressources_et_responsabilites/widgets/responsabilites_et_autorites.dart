@@ -127,7 +127,7 @@ class ResponsabilitesEtAutorites extends StatefulWidget {
 class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites> {
   late List<List<TextEditingController>> _controllers;
   late List<List<FocusNode>> _focusNodes;
-  int _rowCount = 4; // Nombre initial de lignes
+  int _rowCount = 10; // Nombre initial de lignes
 
   @override
   void initState() {
@@ -253,7 +253,7 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
               ),
               initiallyExpanded: true, // Dérouler automatiquement au chargement
               children: [
-                const SizedBox(height: 20), // Espace entre le titre et le tableau
+                const SizedBox(height: 0), // Espace entre le titre et le tableau
                 Table(
                   columnWidths: const {
                     0: FlexColumnWidth(0.5),
@@ -357,76 +357,112 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
           ),
           // Contenu principal
           Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Table(
-                    border: TableBorder.all(color: Colors.black),
-                    columnWidths: const {
-                      0: FixedColumnWidth(250.0),
-                      1: FixedColumnWidth(120.0),
-                      2: FixedColumnWidth(120.0),
-                      3: FixedColumnWidth(120.0),
-                      4: FixedColumnWidth(120.0),
-                      5: FixedColumnWidth(120.0),
-                      6: FixedColumnWidth(120.0),
-                      7: FixedColumnWidth(120.0),
-                      8: FixedColumnWidth(120.0),
-                      9: FixedColumnWidth(120.0),
-                      10: FixedColumnWidth(120.0),
-                      11: FixedColumnWidth(120.0),
-                      12: FixedColumnWidth(120.0),
-                      13: FixedColumnWidth(120.0),
-                      14: FixedColumnWidth(120.0),
-                      15: FixedColumnWidth(50.0),
-                      16: FixedColumnWidth(120.0),
-                      17: FixedColumnWidth(120.0),
-                      18: FixedColumnWidth(120.0),
-                    },
-                    children: [
-                      // Header Row
-                      TableRow(
-                        children: [
-                          tableCell('ACTIVITES', isHeader: true),
-                          tableCell('Chef de département C&GR', isHeader: true),
-                          tableCell('Chargé Qualité', isHeader: true),
-                          tableCell('DT', isHeader: true),
-                          tableCell('Chef de service MIT', isHeader: true),
-                          tableCell('Chef de service MI', isHeader: true),
-                          tableCell('Chargé Electrotech', isHeader: true),
-                          tableCell('Chef de service Etude et projet', isHeader: true),
-                          tableCell('Responsable RH', isHeader: true),
-                          tableCell('Responsable Comm', isHeader: true),
-                          tableCell('Chargé Achat', isHeader: true),
-                          tableCell('Chargé électroméca.', isHeader: true),
-                          tableCell('Chargé Matériel et Logistique', isHeader: true),
-                          tableCell('Chargé Audit et Méthodes', isHeader: true),
-                          tableCell('DG/DGA', isHeader: true),
-                          tableCell('', isHeader: true),
-                          tableCell('DELAI', isHeader: true),
-                          tableCell('TAUX DE REALISATION', isHeader: true),
-                          tableCell('OBSERVATION', isHeader: true),
-                        ],
-                      ),
-                      // Data Rows
-                      for (var i = 0; i < _rowCount; i++)
+            child: Row(
+              children: [
+                // Première colonne fixe
+                SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Table(
+                      border: TableBorder.all(color: Colors.black),
+                      columnWidths: const {
+                        0: FixedColumnWidth(250.0),
+                      },
+                      children: [
+                        // Ligne d'en-tête pour la première colonne
                         TableRow(
                           children: [
-                            for (var j = 0; j < 19; j++)
+                            tableCell('ACTIVITES', isHeader: true),
+                          ],
+                        ),
+                        // Les données pour la première colonne
+                        for (var i = 0; i < _rowCount; i++)
+                          TableRow(
+                            children: [
                               TableCell(
-                                child: _buildEditableCell(i, j, provider),
+                                child: _buildEditableCell(i, 0, provider),
+                              ),
+                            ],
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+                // Autres colonnes défilables horizontalement et verticalement
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Table(
+                          border: TableBorder.all(color: Colors.black),
+                          columnWidths: const {
+                            0: FixedColumnWidth(200.0),
+                            1: FixedColumnWidth(250.0),
+                            2: FixedColumnWidth(250.0),
+                            3: FixedColumnWidth(250.0),
+                            4: FixedColumnWidth(250.0),
+                            5: FixedColumnWidth(250.0),
+                            6: FixedColumnWidth(250.0),
+                            7: FixedColumnWidth(250.0),
+                            8: FixedColumnWidth(250.0),
+                            9: FixedColumnWidth(250.0),
+                            10: FixedColumnWidth(250.0),
+                            11: FixedColumnWidth(250.0),
+                            12: FixedColumnWidth(250.0),
+                            13: FixedColumnWidth(250.0),
+                            14: FixedColumnWidth(50.0),
+                            15: FixedColumnWidth(250.0),
+                            16: FixedColumnWidth(250.0),
+                            17: FixedColumnWidth(250.0),
+                          },
+                          children: [
+                            // En-têtes des autres colonnes
+                            TableRow(
+                              children: [
+                                tableCell('Chef de département C&GR', isHeader: true),
+                                tableCell('Chargé Qualité', isHeader: true),
+                                tableCell('DT', isHeader: true),
+                                tableCell('Chef de service MIT', isHeader: true),
+                                tableCell('Chef de service MI', isHeader: true),
+                                tableCell('Chargé Electrotech', isHeader: true),
+                                tableCell('Chef de service Etude et projet', isHeader: true),
+                                tableCell('Responsable RH', isHeader: true),
+                                tableCell('Responsable Comm', isHeader: true),
+                                tableCell('Chargé Achat', isHeader: true),
+                                tableCell('Chargé électroméca.', isHeader: true),
+                                tableCell('Chargé Matériel et Logistique', isHeader: true),
+                                tableCell('Chargé Audit et Méthodes', isHeader: true),
+                                tableCell('DG/DGA', isHeader: true),
+                                tableCell('', isHeader: true),
+                                tableCell('DELAI', isHeader: true),
+                                tableCell('TAUX DE REALISATION', isHeader: true),
+                                tableCell('OBSERVATION', isHeader: true),
+                              ],
+                            ),
+                            // Lignes de données pour les autres colonnes
+                            for (var i = 0; i < _rowCount; i++)
+                              TableRow(
+                                children: [
+                                  for (var j = 1; j < 19; j++)
+                                    TableCell(
+                                      child: _buildEditableCell(i, j, provider),
+                                    ),
+                                ],
                               ),
                           ],
                         ),
-                    ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ),
+          )
+
         ],
       ),
     );
