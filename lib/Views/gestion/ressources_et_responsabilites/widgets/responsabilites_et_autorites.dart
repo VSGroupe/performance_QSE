@@ -135,7 +135,7 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
     _controllers = List.generate(
       _rowCount,
           (i) => List.generate(
-        15,
+        19,
             (j) => TextEditingController(),
       ),
     );
@@ -143,7 +143,7 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
     _focusNodes = List.generate(
       _rowCount,
           (i) => List.generate(
-        15,
+        19,
             (j) => FocusNode(),
       ),
     );
@@ -174,7 +174,7 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
       _controllers = List.generate(
         _rowCount, // Nombre de lignes, ajustez selon votre structure
             (i) => List.generate(
-          15, // Nombre de colonnes
+          19, // Nombre de colonnes
               (j) {
             final cellValue = provider.getCellValue(i, j);
             return TextEditingController(text: cellValue ?? '');
@@ -188,8 +188,8 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
     final provider = Provider.of<ModificationProvider>(context, listen: false);
 
     // Créer une nouvelle ligne avec des contrôleurs et des focus nodes
-    List<TextEditingController> newControllers = List.generate(15, (j) => TextEditingController());
-    List<FocusNode> newFocusNodes = List.generate(15, (j) => FocusNode());
+    List<TextEditingController> newControllers = List.generate(19, (j) => TextEditingController());
+    List<FocusNode> newFocusNodes = List.generate(19, (j) => FocusNode());
 
     // Ajouter la nouvelle ligne à l'interface utilisateur
     setState(() {
@@ -235,80 +235,203 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
     final provider = Provider.of<ModificationProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Responsabilités et Autorités'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: _addNewRow,
-          ),
-        ],
-      ),
       body: provider._isLoading
           ? Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Padding(
+          : Column(
+        children: [
+          // Menu déroulant avec couleur de fond amber
+          Container(
+            color: Colors.white,
             padding: const EdgeInsets.all(16.0),
-            child: Table(
-              border: TableBorder.all(color: Colors.black),
-              columnWidths: const {
-                0: FixedColumnWidth(250.0),
-                1: FixedColumnWidth(120.0),
-                2: FixedColumnWidth(120.0),
-                3: FixedColumnWidth(120.0),
-                4: FixedColumnWidth(120.0),
-                5: FixedColumnWidth(120.0),
-                6: FixedColumnWidth(120.0),
-                7: FixedColumnWidth(120.0),
-                8: FixedColumnWidth(120.0),
-                9: FixedColumnWidth(120.0),
-                10: FixedColumnWidth(120.0),
-                11: FixedColumnWidth(120.0),
-                12: FixedColumnWidth(120.0),
-                13: FixedColumnWidth(120.0),
-                14: FixedColumnWidth(120.0),
-              },
+            child: ExpansionTile(
+              title: const Text(
+                'Responsabilités et Autorités',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              initiallyExpanded: true, // Dérouler automatiquement au chargement
               children: [
-                // Header Row
-                TableRow(
+                const SizedBox(height: 20), // Espace entre le titre et le tableau
+                Table(
+                  columnWidths: const {
+                    0: FlexColumnWidth(0.5),
+                    1: FlexColumnWidth(2),
+                  },
+                  border: TableBorder.all(), // Ajout de bordures au tableau
+                  defaultVerticalAlignment: TableCellVerticalAlignment.middle, // Alignement vertical
                   children: [
-                    tableCell('ACTIVITES', isHeader: true),
-                    tableCell('Chef de département C&GR', isHeader: true),
-                    tableCell('Chargé Qualité', isHeader: true),
-                    tableCell('DT', isHeader: true),
-                    tableCell('Chef de service MIT', isHeader: true),
-                    tableCell('Chef de service MI', isHeader: true),
-                    tableCell('Chargé Electrotech', isHeader: true),
-                    tableCell('Chef de service Etude et projet', isHeader: true),
-                    tableCell('Responsable RH', isHeader: true),
-                    tableCell('Responsable Comm', isHeader: true),
-                    tableCell('Chargé Achat', isHeader: true),
-                    tableCell('Chargé électroméca.', isHeader: true),
-                    tableCell('Chargé Matériel Roulant', isHeader: true),
-                    tableCell('Superviseur technique', isHeader: true),
-                    tableCell('Contrôleur technique', isHeader: true),
+                    TableRow(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(12.0),
+                          child: Text(
+                            'R',
+                            style: TextStyle(
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center, // Alignement horizontal
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.all(12.0),
+                          child: Text(
+                            'Responsable (Celui qui réalise l\'activité)',
+                            style: TextStyle(color: Colors.green),
+                          ),
+                        ),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(12.0),
+                          child: Text(
+                            'A',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.all(12.0),
+                          child: Text(
+                            'Approbateur (Celui qui approuve l\'activité)',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(12.0),
+                          child: Text(
+                            'C',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.all(12.0),
+                          child: Text(
+                            'Consulté (Celui qui est consulté)',
+                            style: TextStyle(color: Colors.blue),
+                          ),
+                        ),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(12.0),
+                          child: Text(
+                            'I',
+                            style: TextStyle(
+                              color: Colors.yellow,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.all(12.0),
+                          child: Text(
+                            'Informé (Celui qui doit être informé)',
+                            style: TextStyle(color: Colors.amber),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-                // Data Rows
-                for (var i = 0; i < _rowCount; i++)
-                  TableRow(
-                    children: [
-                      for (var j = 0; j < 15; j++)
-                        TableCell(
-                          child: _buildEditableCell(i, j, provider),
-                        ),
-                    ],
-                  ),
               ],
             ),
           ),
-        ),
+          // Contenu principal
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Table(
+                    border: TableBorder.all(color: Colors.black),
+                    columnWidths: const {
+                      0: FixedColumnWidth(250.0),
+                      1: FixedColumnWidth(120.0),
+                      2: FixedColumnWidth(120.0),
+                      3: FixedColumnWidth(120.0),
+                      4: FixedColumnWidth(120.0),
+                      5: FixedColumnWidth(120.0),
+                      6: FixedColumnWidth(120.0),
+                      7: FixedColumnWidth(120.0),
+                      8: FixedColumnWidth(120.0),
+                      9: FixedColumnWidth(120.0),
+                      10: FixedColumnWidth(120.0),
+                      11: FixedColumnWidth(120.0),
+                      12: FixedColumnWidth(120.0),
+                      13: FixedColumnWidth(120.0),
+                      14: FixedColumnWidth(120.0),
+                      15: FixedColumnWidth(50.0),
+                      16: FixedColumnWidth(120.0),
+                      17: FixedColumnWidth(120.0),
+                      18: FixedColumnWidth(120.0),
+                    },
+                    children: [
+                      // Header Row
+                      TableRow(
+                        children: [
+                          tableCell('ACTIVITES', isHeader: true),
+                          tableCell('Chef de département C&GR', isHeader: true),
+                          tableCell('Chargé Qualité', isHeader: true),
+                          tableCell('DT', isHeader: true),
+                          tableCell('Chef de service MIT', isHeader: true),
+                          tableCell('Chef de service MI', isHeader: true),
+                          tableCell('Chargé Electrotech', isHeader: true),
+                          tableCell('Chef de service Etude et projet', isHeader: true),
+                          tableCell('Responsable RH', isHeader: true),
+                          tableCell('Responsable Comm', isHeader: true),
+                          tableCell('Chargé Achat', isHeader: true),
+                          tableCell('Chargé électroméca.', isHeader: true),
+                          tableCell('Chargé Matériel et Logistique', isHeader: true),
+                          tableCell('Chargé Audit et Méthodes', isHeader: true),
+                          tableCell('DG/DGA', isHeader: true),
+                          tableCell('', isHeader: true),
+                          tableCell('DELAI', isHeader: true),
+                          tableCell('TAUX DE REALISATION', isHeader: true),
+                          tableCell('OBSERVATION', isHeader: true),
+                        ],
+                      ),
+                      // Data Rows
+                      for (var i = 0; i < _rowCount; i++)
+                        TableRow(
+                          children: [
+                            for (var j = 0; j < 19; j++)
+                              TableCell(
+                                child: _buildEditableCell(i, j, provider),
+                              ),
+                          ],
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
+
 
   Widget _buildEditableCell(int rowIndex, int columnIndex, ModificationProvider provider) {
     final controller = _controllers[rowIndex][columnIndex];
@@ -341,15 +464,17 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
   Color _getColorForLetter(String letter) {
     switch (letter.toUpperCase()) {
       case 'R':
-        return Colors.red; // VerRot pour "R"
+        return Colors.red.shade100; // VerRot pour "R"
       case 'A':
-        return Colors.green; // Rouge pour "A"
+        return Colors.green.shade100; // Rouge pour "A"
       case 'C':
-        return Colors.blueAccent; // Bleu pour "C"
+        return Colors.blue.shade100; // Bleu pour "C"
       case 'I':
-        return Colors.yellowAccent; // Jaune pour "I"
+        return Colors.yellow.shade100; // Jaune pour "I"
+      case '':
+        return Colors.white; // Jaune pour "I"
       default:
-        return Colors.grey; // Transparent pour les autres valeurs
+        return Colors.grey.shade200; // Transparent pour les autres valeurs
     }
   }
 
