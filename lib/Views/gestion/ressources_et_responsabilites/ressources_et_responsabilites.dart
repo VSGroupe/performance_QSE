@@ -17,8 +17,8 @@ class RessourcesEtResponsabilites extends StatefulWidget {
 
 class _RessourcesEtResponsabilitesState extends State<RessourcesEtResponsabilites> with SingleTickerProviderStateMixin {
   static const List<Tab> myTabs = <Tab>[
-    Tab(text: 'Budget'),
     Tab(text: 'Rapport du risque'),
+    Tab(text: 'Budget'),
     //Tab(text: 'Modifier mon mot de passe'),
   ];
 
@@ -65,11 +65,11 @@ class _RessourcesEtResponsabilitesState extends State<RessourcesEtResponsabilite
                     )),
                 tabs: const [
                   CustomText(
-                    text: "Budget",
+                    text: "Responsabilités et autorités",
                     size: 15,
                   ),
                   CustomText(
-                    text: "Responsabilités et autorités",
+                    text: "Budget",
                     size: 15,
                   ),
                   // CustomText(
@@ -78,8 +78,8 @@ class _RessourcesEtResponsabilitesState extends State<RessourcesEtResponsabilite
                   // ),
                 ],
                 views: [
-                  Container(child: Budget(),),
                   Container(child: ResponsabilitesEtAutorites(),),
+                  Container(child: Budget(),),
                   //Container(child: Password(),)
                 ],
               ),

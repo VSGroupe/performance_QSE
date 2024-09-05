@@ -279,7 +279,7 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
                 const SizedBox(height: 0), // Espace entre le titre et le tableau
                 Table(
                   columnWidths: const {
-                    0: FlexColumnWidth(0.5),
+                    0: FlexColumnWidth(0.522),
                     1: FlexColumnWidth(2),
                   },
                   border: TableBorder.all(), // Ajout de bordures au tableau
@@ -526,9 +526,9 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
   Color _getColorForLetter(String letter) {
     switch (letter.toUpperCase()) {
       case 'R':
-        return Colors.red.shade100; // VerRot pour "R"
+        return Colors.green.shade100; // VerRot pour "R"
       case 'A':
-        return Colors.green.shade100; // Rouge pour "A"
+        return Colors.red.shade100; // Rouge pour "A"
       case 'C':
         return Colors.blue.shade100; // Bleu pour "C"
       case 'I':

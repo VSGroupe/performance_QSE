@@ -87,7 +87,7 @@ class _FonctionsGeneralesState extends State<FonctionsGenerales> {
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                color: Colors.amber,
+                color: Colors.blueGrey.shade300,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -95,7 +95,7 @@ class _FonctionsGeneralesState extends State<FonctionsGenerales> {
                   const Text(
                     'Environnement de l\'entreprise',
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 21,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
