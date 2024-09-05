@@ -127,11 +127,15 @@ class ResponsabilitesEtAutorites extends StatefulWidget {
 class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites> {
   late List<List<TextEditingController>> _controllers;
   late List<List<FocusNode>> _focusNodes;
-  int _rowCount = 10; // Nombre initial de lignes
+  int _rowCount = 6; // Nombre initial de lignes
+  final ScrollController _firstColumnScrollController = ScrollController();
+  final ScrollController _otherColumnsScrollController = ScrollController();
+
 
   @override
   void initState() {
     super.initState();
+    _addScrollListeners();
     _controllers = List.generate(
       _rowCount,
           (i) => List.generate(
@@ -184,6 +188,23 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
     });
   }
 
+  void _addScrollListeners() {
+    _firstColumnScrollController.addListener(() {
+      _syncVerticalScroll(_firstColumnScrollController, _otherColumnsScrollController);
+    });
+
+    _otherColumnsScrollController.addListener(() {
+      _syncVerticalScroll(_otherColumnsScrollController, _firstColumnScrollController);
+    });
+  }
+
+  void _syncVerticalScroll(ScrollController source, ScrollController target) {
+    if (source.hasClients && target.hasClients) {
+      target.jumpTo(source.offset);
+    }
+  }
+
+
   Future<void> _addNewRow() async {
     final provider = Provider.of<ModificationProvider>(context, listen: false);
 
@@ -217,6 +238,8 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
 
   @override
   void dispose() {
+    _firstColumnScrollController.dispose();
+    _otherColumnsScrollController.dispose();
     for (var row in _controllers) {
       for (var controller in row) {
         controller.dispose();
@@ -361,6 +384,7 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
               children: [
                 // Première colonne fixe
                 SingleChildScrollView(
+                  controller: _firstColumnScrollController,
                   scrollDirection: Axis.vertical,
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -389,12 +413,14 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
                     ),
                   ),
                 ),
+
                 // Autres colonnes défilables horizontalement et verticalement
                 Expanded(
                   child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
+                    controller: _otherColumnsScrollController,
+                    scrollDirection: Axis.vertical,
                     child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
+                      scrollDirection: Axis.horizontal,
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Table(
