@@ -14,10 +14,10 @@ class _ApercuPartiesInteresseesState extends State<ApercuPartiesInteressees> {
   final SupabaseClient supabase = Supabase.instance.client;
 
   // Listes pour stocker les parties intéressées en fonction du type
-  List<String> internes = [];
-  List<String> partenairesEco = [];
-  List<String> regulateurs = [];
-  List<String> influenceurs = [];
+  List<Map<String, dynamic>> internes = [];
+  List<Map<String, dynamic>> partenairesEco = [];
+  List<Map<String, dynamic>> regulateurs = [];
+  List<Map<String, dynamic>> influenceurs = [];
 
   @override
   void initState() {
@@ -31,28 +31,19 @@ class _ApercuPartiesInteresseesState extends State<ApercuPartiesInteressees> {
       final response = await supabase.from('PartiesInteressees').select().execute();
 
       if (response.data != null) {
-        print("\nDonnées récupérées avec succès:\nLes Données:\n");
         final data = response.data as List<dynamic>;
-        print("\n");
-        print(data);
-        print("\n");
 
         setState(() {
           // Filtrer les données en fonction du type_pi
-          internes = data.where((pi) => pi['type_pi'] == 'interne').map<String>((pi) => pi['libelle']).toList();
-          print("Les parties intéressées internes:\n");
-          print(internes);
-          print("\n");
-          partenairesEco = data.where((pi) => pi['type_pi'] == 'partenaire eco').map<String>((pi) => pi['libelle']).toList();
-          regulateurs = data.where((pi) => pi['type_pi'] == 'regulateur').map<String>((pi) => pi['libelle']).toList();
-          influenceurs = data.where((pi) => pi['type_pi'] == 'influenceur').map<String>((pi) => pi['libelle']).toList();
+          internes = data.where((pi) => pi['type_pi'] == 'interne').map<Map<String, dynamic>>((pi) => pi).toList();
+          partenairesEco = data.where((pi) => pi['type_pi'] == 'partenaire eco').map<Map<String, dynamic>>((pi) => pi).toList();
+          regulateurs = data.where((pi) => pi['type_pi'] == 'regulateur').map<Map<String, dynamic>>((pi) => pi).toList();
+          influenceurs = data.where((pi) => pi['type_pi'] == 'influenceur').map<Map<String, dynamic>>((pi) => pi).toList();
         });
       } else {
-        // Gérer l'erreur
         print('Erreur lors de la récupération des données : ${response.status}');
       }
     } catch (e) {
-      // Gérer l'exception
       print('Exception: $e');
     }
   }
@@ -64,77 +55,84 @@ class _ApercuPartiesInteresseesState extends State<ApercuPartiesInteressees> {
         title: const Text('Parties Intéressées'),
       ),
       body: Center(
-        child: CustomPaint(
-          size: const Size(485, 485),
-          painter: QuadrantPainter(),
-          child: SizedBox(
-            width: 485,
-            height: 485,
-            child: Stack(
-              children: [
-                // Quadrant 1 - Parties prenantes internes
-                Positioned(
-                  top: 100,
-                  left: 20,
-                  width: 220,
-                  height: 140,
-                  child: Container(
-                    color: Colors.red.withOpacity(0.0),
-                    child: buildPartiesList(internes, "Parties prenantes internes"),
-                  ),
+        child: Row(
+          children: [
+            // Légende à gauche du cercle
+            buildLegend(),
+            const SizedBox(width: 250),
+            CustomPaint(
+              size: const Size(485, 485),
+              painter: QuadrantPainter(),
+              child: SizedBox(
+                width: 485,
+                height: 485,
+                child: Stack(
+                  children: [
+                    // Quadrant 1 - Parties prenantes internes
+                    Positioned(
+                      top: 124,
+                      left: 30,
+                      width: 220,
+                      height: 140,
+                      child: Container(
+                        color: Colors.red.withOpacity(0.0),
+                        child: buildPartiesList(internes, "Parties prenantes internes"),
+                      ),
+                    ),
+                    // Quadrant 2 - Partenaires économiques
+                    Positioned(
+                      top: 124,
+                      right: 21,
+                      width: 220,
+                      height: 140,
+                      child: Container(
+                        color: Colors.green.withOpacity(0.0),
+                        child: buildPartiesList(partenairesEco, "Partenaires économiques"),
+                      ),
+                    ),
+                    // Quadrant 3 - Régulateurs
+                    Positioned(
+                      bottom: 101,
+                      left: 30,
+                      width: 220,
+                      height: 140,
+                      child: Container(
+                        color: Colors.blue.withOpacity(0.0),
+                        child: buildPartiesList(regulateurs, "Régulateurs"),
+                      ),
+                    ),
+                    // Quadrant 4 - Influenceurs sociétaux
+                    Positioned(
+                      bottom: 101,
+                      right: 21,
+                      width: 220,
+                      height: 140,
+                      child: Container(
+                        color: Colors.yellow.withOpacity(0.0),
+                        child: buildPartiesList(influenceurs, "Influenceurs sociétaux"),
+                      ),
+                    ),
+                  ],
                 ),
-                // Quadrant 2 - Partenaires économiques
-                Positioned(
-                  top: 100,
-                  right: 31,
-                  width: 220,
-                  height: 140,
-                  child: Container(
-                    color: Colors.green.withOpacity(0.0),
-                    child: buildPartiesList(partenairesEco, "Partenaires économiques"),
-                  ),
-                ),
-                // Quadrant 3 - Régulateurs
-                Positioned(
-                  bottom: 124,
-                  left: 20,
-                  width: 220,
-                  height: 140,
-                  child: Container(
-                    color: Colors.blue.withOpacity(0.0),
-                    child: buildPartiesList(regulateurs, "Régulateurs"),
-                  ),
-                ),
-                // Quadrant 4 - Influenceurs sociétaux
-                Positioned(
-                  bottom: 125,
-                  right: 31,
-                  width: 220,
-                  height: 140,
-                  child: Container(
-                    color: Colors.yellow.withOpacity(0.0),//Colors.yellow.withOpacity(0.0),
-                    child: buildPartiesList(influenceurs, "Influenceurs sociétaux"),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
   }
 
   // Widget pour afficher la liste des parties intéressées sous forme de boutons
-  Widget buildPartiesList(List<String> parties, String title) {
+  Widget buildPartiesList(List<Map<String, dynamic>> parties, String title) {
     return Stack(
       children: [
         Positioned(
-          top: 24,
-          left: 10,
+          top: 0,
+          left: 0,
           width: 210,
           height: 116,
           child: Container(
-            color: Colors.white,
+            color: Colors.transparent,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center, // Centre le titre horizontalement
               children: [
@@ -145,7 +143,7 @@ class _ApercuPartiesInteresseesState extends State<ApercuPartiesInteressees> {
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
-                const SizedBox(height: 8), // Espacement entre le titre et les boutons
+                // const SizedBox(height: 8), // Espacement entre le titre et les boutons
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
@@ -155,18 +153,17 @@ class _ApercuPartiesInteresseesState extends State<ApercuPartiesInteressees> {
                             width: 200, // Largeur définie pour les boutons
                             child: ElevatedButton(
                               onPressed: () {
-                                // Action sur le bouton
-                                print('Sélectionné: $partie');
+                                showPartieDetailsDialog(context, partie);
                               },
                               style: ElevatedButton.styleFrom(
                                 foregroundColor: Colors.black,
-                                backgroundColor: Colors.white, // Couleur du texte et du fond
-                                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10), // Ajuste la hauteur du bouton
+                                backgroundColor: Colors.transparent,
+                                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
                                 alignment: Alignment.centerLeft, // Aligne le texte à gauche
                               ),
                               child: Text(
-                                partie,
-                                style: const TextStyle(color: Colors.black, fontSize: 12),
+                                partie['libelle'],
+                                style: const TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal),
                               ),
                             ),
                           ),
@@ -181,6 +178,136 @@ class _ApercuPartiesInteresseesState extends State<ApercuPartiesInteressees> {
           ),
         ),
       ],
+    );
+  }
+
+  // Fonction pour afficher la boîte de dialogue avec les détails d'une partie intéressée
+  void showPartieDetailsDialog(BuildContext context, Map<String, dynamic> partie) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            constraints: BoxConstraints(
+              maxWidth: 350.0,
+              minWidth: 350.0,
+              minHeight: 250.0,
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    color: Colors.blue,
+                    padding: EdgeInsets.all(16.0),
+                    width: double.infinity,
+                    child: Text(
+                      partie['libelle'],
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.0,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'Catégorie : ',
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                                ),
+                                TextSpan(
+                                  text: '${partie['categorie']}',
+                                  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 18),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'Poids : ',
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                                ),
+                                TextSpan(
+                                  text: '${partie['poids_pi']}',
+                                  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 18),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 50),
+                  ButtonBar(
+                    alignment: MainAxisAlignment.end, // Aligne les boutons à droite
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 40),
+                          foregroundColor: Colors.white, backgroundColor: Colors.blue,
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+  // Widget pour afficher la légende
+  Widget buildLegend() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        buildLegendItem('Parties prenantes internes', Colors.red),
+        buildLegendItem('Partenaires économiques', Colors.green),
+        buildLegendItem('Régulateurs', Colors.blue),
+        buildLegendItem('Influenceurs sociétaux', Colors.yellow),
+      ],
+    );
+  }
+
+  // Widget pour chaque élément de la légende
+  Widget buildLegendItem(String title, Color color) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: [
+          Container(
+            width: 20,
+            height: 20,
+            color: color,
+          ),
+          const SizedBox(width: 8),
+          Text(title),
+        ],
+      ),
     );
   }
 }
