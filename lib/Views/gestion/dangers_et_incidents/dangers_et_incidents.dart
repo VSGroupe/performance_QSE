@@ -18,9 +18,9 @@ class DangersEtIncidents extends StatefulWidget {
 
 class _DangersEtIncidentsState extends State<DangersEtIncidents> with SingleTickerProviderStateMixin {
   static const List<Tab> myTabs = <Tab>[
-    Tab(text: 'Analyse du contexte'),
-    Tab(text: 'Rapport du risque'),
-    Tab(text: 'Fonctions générales'),
+    Tab(text: 'Dangers'),
+    Tab(text: 'Incidents'),
+    Tab(text: 'Ajout d\'un incident ou d\'un danger'),
   ];
 
   late TabController _tabController;
@@ -73,7 +73,7 @@ class _DangersEtIncidentsState extends State<DangersEtIncidents> with SingleTick
                     size: 15,
                   ),
                   CustomText(
-                    text: "Ajout d'incident ou d'enjeu",
+                    text: "Ajout d'un incident ou d'un danger",
                     size: 15,
                   ),
                 ],
