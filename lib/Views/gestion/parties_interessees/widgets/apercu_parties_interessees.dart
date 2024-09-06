@@ -31,11 +31,18 @@ class _ApercuPartiesInteresseesState extends State<ApercuPartiesInteressees> {
       final response = await supabase.from('PartiesInteressees').select().execute();
 
       if (response.data != null) {
+        print("\nDonnées récupérées avec succès:\nLes Données:\n");
         final data = response.data as List<dynamic>;
+        print("\n");
+        print(data);
+        print("\n");
 
         setState(() {
           // Filtrer les données en fonction du type_pi
           internes = data.where((pi) => pi['type_pi'] == 'interne').map<String>((pi) => pi['libelle']).toList();
+          print("Les parties intéressées internes:\n");
+          print(internes);
+          print("\n");
           partenairesEco = data.where((pi) => pi['type_pi'] == 'partenaire eco').map<String>((pi) => pi['libelle']).toList();
           regulateurs = data.where((pi) => pi['type_pi'] == 'regulateur').map<String>((pi) => pi['libelle']).toList();
           influenceurs = data.where((pi) => pi['type_pi'] == 'influenceur').map<String>((pi) => pi['libelle']).toList();
@@ -79,7 +86,7 @@ class _ApercuPartiesInteresseesState extends State<ApercuPartiesInteressees> {
                 // Quadrant 2 - Partenaires économiques
                 Positioned(
                   top: 100,
-                  right: 20,
+                  right: 31,
                   width: 220,
                   height: 140,
                   child: Container(
@@ -89,7 +96,7 @@ class _ApercuPartiesInteresseesState extends State<ApercuPartiesInteressees> {
                 ),
                 // Quadrant 3 - Régulateurs
                 Positioned(
-                  bottom: 100,
+                  bottom: 124,
                   left: 20,
                   width: 220,
                   height: 140,
@@ -100,12 +107,12 @@ class _ApercuPartiesInteresseesState extends State<ApercuPartiesInteressees> {
                 ),
                 // Quadrant 4 - Influenceurs sociétaux
                 Positioned(
-                  bottom: 100,
-                  right: 20,
+                  bottom: 125,
+                  right: 31,
                   width: 220,
                   height: 140,
                   child: Container(
-                    color: Colors.yellow.withOpacity(0.0),
+                    color: Colors.yellow.withOpacity(0.0),//Colors.yellow.withOpacity(0.0),
                     child: buildPartiesList(influenceurs, "Influenceurs sociétaux"),
                   ),
                 ),
@@ -128,20 +135,48 @@ class _ApercuPartiesInteresseesState extends State<ApercuPartiesInteressees> {
           height: 116,
           child: Container(
             color: Colors.white,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                  for (var partie in parties)
-                    ElevatedButton(
-                      onPressed: () {
-                        // Action sur le bouton
-                        print('Sélectionné: $partie');
-                      },
-                      child: Text(partie),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center, // Centre le titre horizontalement
+              children: [
+                Center(
+                  child: Text(
+                    title,
+                    textAlign: TextAlign.center, // Centre le texte dans le widget
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(height: 8), // Espacement entre le titre et les boutons
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        for (var partie in parties) ...[
+                          SizedBox(
+                            width: 200, // Largeur définie pour les boutons
+                            child: ElevatedButton(
+                              onPressed: () {
+                                // Action sur le bouton
+                                print('Sélectionné: $partie');
+                              },
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.black,
+                                backgroundColor: Colors.white, // Couleur du texte et du fond
+                                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10), // Ajuste la hauteur du bouton
+                                alignment: Alignment.centerLeft, // Aligne le texte à gauche
+                              ),
+                              child: Text(
+                                partie,
+                                style: const TextStyle(color: Colors.black, fontSize: 12),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 4), // Espacement de 4 pixels entre les boutons
+                        ],
+                      ],
                     ),
-                ],
-              ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
