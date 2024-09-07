@@ -20,7 +20,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
   Map<String, List<Map<String, dynamic>>> _risquesParEnjeu = {};
   Map<String, List<Map<String, dynamic>>> _opportunitesParEnjeu = {};
   Map<String, String> libellesEnjeux = {};// Créer une liste associative pour stocker les libellés avec leur id_enjeu comme clé
-
+  
   @override
   void initState() {
     super.initState();
@@ -48,10 +48,6 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
         libellesEnjeux[idEnjeu] = libelle;
       }
 
-      print("\nenjeuList:\n");
-      print(enjeuxList);
-      print("\n");
-
       _interneEnjeux = enjeuxList.where((item) => item['type_enjeu'] == 'interne').toList();
       _externeEnjeux = enjeuxList.where((item) => item['type_enjeu'] == 'externe').toList();
 
@@ -60,16 +56,8 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
 
         final List<dynamic> risquesData = json.decode(risquesResponse.body);
 
-        print("\nrisqueData:\n");
-        print(risquesData);
-        print("\n");
-
         final List<Map<String, dynamic>> risquesList =
         risquesData.map((item) => item as Map<String, dynamic>).toList();
-
-        print("\nrisqueList:\n");
-        print(risquesList);
-        print("\n");
 
         for (var risque in risquesList) {
           String idEnjeu = risque['id_enjeu'];

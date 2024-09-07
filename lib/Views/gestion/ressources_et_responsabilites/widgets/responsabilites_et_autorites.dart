@@ -86,7 +86,7 @@ class ModificationProvider with ChangeNotifier {
   }
 
   Future<void> saveModification(int rowIndex, int columnIndex, String cellValue) async {
-    await Future.delayed(Duration(seconds: 1)); // Délai de 1 seconde
+    await Future.delayed(Duration(seconds: 1)); // Délai de 1 seconde important
     await apiService.saveModification(rowIndex, columnIndex, cellValue);
     await refreshModifications();
   }
@@ -127,7 +127,7 @@ class ResponsabilitesEtAutorites extends StatefulWidget {
 class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites> {
   late List<List<TextEditingController>> _controllers;
   late List<List<FocusNode>> _focusNodes;
-  int _rowCount = 6; // Nombre initial de lignes
+  int _rowCount = 15; // Nombre initial de lignes
   final ScrollController _firstColumnScrollController = ScrollController();
   final ScrollController _otherColumnsScrollController = ScrollController();
 
@@ -163,7 +163,7 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
     // Charger les modifications avec un délai
     await Future.wait([
       provider.loadModifications(),
-      Future.delayed(Duration(seconds: 2)), // Délai de 2 secondes
+      Future.delayed(Duration(seconds: 2)), // Délai de 2 secondes Très importante
     ]);
 
     setState(() {
