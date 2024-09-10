@@ -672,7 +672,7 @@ class _DrawerEvaluationState extends State<DrawerEvaluation> {
                 ),
                 const SizedBox(height: 3),
                 const CustomMenuButton(
-                  pathMenu: '/pilotage',
+                  pathMenu: '/accueil_pilotage',
                   image: "assets/images/retour_pilotage.jpg",
                   isFullPath: true,
                   // icon: Icons.arrow_circle_left_sharp,

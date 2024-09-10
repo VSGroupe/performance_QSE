@@ -3,14 +3,14 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:perfqse/Views/audit/controller/controller_audit.dart';
 
-class DrawerGestion extends StatefulWidget {
-  const DrawerGestion({Key? key}) : super(key: key);
+class HomeAccueilPilot extends StatefulWidget {
+  const HomeAccueilPilot({Key? key}) : super(key: key);
 
   @override
-  State<DrawerGestion> createState() => _DrawerGestionState();
+  State<HomeAccueilPilot> createState() => _HomeAccueilPilotState();
 }
 
-class _DrawerGestionState extends State<DrawerGestion> {
+class _HomeAccueilPilotState extends State<HomeAccueilPilot> {
   final ControllerAudit controllerAudit = Get.put(ControllerAudit());
 
   @override
@@ -63,7 +63,7 @@ class _DrawerGestionState extends State<DrawerGestion> {
               _Header(onDialogRequest: _showDialogNoAccess),
               const _Divider(),
               Obx(() => _buildMenuButton(
-                pathMenu: controllerAudit.reference.value.isEmpty ? "/gestion/accueil" : "/gestion/accueil",
+                pathMenu: controllerAudit.reference.value.isEmpty ? "/accueil_pilotage" : "/accueil_pilotage",
                 image: "assets/images/home1.png",
                 label: "Accueil",
                 onTap: () => controllerAudit.reference.value = "",
@@ -75,17 +75,11 @@ class _DrawerGestionState extends State<DrawerGestion> {
                 label: "Profil",
               )),
               const SizedBox(height: 5),
-              Obx(() => _buildMenuButton(
-                pathMenu: controllerAudit.reference.value.isEmpty ? "" : '/audit/admin',
-                image: "assets/images/res.png",
-                label: "Ressources",
-              )),
-              const SizedBox(height: 5),
               const _Divider(),
               Obx(() => _buildMenuButton(
-                pathMenu: controllerAudit.reference.value.isEmpty ? "/accueil_pilotage" : '/accueil_pilotage',
+                pathMenu: controllerAudit.reference.value.isEmpty ? "/gestion/accueil" : '/gestion/accueil',
                 image: "assets/images/retour_pilotage.jpg",
-                label: "Pilotage",
+                label: "Gestion",
               )),
               const SizedBox(height: 5),
               Obx(() => _buildMenuButton(
@@ -138,24 +132,24 @@ class _Header extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.only(left: 11.3),
-            child: Container(
-              width: 200,
-              decoration: const BoxDecoration(
-                color: Colors.amber,
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-              ),
-              child: TextButton(
-                onPressed: onDialogRequest,
-                child: const Text(
-                  "GESTION",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 5),
+          // Padding(
+          //   padding: const EdgeInsets.only(left: 11.3),
+          //   child: Container(
+          //     width: 200,
+          //     decoration: const BoxDecoration(
+          //       color: Color.fromRGBO(42,77,4,1),
+          //       borderRadius: BorderRadius.all(Radius.circular(20)),
+          //     ),
+          //     child: TextButton(
+          //       onPressed: onDialogRequest,
+          //       child: const Text(
+          //         "Pilotage",
+          //         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          // const SizedBox(height: 5),
           const Text(
             "Menu Principal",
             textAlign: TextAlign.center,

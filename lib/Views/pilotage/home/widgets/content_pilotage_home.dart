@@ -126,7 +126,9 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
                     height: 211,
                     children: _management.map((item) {
                       return TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          context.go("/accueil_pilotage");
+                        },
                         child: Align(
                           alignment: Alignment.centerLeft, // Alignement du texte à gauche
                           child: Text(

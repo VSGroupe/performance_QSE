@@ -1,6 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-//import 'package:perfqse/Views/gestion/widgets/dashboard_gestion.dart';
+//import 'package:perfqse/Views/gestion/widgets/dashboard_accueil_pilot.dart';
 
 import '../../../../../models/common/user_model.dart';
 import '../../../../../models/pilotage/acces_pilotage_model.dart';

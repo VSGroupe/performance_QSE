@@ -3,7 +3,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:perfqse/Views/gestion/screen_gestion.dart';
-import 'package:perfqse/Views/rapport/home_rapport.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../Views/audit/audit_management/panneau_gestion/screen_admin.dart';
 import '../Views/audit/gestion_audits/auditE/screen_gestions_audits.dart';
@@ -54,6 +53,8 @@ import '../Views/pilotage/entity/tableau_bord/screen_tableau_bord_pilotage.dart'
 import '../Views/pilotage/entity/tableau_bord/transite_tableau_bord.dart';
 import '../Views/pilotage/entity/widgets/get_info_espace.dart';
 import '../Views/pilotage/home/pilotage_home.dart';
+import '../Views/pilotage_home/screen_home_accueil_pilot.dart';
+import '../Views/pilotage_home/widgets/dashboard_accueil_pilot.dart';
 import '../helpers/helper_methods.dart';
 import '../widgets/loading_page.dart';
 
@@ -87,13 +88,13 @@ class RouteClass {
           child: ReloadScreen(redirection: state.extra.toString(),),
         ),
       ),
-      GoRoute(path: "/rapport",
-        pageBuilder: (context, state) => NoTransitionPage<void>(
-          key: state.pageKey,
-          restorationId: state.pageKey.value,
-          child: const DrawerRapport(),
-        ),
-      ),
+      // GoRoute(path: "/rapport",
+      //   pageBuilder: (context, state) => NoTransitionPage<void>(
+      //     key: state.pageKey,
+      //     restorationId: state.pageKey.value,
+      //     child: const DrawerRapport(),
+      //   ),
+      // ),
       GoRoute(
           path: '/pilotage',
           pageBuilder: (context, state) => NoTransitionPage<void>(
@@ -190,7 +191,76 @@ class RouteClass {
                   ),
                 ]
             ),
-          ]),
+          ]
+      ),
+
+
+
+      // Routes ACCUEIL vers PILOTAGE
+
+      ShellRoute(
+        navigatorKey: _shellNavigatorKey,
+        builder: (BuildContext context, GoRouterState state, Widget child) {
+          return ScreenHomeAccueilPilot(child: child);
+        },
+        routes: <RouteBase>[
+          GoRoute(
+            path: '/accueil_pilotage',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: const DashboardAccueilPilot()
+            ),
+          ),
+          // GoRoute(
+          //   path: '/gestion/profil',
+          //   pageBuilder: (context, state) => NoTransitionPage<void>(
+          //       key: state.pageKey,
+          //       child: ScreenPilotageProfil()
+          //   ),
+          // ),
+          // GoRoute(
+          //   path: '/gestion/contexte',
+          //   pageBuilder: (context, state) => NoTransitionPage<void>(
+          //       key: state.pageKey,
+          //       child: ScreenContexte()
+          //   ),
+          // ),
+          // GoRoute(
+          //   path: '/gestion/partiesInteressees',
+          //   pageBuilder: (context, state) => NoTransitionPage<void>(
+          //       key: state.pageKey,
+          //       child: ScreenPartieInteressees()
+          //   ),
+          // ),
+          // GoRoute(
+          //   path: '/gestion/perimetresEt/domaines/Dapplication',
+          //   pageBuilder: (context, state) => NoTransitionPage<void>(
+          //       key: state.pageKey,
+          //       child: ScreenPerimetresEtDomainesDApplication()
+          //   ),
+          // ),
+          // GoRoute(
+          //   path: '/gestion/politiqueQSE',
+          //   pageBuilder: (context, state) => NoTransitionPage<void>(
+          //       key: state.pageKey,
+          //       child: PolitiqueQSE()
+          //   ),
+          // ),
+          // GoRoute(
+          //   path: '/gestion/ressources/et/responsabiltes',
+          //   pageBuilder: (context, state) => NoTransitionPage<void>(
+          //       key: state.pageKey,
+          //       child: ScreenRessourcesEtResponsabilites()
+          //   ),
+          // ),
+        ],
+      ),
+
+
+
+
+
+      // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
       // Routes pour la gestion du module Gestion
 
