@@ -70,7 +70,7 @@ class _HomeAccueilPilotState extends State<HomeAccueilPilot> {
               )),
               const SizedBox(height: 5),
               Obx(() => _buildMenuButton(
-                pathMenu: controllerAudit.reference.value.isEmpty ? '/gestion/profil' : '/gestion/profil',
+                pathMenu: controllerAudit.reference.value.isEmpty ? '/accueil_pilotage/profil' : '/accueil_pilotage/profil',
                 image: "assets/images/profile-user.png",
                 label: "Profil",
               )),
@@ -137,7 +137,7 @@ class _Header extends StatelessWidget {
           //   child: Container(
           //     width: 200,
           //     decoration: const BoxDecoration(
-          //       color: Color.fromRGBO(42,77,4,1),
+          //       color: Colors.amber,
           //       borderRadius: BorderRadius.all(Radius.circular(20)),
           //     ),
           //     child: TextButton(

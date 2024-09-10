@@ -211,13 +211,13 @@ class RouteClass {
                 child: const DashboardAccueilPilot()
             ),
           ),
-          // GoRoute(
-          //   path: '/gestion/profil',
-          //   pageBuilder: (context, state) => NoTransitionPage<void>(
-          //       key: state.pageKey,
-          //       child: ScreenPilotageProfil()
-          //   ),
-          // ),
+          GoRoute(
+            path: '/accueil_pilotage/profil',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                child: ScreenPilotageProfil()
+            ),
+          ),
           // GoRoute(
           //   path: '/gestion/contexte',
           //   pageBuilder: (context, state) => NoTransitionPage<void>(

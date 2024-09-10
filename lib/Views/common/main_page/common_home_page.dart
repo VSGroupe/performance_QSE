@@ -87,7 +87,7 @@ class _MainPageState extends State<MainPage> {
         acces["est_collecteur"] ||
         acces["est_validateur"] ||
         acces["est_admin"]) {
-      context.go("/pilotage");
+      context.go("/accueil_pilotage");
       return true;
     }
     _showMyDialog();

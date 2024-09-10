@@ -93,7 +93,7 @@ class _PilotageHomeState extends State<PilotageHome> {
                           bottom: -1,
                           child: InkWell(
                             onTap: () {
-                              context.go("/");
+                              context.go("/accueil_pilotage");
                             },
                             child: SizedBox(
                               width: 50,

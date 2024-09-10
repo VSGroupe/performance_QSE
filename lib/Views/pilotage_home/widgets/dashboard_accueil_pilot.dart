@@ -13,6 +13,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:perfqse/Views/gestion/ae/controller/ae_controller.dart';
 
+import '../controller/accueil_pilot_controller.dart';
+
 class DashboardAccueilPilot extends StatefulWidget {
   const DashboardAccueilPilot({super.key});
 
@@ -23,18 +25,14 @@ class DashboardAccueilPilot extends StatefulWidget {
 class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
 
   final ControllerAudit controllerAudit = Get.put(ControllerAudit());
-  final AeController aeController = Get.put(AeController());
+  final AccueilPilotController accueilPilotController = Get.put(AccueilPilotController());
 
   final storage = FlutterSecureStorage();
-
   final String location = "/accueil_piotage";
-
-  double scaleValue = 1.0; // Valeur initiale d'échelle pour l'agrandissement
 
   bool _isHoveringBox2 = false;
   bool _isHoveringBox3 = false;
   bool _isHoveringBox5 = false;
-  bool _isHoveringBox7 = false;
   bool _isHoveringBox9 = false;
   bool _isHoveringBox10 = false;
   bool _isHoveringBox11 = false;
@@ -42,6 +40,7 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
   @override
   void initState() {
     super.initState();
+    accueilPilotController.aAfficher.value=0;
   }
 
   Future<void> _showDialogNoAcces() async {
@@ -121,7 +120,7 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                       Padding(
                           padding: EdgeInsets.all(0),
                           child: RichText(text:TextSpan(
-                              text:"SYSTEME DE PILOTAGE ",style: TextStyle(fontSize: 40,color:Colors.black,fontWeight: FontWeight.bold),
+                              text:"SYSTEME DE PILOTAGE ",style: TextStyle(fontSize: 40,color:Colors.grey.shade700,fontWeight: FontWeight.bold),
                               children: [
                                 TextSpan(text:" PERFORMANCE ",style: TextStyle(fontSize: 40,color:Color.fromRGBO(42,77,4,1),fontWeight: FontWeight.bold),),
                                 TextSpan(text:" Q",style: TextStyle(fontSize: 40,color:Color.fromRGBO(172,28,12,1),fontWeight: FontWeight.bold),),
@@ -234,9 +233,7 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                 }),
                 child: InkWell(
                   onTap: () {
-                    // action à effectuer
-                    //_showCustomDialog2(context);
-                    context.go("");
+                    context.go("/pilotage");
                   },
                   child: SizedBox(
                     height: 50,
@@ -302,9 +299,10 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                 }),
                 child: InkWell(
                   onTap: () {
-                    // action à effectuer
-                    //_showCustomDialog10(context);
-                    context.go("");
+                    setState(() {
+                      accueilPilotController.aAfficher.value=2;
+                    });
+                    context.go("/pilotage");
                   },
                   child: SizedBox(
                     height: 50,
@@ -371,9 +369,10 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                 }),
                 child: InkWell(
                   onTap: () {
-                    // action à effectuer
-                    //_showCustomDialog9(context);
-                    context.go("");
+                    setState(() {
+                      accueilPilotController.aAfficher.value=2;
+                    });
+                    context.go("/pilotage");
                   },
                   child: SizedBox(
                     height: 50,
@@ -441,9 +440,10 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                 }),
                 child: InkWell(
                   onTap: () {
-                    // action à effectuer
-                    //_showCustomDialog3(context);
-                    context.go("");
+                    setState(() {
+                      accueilPilotController.aAfficher.value=1;
+                    });
+                    context.go("/pilotage");
                   },
                   child: SizedBox(
                     height: 50,
@@ -510,9 +510,10 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                 }),
                 child: InkWell(
                   onTap: () {
-                    // action à effectuer
-                    //_showCustomDialog5(context);
-                    context.go("");
+                    setState(() {
+                      accueilPilotController.aAfficher.value=2;
+                    });
+                    context.go("/pilotage");
                   },
                   child: SizedBox(
                     height: 50,
@@ -580,9 +581,10 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                 }),
                 child: InkWell(
                   onTap: () {
-                    // action à effectuer
-                    //_showCustomDialog8(context);
-                    context.go("");
+                    setState(() {
+                      accueilPilotController.aAfficher.value=2;
+                    });
+                    context.go("/pilotage");
                   },
                   child: SizedBox(
                     height: 50,
