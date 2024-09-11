@@ -13,6 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:perfqse/Views/gestion/ae/controller/ae_controller.dart';
 
+import '../../../utils/utils.dart';
 import '../controller/accueil_pilot_controller.dart';
 
 class DashboardAccueilPilot extends StatefulWidget {
@@ -27,7 +28,7 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
   final ControllerAudit controllerAudit = Get.put(ControllerAudit());
   final AccueilPilotController accueilPilotController = Get.put(AccueilPilotController());
 
-  final storage = FlutterSecureStorage();
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
   final String location = "/accueil_piotage";
 
   bool _isHoveringBox2 = false;
@@ -40,8 +41,8 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
   @override
   void initState() {
     super.initState();
-    accueilPilotController.aAfficher.value=0;
   }
+
 
   Future<void> _showDialogNoAcces() async {
     return showDialog<void>(
@@ -104,8 +105,6 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
             ),
 
 
-
-            // Le text "SYSTEME DE MANAGEMENT INTEGRE"
 
             Positioned(
               top: 10,
@@ -232,7 +231,7 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                   _isHoveringBox3 = false;
                 }),
                 child: InkWell(
-                  onTap: () {
+                  onTap: () async {
                     context.go("/pilotage");
                   },
                   child: SizedBox(
