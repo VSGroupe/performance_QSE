@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:perfqse/Views/audit/controller/controller_audit.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:perfqse/Views/gestion/ae/controller/ae_controller.dart';
@@ -25,10 +26,11 @@ class DashboardAccueilPilot extends StatefulWidget {
 
 class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
 
-  final ControllerAudit controllerAudit = Get.put(ControllerAudit());
   final AccueilPilotController accueilPilotController = Get.put(AccueilPilotController());
 
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  late String _userEmail = 'No email available';
+  String _espaces_d_acces = "";
+
   final String location = "/accueil_piotage";
 
   bool _isHoveringBox2 = false;
@@ -43,24 +45,25 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
     super.initState();
   }
 
-
-  Future<void> _showDialogNoAcces() async {
+  Future<void> _showNoAccess() async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: true,
+      barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Accès refusé'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text("Vous n'avez pas la référence d'accès à cet espace."),
-                SizedBox(height: 20),
+                Text("Vous n'avez pas accès à cet espace."),
+                SizedBox(
+                  height: 20,
+                ),
                 Image.asset(
                   "assets/images/forbidden.png",
                   width: 50,
                   height: 50,
-                ),
+                )
               ],
             ),
           ),
@@ -69,19 +72,63 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
     );
   }
 
-  void getAccess(String centerTitle) async {
-    String? reference = await storage.read(key: "ref");
-    List<String> ref = ["QX", "SX"]; // ["Q", "S", "E", "QSE"]
-    if (reference != null) {
-      ref = reference.split("\n");
-    }
-    if (ref.contains(centerTitle)) {
-      controllerAudit.reference.value = centerTitle;
-      context.go(location);
+  Future<bool> _getAccessEspace(String espace) async {
+    final user = Supabase.instance.client.auth.currentUser;
+
+    if (user != null) {
+      _userEmail = user.email ?? 'No email available';
+
+      try {
+        print('Début de la requête pour l\'utilisateur $_userEmail');
+        final response = await Supabase.instance.client
+            .from('Users')
+            .select('a_acces_a')
+            .eq('email', _userEmail)
+            .single()
+            .execute();
+
+        print('Réponse obtenue: ${response.data}');
+        final data = response.data;
+
+        if (data == null) {
+          print('Votre espace d\'accès n\'est pas spécifié dans la base de données');
+          return false;
+        }
+
+        String espacesDacces = data['a_acces_a'] ?? '';
+
+        setState(() {
+          _espaces_d_acces = espacesDacces;
+        });
+
+        print('Espaces d\'accès: $_espaces_d_acces');
+
+        if (_espaces_d_acces == espace) {
+          print('Accès à l\'espace $espace autorisé.');
+          return true;
+        } else {
+          print("Vous n'avez pas accès à: $espace");
+          return false;
+        }
+
+      } catch (e) {
+        print('Exception lors de la requête: $e');
+        return false;
+      }
+
     } else {
-      _showDialogNoAcces();
+      print('Utilisateur non authentifié.');
+      setState(() {
+        _userEmail = 'No email available';
+      });
+      context.go("/");
+      return false;
     }
   }
+
+
+
+
 
   void _hideInformation() {
     setState(() {
@@ -103,7 +150,6 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                 child: Container(color: Colors.transparent),
               ),
             ),
-
 
 
             Positioned(
@@ -154,62 +200,6 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                       border: Border.all(color: Colors.white, width: 2), // Bordure grise
                       borderRadius: BorderRadius.circular(20), // Bordure circulaire
                     ),
-                    // child: Stack(
-                    //   children: [
-                    //     Positioned(
-                    //       top: 15, // Positionner l'image en haut
-                    //       left: 0,
-                    //       right: 0, // Centrer horizontalement
-                    //       child: SizedBox(
-                    //         height: 50,
-                    //         width: 80,
-                    //         child: Image.asset("assets/images/barre_qse.jpg", fit: BoxFit.contain),
-                    //       ),
-                    //     ),
-                    //     Positioned(
-                    //       top: 10, // Positionner le texte en bas avec un padding de 10
-                    //       left: 500,
-                    //       right: 0,
-                    //       child: Text(
-                    //         'Q',
-                    //         textAlign: TextAlign.center,
-                    //         style: TextStyle(
-                    //           color: Colors.white,
-                    //           fontSize: 16,
-                    //           fontWeight: FontWeight.bold,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     Positioned(
-                    //       bottom: 10, // Positionner le texte en bas avec un padding de 10
-                    //       left: 0,
-                    //       right: 0,
-                    //       child: Text(
-                    //         'S',
-                    //         textAlign: TextAlign.center,
-                    //         style: TextStyle(
-                    //           color: Colors.white,
-                    //           fontSize: 16,
-                    //           fontWeight: FontWeight.bold,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     Positioned(
-                    //       top: 10, // Positionner le texte en bas avec un padding de 10
-                    //       left: 0,
-                    //       right: 500,
-                    //       child: Text(
-                    //         'E',
-                    //         textAlign: TextAlign.center,
-                    //         style: TextStyle(
-                    //           color: Colors.white,
-                    //           fontSize: 16,
-                    //           fontWeight: FontWeight.bold,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
                   ),
                 ),
               ),
@@ -232,7 +222,14 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                 }),
                 child: InkWell(
                   onTap: () async {
-                    context.go("/pilotage");
+                    if (await _getAccessEspace("Consolide")) {
+                      context.go("/pilotage");
+                      setState(() {
+                        accueilPilotController.aAfficher.value=0;
+                      });
+                    } else {
+                      _showNoAccess();
+                    }
                   },
                   child: SizedBox(
                     height: 50,
@@ -297,11 +294,15 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                   _isHoveringBox11 = false;
                 }),
                 child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      accueilPilotController.aAfficher.value=2;
-                    });
-                    context.go("/pilotage");
+                  onTap: () async {
+                    if (await _getAccessEspace("Usine")){
+                      setState(() {
+                        accueilPilotController.aAfficher.value=2;
+                      });
+                      context.go("/pilotage");
+                    } else{
+                    _showNoAccess();
+                    }
                   },
                   child: SizedBox(
                     height: 50,
@@ -367,11 +368,15 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                   _isHoveringBox10 = false;
                 }),
                 child: InkWell(
-                  onTap: () {
-                    setState(() {
+                  onTap: () async {
+                    if (await _getAccessEspace("Usine")){
+                      setState(() {
                       accueilPilotController.aAfficher.value=2;
-                    });
-                    context.go("/pilotage");
+                      });
+                      context.go("/pilotage");
+                    } else{
+                      _showNoAccess();
+                    }
                   },
                   child: SizedBox(
                     height: 50,
@@ -438,11 +443,15 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                   _isHoveringBox5 = false;
                 }),
                 child: InkWell(
-                  onTap: () {
+                  onTap: () async {
+                    if (await _getAccessEspace("Siege")){
                     setState(() {
                       accueilPilotController.aAfficher.value=1;
-                    });
-                    context.go("/pilotage");
+                      });
+                      context.go("/pilotage");
+                    } else{
+                      _showNoAccess();
+                    }
                   },
                   child: SizedBox(
                     height: 50,
@@ -508,11 +517,15 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                   _isHoveringBox2 = false;
                 }),
                 child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      accueilPilotController.aAfficher.value=2;
-                    });
-                    context.go("/pilotage");
+                  onTap: () async {
+                    if (await _getAccessEspace("Usine")){
+                      setState(() {
+                        accueilPilotController.aAfficher.value=2;
+                      });
+                      context.go("/pilotage");
+                    } else{
+                      _showNoAccess();
+                    }
                   },
                   child: SizedBox(
                     height: 50,
@@ -579,11 +592,15 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                   _isHoveringBox9 = false;
                 }),
                 child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      accueilPilotController.aAfficher.value=2;
-                    });
-                    context.go("/pilotage");
+                  onTap: () async {
+                    if (await _getAccessEspace("Usine")){
+                      setState(() {
+                        accueilPilotController.aAfficher.value=2;
+                      });
+                      context.go("/pilotage");
+                    } else{
+                      _showNoAccess();
+                    }
                   },
                   child: SizedBox(
                     height: 50,
@@ -635,298 +652,6 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                 ),
               ),
             ),
-
-
-            // Gestion de l'entreprise Dropdown
-
-            // Positioned(
-            //   top: 30,
-            //   right: 50,//480
-            //   child: MouseRegion(
-            //     onEnter: (_) {
-            //       setState(() {
-            //         isHoveredQSE = true;
-            //       });
-            //     },
-            //     onExit: (_) {
-            //       setState(() {
-            //         isHoveredQSE = false;
-            //       });
-            //     },
-            //     child: AnimatedContainer(
-            //       duration: Duration(milliseconds: 300),
-            //       height: isHoveredQSE ? 390 : 45,
-            //       width: 275,
-            //       decoration: BoxDecoration(
-            //         color: Color(0xFF468FBC),//Color(0xFFB0C0CF),
-            //         borderRadius: BorderRadius.circular(8),
-            //         border: Border.all(
-            //           color: Colors.grey,
-            //           width: 1,
-            //         ),
-            //       ),
-            //       child: SingleChildScrollView(
-            //         child: Column(
-            //           crossAxisAlignment: CrossAxisAlignment.center,
-            //           children: [
-            //             Container(
-            //               width: double.infinity,
-            //               decoration: BoxDecoration(
-            //                 color: Colors.white,
-            //                 borderRadius: BorderRadius.only(
-            //                   topLeft: Radius.circular(8),
-            //                   topRight: Radius.circular(8),
-            //                 ),
-            //                 border: Border.all(
-            //                   color: Colors.grey,
-            //                   width: 1,
-            //                 ),
-            //               ),
-            //               padding: EdgeInsets.symmetric(vertical: 8),
-            //               child: Text(
-            //                 "Gestion de l'entreprise",
-            //                 textAlign: TextAlign.center,
-            //                 style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
-            //               ),
-            //             ),
-            //             if (isHoveredQSE)
-            //               Padding(
-            //                 padding: const EdgeInsets.symmetric(vertical: 10),
-            //                 child: Column(
-            //                   children: [
-            //                     SizedBox(
-            //                       width: 245, // Fixed width for buttons
-            //                       child: ElevatedButton(
-            //                         onPressed: () {
-            //                           getAccess("QSE");
-            //                         },
-            //                         child: Text("Fonctionnement de l'entreprise"),
-            //                       ),
-            //                     ),
-            //                     SizedBox(height: 10),
-            //                     SizedBox(
-            //                       width: 245, // Fixed width for buttons
-            //                       child: ElevatedButton(
-            //                         onPressed: () {
-            //                           getAccess("QSE");
-            //                         },
-            //                         child: Text("Responsabilités et autorités"),
-            //                       ),
-            //                     ),
-            //                     SizedBox(height: 10),
-            //                     SizedBox(
-            //                       width: 245, // Fixed width for buttons
-            //                       child: ElevatedButton(
-            //                         onPressed: () {
-            //                           getAccess("QSE");
-            //                         },
-            //                         child: Text("Gestion du personnel"),
-            //                       ),
-            //                     ),
-            //                   ],
-            //                 ),
-            //               ),
-            //           ],
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-
-            // Gestion SM-QSE Dropdown
-
-            // Positioned(
-            //   top: 30,
-            //   left: 60,
-            //   child: MouseRegion(
-            //     onEnter: (_) {
-            //       setState(() {
-            //         isHoveredQ = true;
-            //       });
-            //     },
-            //     onExit: (_) {
-            //       setState(() {
-            //         isHoveredQ = false;
-            //       });
-            //     },
-            //     child: AnimatedContainer(
-            //       duration: Duration(milliseconds: 300),
-            //       height: isHoveredQ ? 390 : 45,
-            //       width: 275,
-            //       decoration: BoxDecoration(
-            //         color: Color(0xFFD1DBE4),
-            //         borderRadius: BorderRadius.circular(8),
-            //         border: Border.all(
-            //           color: Colors.grey,
-            //           width: 1,
-            //         ),
-            //       ),
-            //       child: SingleChildScrollView(
-            //         child: Column(
-            //           crossAxisAlignment: CrossAxisAlignment.center,
-            //           children: [
-            //             Container(
-            //               width: double.infinity,
-            //               decoration: BoxDecoration(
-            //                 color: Colors.white,
-            //                 borderRadius: BorderRadius.only(
-            //                   topLeft: Radius.circular(8),
-            //                   topRight: Radius.circular(8),
-            //                 ),
-            //                 border: Border.all(
-            //                   color: Colors.grey,
-            //                   width: 1,
-            //                 ),
-            //               ),
-            //               padding: EdgeInsets.symmetric(vertical: 8),
-            //               child: Text(
-            //                 "Gestion SM-QSE",
-            //                 textAlign: TextAlign.center,
-            //                 style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
-            //               ),
-            //             ),
-            //             if (isHoveredQ)
-            //               Padding(
-            //                 padding: const EdgeInsets.symmetric(vertical: 10),
-            //                 child: Column(
-            //                   children: [
-            //                     SizedBox(
-            //                       width: 245, // Fixed width for buttons
-            //                       child: ElevatedButton(
-            //                         onPressed: () {
-            //                           getAccess("Q");
-            //                         },
-            //                         child: Text("Politique QSE"),
-            //                       ),
-            //                     ),
-            //                     SizedBox(height: 10),
-            //                     SizedBox(
-            //                       width: 245, // Fixed width for buttons
-            //                       child: ElevatedButton(
-            //                         onPressed: () {
-            //                           getAccess("Q");
-            //                         },
-            //                         child: Text("Non conformités &\nactions correctives"),
-            //                       ),
-            //                     ),
-            //                     SizedBox(height: 10),
-            //                   ],
-            //                 ),
-            //               ),
-            //           ],
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-
-            // Systeme SM-QSE Dropdown
-
-            // Positioned(
-            //   top: 30,
-            //   right: 480,//50
-            //   child: MouseRegion(
-            //     onEnter: (_) {
-            //       setState(() {
-            //         isHoveredS = true;
-            //       });
-            //     },
-            //     onExit: (_) {
-            //       setState(() {
-            //         isHoveredS = false;
-            //       });
-            //     },
-            //     child: AnimatedContainer(
-            //       duration: Duration(milliseconds: 300),
-            //       height: isHoveredS ? 390 : 45,
-            //       width: 275,
-            //       decoration: BoxDecoration(
-            //         color: Color(0xFFB0C0CF),//Color(0xFF468FBC),
-            //         borderRadius: BorderRadius.circular(8),
-            //         border: Border.all(
-            //           color: Colors.grey,
-            //           width: 1,
-            //         ),
-            //       ),
-            //       child: SingleChildScrollView(
-            //         child: Column(
-            //           crossAxisAlignment: CrossAxisAlignment.center,
-            //           children: [
-            //             Container(
-            //               width: double.infinity,
-            //               decoration: BoxDecoration(
-            //                 color: Colors.white,
-            //                 borderRadius: BorderRadius.only(
-            //                   topLeft: Radius.circular(8),
-            //                   topRight: Radius.circular(8),
-            //                 ),
-            //                 border: Border.all(
-            //                   color: Colors.grey,
-            //                   width: 1,
-            //                 ),
-            //               ),
-            //               padding: EdgeInsets.symmetric(vertical: 8),
-            //               child: Text(
-            //                 "Gestion SM-QSE",
-            //                 textAlign: TextAlign.center,
-            //                 style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
-            //               ),
-            //             ),
-            //             if (isHoveredS)
-            //               Padding(
-            //                 padding: const EdgeInsets.symmetric(vertical: 10),
-            //                 child: Column(
-            //                   children: [
-            //                     SizedBox(
-            //                       width: 245, // Fixed width for buttons
-            //                       child: ElevatedButton(
-            //                         onPressed: () {
-            //                           getAccess("S");
-            //                         },
-            //                         child: Text("Parties intéressées"),
-            //                       ),
-            //                     ),
-            //                     SizedBox(height: 10),
-            //                     SizedBox(
-            //                       width: 245, // Fixed width for buttons
-            //                       child: ElevatedButton(
-            //                         onPressed: () {
-            //                           getAccess("S");
-            //                         },
-            //                         child: Text("Gestion des processus"),
-            //                       ),
-            //                     ),
-            //                   ],
-            //                 ),
-            //               ),
-            //           ],
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-
-
-            // Information widget
-            // if (_showInfo)
-            //   Positioned(
-            //     top: _infoPosition.dy,
-            //     left: _infoPosition.dx,
-            //     child: Material(
-            //       color: Colors.transparent,
-            //       child: Container(
-            //         padding: EdgeInsets.all(8),
-            //         decoration: BoxDecoration(
-            //           color: Colors.black.withOpacity(0.7),
-            //           borderRadius: BorderRadius.circular(8),
-            //         ),
-            //         child: Text(
-            //           _infoText,
-            //           style: TextStyle(color: Colors.white),
-            //         ),
-            //       ),
-            //     ),
-            //   ),
           ],
         ),
       ),

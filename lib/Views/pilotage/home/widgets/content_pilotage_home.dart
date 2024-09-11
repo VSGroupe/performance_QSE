@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../widgets/customtext.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../pilotage_home/controller/accueil_pilot_controller.dart';
-import '../../entity/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
 import 'contentbox.dart';
 import 'listeProcessus.dart';
 
@@ -18,15 +15,22 @@ class ContentPilotageHome extends StatefulWidget {
 
 class _ContentPilotageHomeState extends State<ContentPilotageHome> {
   final AccueilPilotController accueilPilotController = Get.put(AccueilPilotController());
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
   List<Map<String, dynamic>> _filliale = [];
   List<Map<String, dynamic>> _management = [];
   List<Map<String, dynamic>> _operationnels = [];
 
+  late String _userEmail = 'No email available';
+  String _espaces_d_acces = "";
+
+  final Map<String, bool> _accessCache = {};
+  late Future<void> _loadDataFuture;
+  late Future<void> _accessFuture;
+
   @override
   void initState() {
     super.initState();
-    _loadData();
+    _loadDataFuture = _loadData();
+    _accessFuture = _checkAccess(); // Assurez-vous que cette fonction est appelée une seule fois
   }
 
   Future<void> _loadData() async {
@@ -45,6 +49,107 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
     }
   }
 
+  Future<void> _checkAccess() async {
+    await Future.wait([
+      _getAccessEspace("Consolide"),
+      _getAccessEspace("Siege"),
+      _getAccessEspace("Usine"),
+    ]);
+  }
+
+  Future<bool> _getAccessEspace(String espace) async {
+    if (_accessCache.containsKey(espace)) {
+      return _accessCache[espace]!;
+    }
+
+    final user = Supabase.instance.client.auth.currentUser;
+
+    if (user != null) {
+      _userEmail = user.email ?? 'No email available';
+
+      try {
+        print('Début de la requête pour l\'utilisateur $_userEmail');
+        final response = await Supabase.instance.client
+            .from('Users')
+            .select('a_acces_a')
+            .eq('email', _userEmail)
+            .single()
+            .execute();
+
+        print('Réponse obtenue: ${response.data}');
+        final data = response.data;
+
+        if (data == null) {
+          print('Votre espace d\'accès n\'est pas spécifié dans la base de données');
+          _accessCache[espace] = false;
+          return false;
+        }
+
+        String espacesDacces = data['a_acces_a'] ?? '';
+
+        setState(() {
+          _espaces_d_acces = espacesDacces;
+        });
+
+        print('Espaces d\'accès: $_espaces_d_acces');
+
+        if (_espaces_d_acces == espace) {
+          print('Accès à l\'espace $espace autorisé.');
+          _accessCache[espace] = true;
+          return true;
+        } else {
+          print("Vous n'avez pas accès à: $espace");
+          _accessCache[espace] = false;
+          return false;
+        }
+
+      } catch (e) {
+        print('Exception lors de la requête: $e');
+        _accessCache[espace] = false;
+        return false;
+      }
+
+    } else {
+      print('Utilisateur non authentifié.');
+      setState(() {
+        _userEmail = 'No email available';
+      });
+      context.go("/");
+      _accessCache[espace] = false;
+      return false;
+    }
+  }
+
+  Future<List<Widget>> _buildContentBoxes() async {
+    final List<Widget> children = [];
+
+    if (await _getAccessEspace("Consolide")) {
+      children.addAll([
+        _buildContentBox("PROCESSUS MANAGEMENT", _management, "management"),
+        const SizedBox(width: 10),
+        _buildContentBox("PROCESSUS OPÉRATIONNELS", _operationnels, "operationnels"),
+        const SizedBox(width: 10),
+        _buildContentBox("PROCESSUS SUPPORT", _filliale, "support"),
+      ]);
+    } else if (await _getAccessEspace("Siege")) {
+      children.addAll([
+        _buildContentBox("PROCESSUS MANAGEMENT", _management, "management"),
+        const SizedBox(width: 120),
+        _buildContentBox("PROCESSUS SUPPORT", _filliale, "support"),
+      ]);
+    } else if (await _getAccessEspace("Usine")) {
+      children.addAll([
+        _buildContentBox("PROCESSUS OPÉRATIONNELS", _operationnels, "operationnels"),
+        const SizedBox(width: 120),
+        _buildContentBox("PROCESSUS SUPPORT", _filliale, "support"),
+      ]);
+    } else {
+      context.go("/accueil_pilotage");
+    }
+
+    return children;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -54,44 +159,38 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
         children: [
           _buildTitle("Processus et Indicateurs"),
           const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: _buildContentBoxes(),
+          FutureBuilder<void>(
+            future: Future.wait([_loadDataFuture, _accessFuture]),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Erreur: ${snapshot.error}'));
+              } else {
+                return FutureBuilder<List<Widget>>(
+                  future: _buildContentBoxes(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Erreur: ${snapshot.error}'));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Center(child: Text('Aucun contenu disponible.'));
+                    } else {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: snapshot.data!,
+                      );
+                    }
+                  },
+                );
+              }
+            },
           ),
         ],
       ),
     );
   }
-
-  List<Widget> _buildContentBoxes() {
-    final List<Widget> children = [];
-
-    // Construire le contenu en fonction de la valeur de 'aAfficher'
-    if (accueilPilotController.aAfficher.value == 0) {
-      children.addAll([
-        _buildContentBox("PROCESSUS MANAGEMENT", _management, "management"),
-        const SizedBox(width: 10),
-        _buildContentBox("PROCESSUS OPÉRATIONNELS", _operationnels, "operationnels"),
-        const SizedBox(width: 10),
-        _buildContentBox("PROCESSUS SUPPORT", _filliale, "support"),
-      ]);
-    } else if (accueilPilotController.aAfficher.value == 1) {
-      children.addAll([
-        _buildContentBox("PROCESSUS MANAGEMENT", _management, "management"),
-        const SizedBox(width: 120),
-        _buildContentBox("PROCESSUS SUPPORT", _filliale, "support"),
-      ]);
-    } else {
-      children.addAll([
-        _buildContentBox("PROCESSUS OPÉRATIONNELS", _operationnels, "operationnels"),
-        const SizedBox(width: 120),
-        _buildContentBox("PROCESSUS SUPPORT", _filliale, "support"),
-      ]);
-    }
-
-    return children;
-  }
-
 
   Widget _buildTitle(String title) {
     return Container(
@@ -155,37 +254,6 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
           ),
         );
       }).toList(),
-    );
-  }
-}
-
-class EspaceTextButton extends StatelessWidget {
-  final String title;
-  final String espaceID;
-  final Color color;
-  final Function()? onTap;
-
-  const EspaceTextButton({
-    Key? key,
-    required this.title,
-    required this.espaceID,
-    required this.color,
-    this.onTap,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: onTap,
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: CustomText(
-          text: title,
-          color: color,
-          weight: FontWeight.bold,
-          size: 16,
-        ),
-      ),
     );
   }
 }
