@@ -218,41 +218,6 @@ class RouteClass {
                 child: ScreenPilotageProfil()
             ),
           ),
-          // GoRoute(
-          //   path: '/gestion/contexte',
-          //   pageBuilder: (context, state) => NoTransitionPage<void>(
-          //       key: state.pageKey,
-          //       child: ScreenContexte()
-          //   ),
-          // ),
-          // GoRoute(
-          //   path: '/gestion/partiesInteressees',
-          //   pageBuilder: (context, state) => NoTransitionPage<void>(
-          //       key: state.pageKey,
-          //       child: ScreenPartieInteressees()
-          //   ),
-          // ),
-          // GoRoute(
-          //   path: '/gestion/perimetresEt/domaines/Dapplication',
-          //   pageBuilder: (context, state) => NoTransitionPage<void>(
-          //       key: state.pageKey,
-          //       child: ScreenPerimetresEtDomainesDApplication()
-          //   ),
-          // ),
-          // GoRoute(
-          //   path: '/gestion/politiqueQSE',
-          //   pageBuilder: (context, state) => NoTransitionPage<void>(
-          //       key: state.pageKey,
-          //       child: PolitiqueQSE()
-          //   ),
-          // ),
-          // GoRoute(
-          //   path: '/gestion/ressources/et/responsabiltes',
-          //   pageBuilder: (context, state) => NoTransitionPage<void>(
-          //       key: state.pageKey,
-          //       child: ScreenRessourcesEtResponsabilites()
-          //   ),
-          // ),
         ],
       ),
 

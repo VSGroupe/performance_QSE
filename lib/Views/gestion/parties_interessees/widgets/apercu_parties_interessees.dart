@@ -132,7 +132,7 @@ class _ApercuPartiesInteresseesState extends State<ApercuPartiesInteressees> {
                     children: [
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 40),
+                          padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 30),
                           foregroundColor: Colors.white, backgroundColor: Colors.blue,
                         ),
                         onPressed: () {

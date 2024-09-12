@@ -24,7 +24,6 @@ class _GestionProcessusState extends State<GestionProcessus> with SingleTickerPr
 
   static const List<Tab> myTabs = <Tab>[
     Tab(text: 'Cartographie des processus'),
-    Tab(text: 'Processus et responsabilités'),
     Tab(text: 'Fiche d\'identité des pocessus'),
     Tab(text: 'Ajouter un processus'),
   ];
@@ -74,21 +73,12 @@ class _GestionProcessusState extends State<GestionProcessus> with SingleTickerPr
                   if (gestionProcessusController.aAfficher.value == 1) {
                     return const [
                       CustomText(text: "Cartographie des processus", size: 15),
-                      CustomText(text: "Processus et responsabilités", size: 15),
                       CustomText(text: "Fiche d'identité des pocessus", size: 15),
-                      CustomText(text: "Ajouter un processus", size: 15),
-                    ];
-                  } else if (gestionProcessusController.aAfficher.value == 2) {
-                    return const [
-                      CustomText(text: "Processus et responsabilités", size: 15),
-                      CustomText(text: "Fiche d'identité des pocessus", size: 15),
-                      CustomText(text: "Cartographie des processus", size: 15),
                       CustomText(text: "Ajouter un processus", size: 15),
                     ];
                   } else {
                     return const [
                       CustomText(text: "Fiche d'identité des pocessus", size: 15),
-                      CustomText(text: "Processus et responsabilités", size: 15),
                       CustomText(text: "Cartographie des processus", size: 15),
                       CustomText(text: "Ajouter un processus", size: 15),
                     ];
@@ -98,21 +88,12 @@ class _GestionProcessusState extends State<GestionProcessus> with SingleTickerPr
                   if (gestionProcessusController.aAfficher.value == 1) {
                     return [
                       Container(child: CartographieProcessus()),
-                      Container(child: ListesProcessEtResp()),
                       Container(child: FicheDIdentiteProcessus()),
-                      Container(child: AjoutProcessus()),
-                    ];
-                  } else if (gestionProcessusController.aAfficher.value == 2) {
-                    return [
-                      Container(child: ListesProcessEtResp()),
-                      Container(child: FicheDIdentiteProcessus()),
-                      Container(child: CartographieProcessus()),
                       Container(child: AjoutProcessus()),
                     ];
                   } else {
                     return [
                       Container(child: FicheDIdentiteProcessus()),
-                      Container(child: ListesProcessEtResp()),
                       Container(child: CartographieProcessus()),
                       Container(child: AjoutProcessus()),
                     ];

@@ -931,7 +931,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
                         color: Colors.transparent,
                         child: Container(
                           width: 300,
-                          height: 230,
+                          height: 180,
                           decoration: BoxDecoration(
                             color: Colors.white, //Color(0xFFD1DBE4), // Couleur de fond bleue
                             borderRadius: BorderRadius.circular(8.0),
@@ -994,23 +994,6 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                       Navigator.of(context).pop();
                                       setState(() {
                                         gestionProcessusController.aAfficher.value = 2;
-                                      });
-                                      context.go("/gestion/processus");
-                                    },
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Liste des processus et\nleurs responsabilités',
-                                        style: TextStyle(color: Colors.black, fontSize: 15),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      setState(() {
-                                        gestionProcessusController.aAfficher.value = 3;
                                       });
                                       context.go("/gestion/processus");
                                     },

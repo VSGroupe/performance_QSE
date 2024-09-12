@@ -235,7 +235,7 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
       children: items.map((item) {
         return TextButton(
           onPressed: () {
-            context.go("/accueil_pilotage");
+            context.go("/pilotage/espace/Com/accueil");
             print("\nitems:\n");
             print(items);
             print("\nitem:\n");

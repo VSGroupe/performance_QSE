@@ -20,9 +20,8 @@ class _MoyensDeMaitriseState extends State<MoyensDeMaitrise> with SingleTickerPr
   static const List<Tab> myTabs = <Tab>[
     Tab(text: 'Maîtrise des risques'),
     Tab(text: 'Maîtrise des IES'),
-    Tab(text: 'Maîtrise des incidents'),
+    Tab(text: 'Maîtrise des dangers et incidents'),
     Tab(text: 'Maîtrise des urgences'),
-    Tab(text: 'Maîtrise des dangers'),
   ];
 
   late TabController _tabController;
@@ -76,15 +75,11 @@ class _MoyensDeMaitriseState extends State<MoyensDeMaitrise> with SingleTickerPr
                     size: 15,
                   ),
                   CustomText(
-                    text: "Maîtrise des incidents",
+                    text: "Maîtrise des dangers et incidents",
                     size: 15,
                   ),
                   CustomText(
                     text: "Maîtrise des urgences",
-                    size: 15,
-                  ),
-                  CustomText(
-                    text: "Maîtrise des dangers",
                     size: 15,
                   ),
                 ],
@@ -93,7 +88,6 @@ class _MoyensDeMaitriseState extends State<MoyensDeMaitrise> with SingleTickerPr
                   Container(child: MaitriseIes(),),
                   Container(child: MaitriseIncidents(),),
                   Container(child: MaitriseUrgences(),),
-                  Container(child: MaitriseDangers(),),
                 ],
               ),
             ),
