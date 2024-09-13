@@ -1096,11 +1096,11 @@ class _DashboardGestionState extends State<DashboardGestion> {
                                 child: Row(
                                   children: [
                                     Image.asset(
-                                      'assets/icons/environnement.png', // Remplacez par le chemin de votre image
-                                      width: 30.0, // Ajustez la taille de l'image selon vos besoins
+                                      'assets/icons/environnement.png',
+                                      width: 30.0,
                                       height: 40.0,
                                     ),
-                                    SizedBox(width: 8.0), // Espace entre l'image et le texte
+                                    SizedBox(width: 8.0),
                                     Text(
                                       "Aspects environnementaux",
                                       style: TextStyle(
