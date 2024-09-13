@@ -17,7 +17,7 @@ class _FicheDIdentiteProcessusState extends State<FicheDIdentiteProcessus> {
           Container(
             color: Color(0xFF7FC01E),
             child: const SizedBox(
-              width: 50,
+              width: 55,
               height: 400,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -88,23 +88,24 @@ class _FicheDIdentiteProcessusState extends State<FicheDIdentiteProcessus> {
                               child: Stack(
                                 children: [
                                   Positioned(
-                                    top: 50,
-                                    left: 140,
+                                    top: 70,
+                                    left: 100,
                                     child: Text(
                                       "Moyens, Outils",
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
+                                        fontSize: 16,
                                       ),
                                     ),
                                   ),
                                   Positioned(
-                                    top: 40,
-                                    left: 50,
+                                    top: 50,
+                                    left: 10,
                                     child: Image.asset(
                                       "assets/images/home1.png",
-                                      width: 100.0,
-                                      height: 80.0,
+                                      width: 80.0,
+                                      height: 60.0,
                                     ),
                                   ),
                                 ],
@@ -112,33 +113,52 @@ class _FicheDIdentiteProcessusState extends State<FicheDIdentiteProcessus> {
                             ),
                           ),
                         ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(60),
-                            bottomRight: Radius.circular(10),
-                            bottomLeft: Radius.circular(60)
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xFFD67B84), // La couleur de fond du conteneur
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(60),
+                                bottomRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(60)
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.3),
+                                spreadRadius: 1,
+                                blurRadius: 10,
+                                offset: Offset(3, 3),
+                              ),
+                            ],
                           ),
-                          child: Container(
-                            color:Color(0xFFD67B84),
-                            width: 300,
-                            child: Stack(
-                              children: [
-                                Positioned(
-                                    top: 50,
-                                    left: 140,
-                                    child: Text("Acteurs", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)
-                                ),
-                                Positioned(
-                                    top: 40,
-                                    left: 50,
-                                    child: Image.asset(
-                                      "assets/images/home1.png",
-                                      width: 100.0,
-                                      height: 80.0,
-                                    )
-                                ),
-                              ],
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(60),
+                                bottomRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(60)
+                            ),
+                            child: Container(
+                              color:Color(0xFFD67B84),
+                              width: 300,
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                      top: 70,
+                                      left: 100,
+                                      child: Text("Acteurs", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),)
+                                  ),
+                                  Positioned(
+                                      top: 45,
+                                      left: 10,
+                                      child: Image.asset(
+                                        "assets/images/home1.png",
+                                        width: 80.0,
+                                        height: 60.0,
+                                      )
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -166,12 +186,19 @@ class _FicheDIdentiteProcessusState extends State<FicheDIdentiteProcessus> {
                               children: [
                                 Positioned(
                                     top: 50,
-                                    left: 140,
-                                    child: Text("Données\nd'entrée", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)
+                                    left: 80,
+                                    child: Text(
+                                      "Données d'entrée",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    )
                                 ),
                                 Positioned(
                                   top: 40,
-                                  left: 50,
+                                  left: 10,
                                   child: Image.asset(
                                     "assets/images/home1.png",
                                     width: 60.0,
@@ -191,17 +218,24 @@ class _FicheDIdentiteProcessusState extends State<FicheDIdentiteProcessus> {
                               children: [
                                 Positioned(
                                     top: 50,
-                                    left: 120,
-                                    child: Text("Processus", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)
+                                    left: 80,
+                                    child: Text(
+                                      "Processus",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    )
                                 ),
                                 Positioned(
-                                    top: 40,
-                                    left: 50,
-                                    child: Image.asset(
-                                      "assets/images/home1.png",
-                                      width: 60.0,
-                                      height: 40.0,
-                                    )
+                                  top: 40,
+                                  left: 10,
+                                  child: Image.asset(
+                                    "assets/images/home1.png",
+                                    width: 60.0,
+                                    height: 40.0,
+                                  ),
                                 ),
                               ],
                             ),
@@ -216,12 +250,19 @@ class _FicheDIdentiteProcessusState extends State<FicheDIdentiteProcessus> {
                               children: [
                                 Positioned(
                                     top: 50,
-                                    left: 140,
-                                    child: Text("Données\nde sortie", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)
+                                    left: 80,
+                                    child: Text(
+                                      "Données de sortie",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    )
                                 ),
                                 Positioned(
                                   top: 40,
-                                  left: 50,
+                                  left: 10,
                                   child: Image.asset(
                                     "assets/images/home1.png",
                                     width: 60.0,
@@ -243,63 +284,115 @@ class _FicheDIdentiteProcessusState extends State<FicheDIdentiteProcessus> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(60),
-                            bottomRight: Radius.circular(10),
-                            bottomLeft: Radius.circular(60)
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xFFD67B84), // La couleur de fond du conteneur
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(60),
+                              bottomRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(60)
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.3),
+                                spreadRadius: 1,
+                                blurRadius: 10,
+                                offset: Offset(3, 3),
+                              ),
+                            ],
                           ),
-                          child: Container(
-                            color:Color(0xFFD67B84),
-                            width: 300,
-                            child: Stack(
-                              children: [
-                                Positioned(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(60),
+                                bottomRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(60)
+                            ),
+                            child: Container(
+                              color:Color(0xFFD67B84),
+                              width: 300,
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                    top: 70,
+                                    left: 100,
+                                    child: Text(
+                                      "Méthodes/Instructions",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
                                     top: 50,
-                                    left: 140,
-                                    child: Text("Méthodes/Instructions", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)
-                                ),
-                                Positioned(
-                                    top: 40,
-                                    left: 50,
+                                    left: 10,
                                     child: Image.asset(
                                       "assets/images/home1.png",
-                                      width: 100.0,
-                                      height: 80.0,
-                                    )
-                                ),
-                              ],
+                                      width: 80.0,
+                                      height: 60.0,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(60),
-                            topRight: Radius.circular(10),
-                            bottomRight: Radius.circular(60),
-                            bottomLeft: Radius.circular(10)
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xFFD67B84), // La couleur de fond du conteneur
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(60),
+                                topRight: Radius.circular(10),
+                                bottomRight: Radius.circular(60),
+                                bottomLeft: Radius.circular(10)
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.3),
+                                spreadRadius: 1,
+                                blurRadius: 10,
+                                offset: Offset(3, 3),
+                              ),
+                            ],
                           ),
-                          child: Container(
-                            color:Color(0xFFD67B84),
-                            width: 300,
-                            child: Stack(
-                              children: [
-                                Positioned(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(60),
+                                topRight: Radius.circular(10),
+                                bottomRight: Radius.circular(60),
+                                bottomLeft: Radius.circular(10)
+                            ),
+                            child: Container(
+                              color:Color(0xFFD67B84),
+                              width: 300,
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                    top: 70,
+                                    left: 100,
+                                    child: Text(
+                                      "Indicateurs & Objectifs",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
                                     top: 50,
-                                    left: 140,
-                                    child: Text("Indicateurs & Objectifs", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)
-                                ),
-                                Positioned(
-                                    top: 40,
-                                    left: 50,
+                                    left: 10,
                                     child: Image.asset(
                                       "assets/images/home1.png",
-                                      width: 100.0,
-                                      height: 80.0,
-                                    )
-                                ),
-                              ],
+                                      width: 80.0,
+                                      height: 60.0,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -316,7 +409,7 @@ class _FicheDIdentiteProcessusState extends State<FicheDIdentiteProcessus> {
           Container(
             color: Color(0xFF7FC01E),
             child: const SizedBox(
-              width: 50,
+              width: 55,
               height: 400,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

@@ -19,7 +19,7 @@ class _ContexteState extends State<Contexte> with SingleTickerProviderStateMixin
   static const List<Tab> myTabs = <Tab>[
     Tab(text: 'Environnement de l\'entreprise'),
     Tab(text: 'Analyse du contexte'),
-    Tab(text: 'Rapport du risque'),
+    Tab(text: 'Risques et opportunités'),
   ];
 
   late TabController _tabController;
@@ -73,7 +73,7 @@ class _ContexteState extends State<Contexte> with SingleTickerProviderStateMixin
                     size: 15,
                   ),
                   CustomText(
-                    text: "Rapport du risque",
+                    text: "Risques et opportunités",
                     size: 15,
                   ),
                 ],
