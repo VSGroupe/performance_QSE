@@ -621,301 +621,6 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
   }
 
 
-
-  // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-
-  // Ajout d'enjeu
-  Future<void> _showAddEnjeuDialog(BuildContext context) async {
-    final TextEditingController _idEnjeuController = TextEditingController();
-    final TextEditingController _libelleController = TextEditingController();
-    String? _selectedAxeId;
-    String? _selectedType;
-    bool _idEnjeuExists = false;
-    bool _showSuccessAnimation = false;
-    bool _showFieldError = false;
-
-    Future<void> _checkIdEnjeuExists(String idEnjeu) async {
-      final response = await http.get(
-        Uri.parse('$baseUrl/check_id_enjeu_exists?id_enjeu=$idEnjeu'),
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        _idEnjeuExists = data['exists'];
-      } else {
-        print('Erreur lors de la vérification de l\'id enjeu: ${response.statusCode}');
-      }
-    }
-
-    Future<List<Map<String, dynamic>>> _fetchAxes() async {
-      final response = await http.get(
-        Uri.parse('$baseUrl/get_axes'),
-      );
-
-      if (response.statusCode == 200) {
-        return List<Map<String, dynamic>>.from(jsonDecode(response.body));
-      } else {
-        print('Erreur lors de la récupération des axes: ${response.statusCode}');
-        return [];
-      }
-    }
-
-    Future<void> _addEnjeu() async {
-      final idEnjeu = _idEnjeuController.text;
-      final libelle = _libelleController.text;
-
-      await _checkIdEnjeuExists(idEnjeu);
-
-      if (_idEnjeuExists) {
-        print('L\'ID de l\'enjeu existe déjà, ajout annulé.');
-        return;
-      }
-
-      if (idEnjeu.isNotEmpty && libelle.isNotEmpty && _selectedAxeId != null && _selectedType != null) {
-        final response = await http.post(
-          Uri.parse('$baseUrl/add_enjeu'),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({
-            'id_enjeu': idEnjeu,
-            'libelle': libelle,
-            'id_axe': _selectedAxeId,
-            'type_enjeu': _selectedType,
-          }),
-        );
-
-        if (response.statusCode == 201) {
-          print('Enjeu ajouté avec succès');
-          _idEnjeuController.clear();
-          _libelleController.clear();
-          _selectedAxeId = null;
-          _selectedType = null;
-          setState(() {
-            _showSuccessAnimation = true;
-            _showFieldError = false; // Réinitialiser l'erreur des champs
-          });
-        } else {
-          print('Erreur lors de l\'ajout de l\'enjeu: ${response.statusCode}');
-        }
-      } else {
-        setState(() {
-          _showFieldError = true; // Afficher l'erreur si certains champs sont vides
-        });
-        print('Certains champs sont vides ou non sélectionnés');
-      }
-    }
-
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Container(
-                width: 600,
-                height: 500,
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Ajouter un Enjeu',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 16),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildTextField(
-                              controller: _idEnjeuController,
-                              labelText: "Identifiant de l'enjeu (Ex: enjeu1, enjeu2, enjeu15, ...)",
-                              errorText: _idEnjeuExists ? 'Cet identifiant existe déjà' : null,
-                            ),
-                            const SizedBox(height: 16),
-                            _buildTextField(
-                              controller: _libelleController,
-                              labelText: "Nom de l'enjeu",
-                            ),
-                            const SizedBox(height: 16),
-                            _buildDropdown(
-                              labelText: "Sélectionner l'axe associé",
-                              value: _selectedAxeId,
-                              onChanged: (newValue) {
-                                setState(() {
-                                  _selectedAxeId = newValue;
-                                });
-                              },
-                              itemsFuture: _fetchAxes,
-                              itemLabel: (axe) => '${axe['libelle']}',
-                            ),
-                            const SizedBox(height: 16),
-                            _buildDropdown(
-                              labelText: "Sélectionner le type de l'enjeu",
-                              value: _selectedType,
-                              onChanged: (newValue) {
-                                setState(() {
-                                  _selectedType = newValue!;
-                                });
-                              },
-                              itemsFuture: () async => ['interne', 'externe']
-                                  .map((type) => {'type_enjeu': type})
-                                  .toList(),
-                              itemLabel: (item) => item['type_enjeu']!,
-                            ),
-                            const SizedBox(height: 16),
-                            if (_showFieldError)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: Text(
-                                  'Veuillez remplir tous les champs obligatoires',
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              ),
-                            Visibility(
-                              visible: _showSuccessAnimation,
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 16.0),
-                                child: Lottie.asset(
-                                  'assets/animations/success.json',
-                                  width: 200,
-                                  height: 150,
-                                  repeat: false,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text('Annuler'),
-                        ),
-                        const SizedBox(width: 8),
-                        ElevatedButton(
-                          onPressed: () async {
-                            await _addEnjeu();
-                            if (!_idEnjeuExists && !_showFieldError) {
-                              setState(() {
-                                _showSuccessAnimation = true;
-                              });
-                              await Future.delayed(Duration(seconds: 2));
-                              Navigator.of(context).pop();
-                            } else {
-                              setState(() {
-                                _showSuccessAnimation = false;
-                              });
-                            }
-                          },
-                          child: Text('Ajouter'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String labelText,
-    String? errorText,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 1,
-            blurRadius: 5,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
-      child: TextField(
-        controller: controller,
-        decoration: InputDecoration(
-          labelText: labelText,
-          errorText: errorText,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDropdown<T>({
-    required String labelText,
-    required T? value,
-    required void Function(T?) onChanged,
-    required Future<List<Map<String, dynamic>>> Function() itemsFuture,
-    required String Function(Map<String, dynamic>) itemLabel,
-  }) {
-    return FutureBuilder<List<Map<String, dynamic>>>(
-      future: itemsFuture(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(child: CircularProgressIndicator());
-        }
-        final items = snapshot.data!;
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
-                spreadRadius: 1,
-                blurRadius: 5,
-                offset: Offset(0, 3),
-              ),
-            ],
-          ),
-          child: DropdownButtonFormField<T>(
-            decoration: InputDecoration(
-              labelText: labelText,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
-            ),
-            isExpanded: true,
-            value: value,
-            onChanged: onChanged,
-            items: items.map((item) {
-              return DropdownMenuItem<T>(
-                value: item['id_axe'] ?? item['type_enjeu'] as T?,
-                child: Text(itemLabel(item)),
-              );
-            }).toList(),
-          ),
-        );
-      },
-    );
-  }
-
-
-
-
   Future<void> _showAddRisqueDialog(BuildContext context) async {
     final TextEditingController _libelleController = TextEditingController();
     String? _selectedGravite;
@@ -1389,15 +1094,14 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Analyse du Contexte"),
+        title: const Text("Risques et Opportunités"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: SizedBox(
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
             child: Table(
-              border: TableBorder.all(),
+              border: TableBorder.all(color: Colors.grey, width: 0.7),
               columnWidths: const {
                 0: FixedColumnWidth(150.0),
                 1: FixedColumnWidth(350.0),
@@ -1408,7 +1112,7 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
                 TableRow(
                   children: [
                     tableCell("Type", isHeader: true),
-                    headerCellWithButton("Enjeux", () => _showAddEnjeuDialog(context)),
+                    tableCell("Enjeux", isHeader: true),
                     headerCellWithButton("Risques", () => _showAddRisqueDialog(context)),
                     headerCellWithButton("Opportunités", () => _showAddOpportuniteDialog(context)),
                   ],
@@ -1423,7 +1127,7 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
                             .map((enjeu) => Padding(
                           padding: const EdgeInsets.only(bottom: 4.0),
                           child: Text(
-                            "-  ${enjeu['libelle'] ?? 'N/A'}\n",
+                            "-  ${enjeu['libelle'] ?? 'N/A'}",
                             style: const TextStyle(color: Colors.black),
                           ),
                         ))
@@ -1500,7 +1204,7 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
                             .map((enjeu) => Padding(
                           padding: const EdgeInsets.only(bottom: 4.0),
                           child: Text(
-                            "-  ${enjeu['libelle'] ?? 'N/A'}\n",
+                            "-  ${enjeu['libelle'] ?? 'N/A'}",
                             style: const TextStyle(color: Colors.black),
                           ),
                         ))
@@ -1570,7 +1274,7 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
               ],
             ),
           ),
-        ),
+        ],
       ),
     );
   }

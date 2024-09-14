@@ -20,7 +20,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
   Map<String, List<Map<String, dynamic>>> _risquesParEnjeu = {};
   Map<String, List<Map<String, dynamic>>> _opportunitesParEnjeu = {};
   Map<String, String> libellesEnjeux = {};// Créer une liste associative pour stocker les libellés avec leur id_enjeu comme clé
-  
+
   @override
   void initState() {
     super.initState();
@@ -913,504 +913,27 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
     );
   }
 
-
-
-
-  Future<void> _showAddRisqueDialog(BuildContext context) async {
-    final TextEditingController _libelleController = TextEditingController();
-    String? _selectedGravite;
-    String? _selectedFrequence;
-    String? _selectedEnjeuId;
-    bool _showSuccessAnimation = false;
-    bool _showFieldError = false;
-
-    Future<List<Map<String, dynamic>>> _fetchEnjeux() async {
-      final response = await http.get(
-        Uri.parse('$baseUrl/enjeux'),
-      );
-
-      if (response.statusCode == 200) {
-        return List<Map<String, dynamic>>.from(jsonDecode(response.body));
-      } else {
-        print('Erreur lors de la récupération des enjeux: ${response.statusCode}');
-        return [];
-      }
-    }
-
-    Future<bool> _addRisque() async {
-      final libelle = _libelleController.text;
-
-      if (libelle.isNotEmpty && _selectedGravite != null && _selectedFrequence != null && _selectedEnjeuId != null) {
-        final response = await http.post(
-          Uri.parse('$baseUrl/add_risque'),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({
-            'libelle': libelle,
-            'gravite': _selectedGravite,
-            'frequence': _selectedFrequence,
-            'id_enjeu': _selectedEnjeuId,
-          }),
-        );
-
-        if (response.statusCode == 201) {
-          print('Risque ajouté avec succès');
-          _libelleController.clear();
-          _selectedGravite = null;
-          _selectedFrequence = null;
-          _selectedEnjeuId = null;
-          return true;
-        } else {
-          print('Erreur lors de l\'ajout du risque: ${response.statusCode}');
-          return false;
-        }
-      } else {
-        return false;
-      }
-    }
-
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Dialog(
-              child: Container(
-                width: 550,  // Largeur totale de la boîte de dialogue
-                height: 500,
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Ajouter un Risque',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 16),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextField(
-                              controller: _libelleController,
-                              decoration: InputDecoration(
-                                labelText: "Désignation du risque",
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            FutureBuilder<List<Map<String, dynamic>>>(
-                              future: _fetchEnjeux(),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return Center(child: CircularProgressIndicator());
-                                }
-                                final enjeux = snapshot.data!;
-                                return Container(
-                                  // width: 520, // Réduction de la largeur des boîtes déroulantes
-                                  child: DropdownButtonFormField<String>(
-                                    isExpanded: true,
-                                    value: _selectedEnjeuId,
-                                    decoration: InputDecoration(
-                                      labelText: "Sélectionner l'enjeu associé",
-                                      border: OutlineInputBorder(),
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
-                                    ),
-                                    items: enjeux.map((enjeu) {
-                                      return DropdownMenuItem<String>(
-                                        value: enjeu['id_enjeu'],
-                                        child: Text('${enjeu['libelle']}'),
-                                      );
-                                    }).toList(),
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        _selectedEnjeuId = newValue!;
-                                      });
-                                    },
-                                    dropdownColor: Colors.white,
-                                    menuMaxHeight: 200,
-                                  ),
-                                );
-                              },
-                            ),
-                            const SizedBox(height: 16),
-                            Container(
-                              // width: 520, // Réduction de la largeur des boîtes déroulantes
-                              child: DropdownButtonFormField<String>(
-                                isExpanded: true,
-                                value: _selectedGravite,
-                                decoration: InputDecoration(
-                                  labelText: "Sélectionner le Poids risque",
-                                  border: OutlineInputBorder(),
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
-                                ),
-                                items: ['-1', '-3', '-5'].map((gravite) {
-                                  return DropdownMenuItem<String>(
-                                    value: gravite,
-                                    child: Text(gravite),
-                                  );
-                                }).toList(),
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    _selectedGravite = newValue!;
-                                  });
-                                },
-                                dropdownColor: Colors.white,
-                                menuMaxHeight: 200,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Container(
-                              // width: 520, // Réduction de la largeur des boîtes déroulantes
-                              child: DropdownButtonFormField<String>(
-                                isExpanded: true,
-                                value: _selectedFrequence,
-                                decoration: InputDecoration(
-                                  labelText: "Sélectionner la fréquence du risque",
-                                  border: OutlineInputBorder(),
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
-                                ),
-                                items: ['0.10', '0.25', '0.5', '0.75', '0.80', '0.90', '0.95'].map((frequence) {
-                                  return DropdownMenuItem<String>(
-                                    value: frequence,
-                                    child: Text('${(double.parse(frequence) * 100).toStringAsFixed(0)}%'),
-                                  );
-                                }).toList(),
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    _selectedFrequence = newValue!;
-                                  });
-                                },
-                                dropdownColor: Colors.white,
-                                menuMaxHeight: 200,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            if (_showFieldError)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: Text(
-                                  'Veuillez remplir tous les champs obligatoires',
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              ),
-                            Visibility(
-                              visible: _showSuccessAnimation,
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 16.0),
-                                child: Lottie.asset(
-                                  'assets/animations/success.json',
-                                  width: 200,
-                                  height: 150,
-                                  repeat: false,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text('Annuler'),
-                        ),
-                        const SizedBox(width: 8),
-                        ElevatedButton(
-                          onPressed: () async {
-                            final success = await _addRisque();
-                            setState(() {
-                              _showSuccessAnimation = success;
-                              _showFieldError = !success;
-                            });
-                            if (success) {
-                              await Future.delayed(Duration(seconds: 2));
-                              Navigator.of(context).pop();
-                            }
-                          },
-                          child: Text('Ajouter'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-
-
-
-  void _showAddOpportuniteDialog(BuildContext context) async {
-    final TextEditingController _libelleController = TextEditingController();
-    String? _selectedEnjeuId;
-    String? _selectedGravite;
-    String? _selectedFrequence;
-    bool _showSuccessAnimation = false;
-    bool _showFieldError = false;
-
-    Future<List<Map<String, dynamic>>> _fetchEnjeux() async {
-      final response = await http.get(
-        Uri.parse('$baseUrl/enjeux'),
-      );
-
-      if (response.statusCode == 200) {
-        return List<Map<String, dynamic>>.from(jsonDecode(response.body));
-      } else {
-        print('Erreur lors de la récupération des enjeux: ${response.statusCode}');
-        return [];
-      }
-    }
-
-    Future<bool> _addOpportunite() async {
-      final libelle = _libelleController.text;
-      final gravite = int.tryParse(_selectedGravite ?? '');
-      final frequence = double.tryParse(_selectedFrequence ?? '');
-
-      print('Libellé: $libelle');
-      print('ID Enjeu: $_selectedEnjeuId');
-      print('Gravité: $gravite');
-      print('Fréquence: $frequence');
-
-      if (libelle.isNotEmpty && _selectedEnjeuId != null && gravite != null && frequence != null) {
-        final response = await http.post(
-          Uri.parse('$baseUrl/add_opportunite'),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({
-            'libelle': libelle,
-            'id_enjeu': _selectedEnjeuId,
-            'gravite': gravite,
-            'frequence': frequence,
-          }),
-        );
-
-        if (response.statusCode == 201) {
-          print('Opportunité ajoutée avec succès');
-          _libelleController.clear();
-          _selectedEnjeuId = null;
-          _selectedGravite = null;
-          _selectedFrequence = null;
-          return true;
-        } else {
-          print('Erreur lors de l\'ajout de l\'opportunité: ${response.statusCode}');
-          return false;
-        }
-      } else {
-        return false;
-      }
-    }
-
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Dialog(
-              child: Container(
-                width: 550,  // Largeur totale de la boîte de dialogue
-                height: 500,
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Ajouter une Opportunité',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 16),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextField(
-                              controller: _libelleController,
-                              decoration: InputDecoration(
-                                labelText: "Désignation de l'opportunité",
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            FutureBuilder<List<Map<String, dynamic>>>(
-                              future: _fetchEnjeux(),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return Center(child: CircularProgressIndicator());
-                                }
-                                final enjeux = snapshot.data!;
-                                return Container(
-                                  child: DropdownButtonFormField<String>(
-                                    isExpanded: true,
-                                    value: _selectedEnjeuId,
-                                    decoration: InputDecoration(
-                                      labelText: "Sélectionner l'enjeu associé",
-                                      border: OutlineInputBorder(),
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
-                                    ),
-                                    items: enjeux.map((enjeu) {
-                                      return DropdownMenuItem<String>(
-                                        value: enjeu['id_enjeu'],
-                                        child: Text('${enjeu['libelle']}'),
-                                      );
-                                    }).toList(),
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        _selectedEnjeuId = newValue!;
-                                      });
-                                    },
-                                    dropdownColor: Colors.white,
-                                    menuMaxHeight: 200,
-                                  ),
-                                );
-                              },
-                            ),
-                            const SizedBox(height: 16),
-                            Container(
-                              child: DropdownButtonFormField<String>(
-                                isExpanded: true,
-                                value: _selectedGravite,
-                                decoration: InputDecoration(
-                                  labelText: "Sélectionner le poids ",
-                                  border: OutlineInputBorder(),
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
-                                ),
-                                items: ['1', '3', '5'].map((gravite) {
-                                  return DropdownMenuItem<String>(
-                                    value: gravite,
-                                    child: Text(gravite),
-                                  );
-                                }).toList(),
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    _selectedGravite = newValue!;
-                                  });
-                                },
-                                dropdownColor: Colors.white,
-                                menuMaxHeight: 200,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Container(
-                              child: DropdownButtonFormField<String>(
-                                isExpanded: true,
-                                value: _selectedFrequence,
-                                decoration: InputDecoration(
-                                  labelText: "Sélectionner la fréquence",
-                                  border: OutlineInputBorder(),
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
-                                ),
-                                items: ['0.10', '0.25', '0.5', '0.75', '0.80', '0.90', '0.95'].map((frequence) {
-                                  return DropdownMenuItem<String>(
-                                    value: frequence,
-                                    child: Text('${(double.parse(frequence) * 100).toStringAsFixed(0)}%'),
-                                  );
-                                }).toList(),
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    _selectedFrequence = newValue!;
-                                  });
-                                },
-                                dropdownColor: Colors.white,
-                                menuMaxHeight: 200,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            if (_showFieldError)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: Text(
-                                  'Veuillez remplir tous les champs obligatoires',
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              ),
-                            Visibility(
-                              visible: _showSuccessAnimation,
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 16.0),
-                                child: Lottie.asset(
-                                  'assets/animations/success.json',
-                                  width: 200,
-                                  height: 150,
-                                  repeat: false,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text('Annuler'),
-                        ),
-                        const SizedBox(width: 8),
-                        ElevatedButton(
-                          onPressed: () async {
-                            final success = await _addOpportunite();
-                            setState(() {
-                              _showSuccessAnimation = success;
-                              _showFieldError = !success;
-                            });
-                            if (success) {
-                              await Future.delayed(Duration(seconds: 2));
-                              Navigator.of(context).pop();
-                            }
-                          },
-                          child: Text('Ajouter'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Analyse du Contexte"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: SizedBox(
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
             child: Table(
-              border: TableBorder.all(),
+              border: TableBorder.all(color: Colors.grey, width: 0.7),
               columnWidths: const {
-                0: FixedColumnWidth(150.0),
-                1: FixedColumnWidth(350.0),
-                2: FixedColumnWidth(350.0),
-                3: FixedColumnWidth(350.0),
+                0: FixedColumnWidth(300.0),
+                1: FixedColumnWidth(500.0),
               },
               children: [
                 TableRow(
                   children: [
                     tableCell("Type", isHeader: true),
                     headerCellWithButton("Enjeux", () => _showAddEnjeuDialog(context)),
-                    headerCellWithButton("Risques", () => _showAddRisqueDialog(context)),
-                    headerCellWithButton("Opportunités", () => _showAddOpportuniteDialog(context)),
                   ],
                 ),
                 TableRow(
@@ -1423,68 +946,10 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                             .map((enjeu) => Padding(
                           padding: const EdgeInsets.only(bottom: 4.0),
                           child: Text(
-                            "-  ${enjeu['libelle'] ?? 'N/A'}\n",
+                            "-  ${enjeu['libelle'] ?? 'N/A'}",
                             style: const TextStyle(color: Colors.black),
                           ),
                         ))
-                            .toList(),
-                      ),
-                    ),
-                    scrollableTableCell(
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: _interneEnjeux
-                            .map((enjeu) {
-                          final risques = _risquesParEnjeu[enjeu['id_enjeu']];
-                          if (risques != null) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: risques.map((risque) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(bottom: 4.0),
-                                  child: TextButton(
-                                    onPressed: () => _showRisqueDetails(risque),
-                                    child: Text(
-                                      "${risque['libelle'] ?? 'N/A'}",
-                                      style: const TextStyle(color: Colors.black),
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            );
-                          } else {
-                            return Column(); // Retourne un widget vide si aucun risque n'est trouvé
-                          }
-                        })
-                            .toList(),
-                      ),
-                    ),
-                    scrollableTableCell(
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: _interneEnjeux
-                            .map((enjeu) {
-                          final opportunites = _opportunitesParEnjeu[enjeu['id_enjeu']];
-                          if (opportunites != null) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: opportunites.map((opportunite) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(bottom: 4.0),
-                                  child: TextButton(
-                                    onPressed: () => _showOpportuniteDetails(opportunite),
-                                    child: Text(
-                                      "${opportunite['libelle'] ?? 'N/A'}",
-                                      style: const TextStyle(color: Colors.black),
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            );
-                          } else {
-                            return Column(); // Retourne un widget vide si aucune opportunité n'est trouvée
-                          }
-                        })
                             .toList(),
                       ),
                     ),
@@ -1500,68 +965,10 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                             .map((enjeu) => Padding(
                           padding: const EdgeInsets.only(bottom: 4.0),
                           child: Text(
-                            "-  ${enjeu['libelle'] ?? 'N/A'}\n",
+                            "-  ${enjeu['libelle'] ?? 'N/A'}",
                             style: const TextStyle(color: Colors.black),
                           ),
                         ))
-                            .toList(),
-                      ),
-                    ),
-                    scrollableTableCell(
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: _externeEnjeux
-                            .map((enjeu) {
-                          final risques = _risquesParEnjeu[enjeu['id_enjeu']];
-                          if (risques != null) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: risques.map((risque) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(bottom: 4.0),
-                                  child: TextButton(
-                                    onPressed: () => _showRisqueDetails(risque),
-                                    child: Text(
-                                      "${risque['libelle'] ?? 'N/A'}",
-                                      style: const TextStyle(color: Colors.black),
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            );
-                          } else {
-                            return Column(); // Retourne un widget vide si aucun risque n'est trouvé
-                          }
-                        })
-                            .toList(),
-                      ),
-                    ),
-                    scrollableTableCell(
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: _externeEnjeux
-                            .map((enjeu) {
-                          final opportunites = _opportunitesParEnjeu[enjeu['id_enjeu']];
-                          if (opportunites != null) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: opportunites.map((opportunite) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(bottom: 4.0),
-                                  child: TextButton(
-                                    onPressed: () => _showOpportuniteDetails(opportunite),
-                                    child: Text(
-                                      "${opportunite['libelle'] ?? 'N/A'}",
-                                      style: const TextStyle(color: Colors.black),
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            );
-                          } else {
-                            return Column(); // Retourne un widget vide si aucune opportunité n'est trouvée
-                          }
-                        })
                             .toList(),
                       ),
                     ),
@@ -1570,8 +977,9 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
               ],
             ),
           ),
-        ),
-      ),
+        ],
+      )
+
     );
   }
 
