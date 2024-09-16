@@ -24,10 +24,17 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
   @override
   void initState() {
     super.initState();
-    _fetchEnjeuxEtRisquesEtOpportunites();
+    fetchEnjeuxEtRisquesEtOpportunites();
   }
 
-  Future<void> _fetchEnjeuxEtRisquesEtOpportunites() async {
+  Future<void> fetchEnjeuxEtRisquesEtOpportunites() async {
+
+    // Vider les listes avant de les remplir à nouveau, très important pour rafraîchir correctment la page après manipulation des resques et opportunités
+    _interneEnjeux.clear();
+    _externeEnjeux.clear();
+    _risquesParEnjeu.clear();
+    _opportunitesParEnjeu.clear();
+    libellesEnjeux.clear();
 
     // Récupérer les enjeux
     final enjeuxResponse = await http.get(Uri.parse('$baseUrl/enjeux'));
@@ -53,9 +60,7 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
 
       // Traitement de la réponse sur la récupération des risques
       if (risquesResponse.statusCode == 200) {
-
         final List<dynamic> risquesData = json.decode(risquesResponse.body);
-
         final List<Map<String, dynamic>> risquesList =
         risquesData.map((item) => item as Map<String, dynamic>).toList();
 
@@ -63,8 +68,6 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
           String idEnjeu = risque['id_enjeu'];
           if (_risquesParEnjeu.containsKey(idEnjeu)) {
             _risquesParEnjeu[idEnjeu]?.add(risque);
-            print("Bonjour");
-            print(_risquesParEnjeu[idEnjeu]);
           } else {
             _risquesParEnjeu[idEnjeu] = [risque];
           }
@@ -73,7 +76,7 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
         print('Error fetching risks: ${risquesResponse.body}');
       }
 
-      //Traitement de la réponse sur la récupération des opportunités
+      // Traitement de la réponse sur la récupération des opportunités
       if (opportunitesResponse.statusCode == 200) {
         final List<dynamic> opportunitesData = json.decode(opportunitesResponse.body);
         final List<Map<String, dynamic>> opportunitesList =
@@ -91,15 +94,19 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
         print('Error fetching opportunities: ${opportunitesResponse.body}');
       }
 
-      setState(() {});
+      setState(() {}); // Mettre à jour l'interface après avoir récupéré et mis à jour les données
     } else {
       print('Error fetching enjeux: ${enjeuxResponse.body}');
     }
   }
 
-  // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-  // Les détails sur le risque cliqué
+  // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  // PARTIE concernant le RISQUE
+
+
+  // Les détails sur le risque
   void _showRisqueDetails(Map<String, dynamic> risque) {
     showDialog(
       context: context,
@@ -199,71 +206,8 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
     );
   }
 
-  void _showEditRisqueDialog(BuildContext context, Map<String, dynamic> risque, StateSetter setState) {
-    final TextEditingController _libelleController = TextEditingController(text: risque['libelle']);
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Container(
-            width: 400, // Fixer la largeur de la boîte de dialogue
-            height: 300, // Fixer la hauteur de la boîte de dialogue
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Modifier le libelle',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 40),
-                TextField(
-                  controller: _libelleController,
-                  decoration: InputDecoration(
-                    hintText: "Nouveau libelle",
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                SizedBox(height: 110),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('Annuler'),
-                    ),
-                    SizedBox(width: 8),
-                    TextButton(
-                      onPressed: () async {
-                        print('Enregistrement en cours...');  // Journalisation
-                        await _updateRisque(risque['id_risque'], _libelleController.text);
-                        setState(() {
-                          risque['libelle'] = _libelleController.text;
-                        });
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('Enregistrer'),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-
+  // Fonctioin de mise à jour du risque
   Future<void> _updateRisque(int idRisque, String nouveauLibelle) async {
     final url = '$baseUrl/update_risque/$idRisque';
     final response = await http.put(
@@ -274,77 +218,105 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
 
     if (response.statusCode == 200) {
       print('Risque mis à jour avec succès : $idRisque');
+      // Rafraîchir les données après la mise à jour
+      await fetchEnjeuxEtRisquesEtOpportunites(); // Récupérer à nouveau les risques après modification
     } else {
       print('Erreur lors de la mise à jour du risque');
     }
   }
 
-  void _showDeleteRisqueConfirmationDialog(BuildContext context, int idRisque, String libelle) {
+
+
+  // Modifier les informations du risque
+  void _showEditRisqueDialog(BuildContext context, Map<String, dynamic> risque, StateSetter setState) {
+    final TextEditingController _libelleController = TextEditingController(text: risque['libelle']);
+    bool _showSuccessAnimation = false;  // Initialize the animation flag
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Container(
-            width: 400, // Fixer la largeur de la boîte de dialogue
-            height: 300, // Fixer la hauteur de la boîte de dialogue
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Vous êtes sur le point de supprimer l\'élément suivant:',
-                  style: TextStyle(
-                    fontSize: 18,
-                    // fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  '$libelle',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 60),
-                Text(
-                  'Cliquez sur Supprier pour continuer',
-                  style: TextStyle(fontSize: 16),
-                ),
-                Spacer(), // Espacement flexible entre le texte et les boutons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+        return StatefulBuilder(
+          builder: (context, StateSetter dialogSetState) {  // Use StatefulBuilder for local dialog state management
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Container(
+                width: 400,
+                height: 350,  // Adjusted height for animation
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('Annuler'),
+                    Text(
+                      'Modifier le libelle',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    SizedBox(width: 8),
-                    TextButton(
-                      onPressed: () async {
-                        print('Suppression en cours...');  // Journalisation
-                        await _deleteRisque(idRisque);
-                        Navigator.of(context).pop(); // Fermer la boîte de dialogue de confirmation
-                        Navigator.of(context).pop(); // Fermer la boîte de dialogue principale si nécessaire
-                      },
-                      child: Text('Supprimer', style: TextStyle(color: Colors.red)),
+                    SizedBox(height: 40),
+                    TextField(
+                      controller: _libelleController,
+                      decoration: InputDecoration(
+                        hintText: "Nouveau libelle",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('Annuler'),
+                        ),
+                        SizedBox(width: 8),
+                        TextButton(
+                          onPressed: () async {
+                            print('Enregistrement en cours...');
+                            await _updateRisque(risque['id_risque'], _libelleController.text);
+                            setState(() {
+                              risque['libelle'] = _libelleController.text;
+                            });
+                            dialogSetState(() {
+                              _showSuccessAnimation = true;  // Trigger the animation
+                            });
+                            Future.delayed(Duration(seconds: 2), () {
+                              Navigator.of(context).pop();  // Close the dialog after 2 seconds
+                            });
+                          },
+                          child: Text('Enregistrer'),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    Visibility(
+                      visible: _showSuccessAnimation,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 16.0),
+                        child: Lottie.asset(
+                          'assets/animations/success.json',
+                          width: 150,
+                          height: 100,
+                          repeat: false,
+                        ),
+                      ),
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
   }
 
+
+  // La méthode pour la suppression d'un risque
 
   Future<void> _deleteRisque(int idRisque) async {
     final url = '$baseUrl/delete_risque/$idRisque';
@@ -352,16 +324,111 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
 
     if (response.statusCode == 200) {
       print('Risque supprimé avec succès : $idRisque');
+      // Rafraîchir les données après la mise à jour
+      await fetchEnjeuxEtRisquesEtOpportunites(); // Récupérer à nouveau les risques après modification
     } else {
       print('Erreur lors de la suppression du risque');
     }
   }
 
 
-  // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+  // Boîte de dialogue pour la suppression d'un risque
+  void _showDeleteRisqueConfirmationDialog(BuildContext context, int idRisque, String libelle) {
+    bool _showSuccessAnimation = false;  // Initialize the animation flag
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, StateSetter dialogSetState) {  // Use StatefulBuilder for local dialog state management
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Container(
+                width: 400,
+                height: 400,  // Adjusted height for animation
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Vous êtes sur le point de supprimer l\'élément suivant:',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.red,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      '$libelle',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 60),
+                    Text(
+                      'Cliquez sur Supprimer pour continuer',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    Spacer(),  // Flexible spacing between text and buttons
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();  // Close the dialog
+                          },
+                          child: Text('Annuler'),
+                        ),
+                        SizedBox(width: 8),
+                        TextButton(
+                          onPressed: () async {
+                            print('Suppression en cours...');
+                            await _deleteRisque(idRisque);
+                            dialogSetState(() {
+                              _showSuccessAnimation = true;  // Trigger the animation
+                            });
+                            Future.delayed(Duration(seconds: 2), () {
+                              Navigator.of(context).pop();  // Close the confirmation dialog after 2 seconds
+                              Navigator.of(context).pop();  // Close the main dialog if necessary
+                            });
+                          },
+                          child: Text('Supprimer', style: TextStyle(color: Colors.red)),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    Visibility(
+                      visible: _showSuccessAnimation,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 16.0),
+                        child: Lottie.asset(
+                          'assets/animations/success.json',
+                          width: 150,
+                          height: 100,
+                          repeat: false,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+
+
+  // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  // PARTIE concernant les opportunités
 
   // Les détails sur l'opportunité cliquée
-
   void _showOpportuniteDetails(Map<String, dynamic> opportunite) {
     showDialog(
       context: context,
@@ -461,72 +528,7 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
     );
   }
 
-
-  void _showEditDialog(BuildContext context, Map<String, dynamic> opportunite, StateSetter setState) {
-    final TextEditingController _libelleController = TextEditingController(text: opportunite['libelle']);
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Container(
-            width: 400, // Fixer la largeur de la boîte de dialogue
-            height: 300, // Fixer la hauteur de la boîte de dialogue
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Modifier le libelle',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 40),
-                TextField(
-                  controller: _libelleController,
-                  decoration: InputDecoration(
-                    hintText: "Nouveau libelle",
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                SizedBox(height: 110),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('Annuler'),
-                    ),
-                    SizedBox(width: 8),
-                    TextButton(
-                      onPressed: () async {
-                        print('Enregistrement en cours...');  // Journalisation
-                        await _updateOpportunite(opportunite['id_opportunite'], _libelleController.text);
-                        setState(() {
-                          opportunite['libelle'] = _libelleController.text;
-                        });
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('Enregistrer'),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-
+  // Méthode pour la modification d'un enjeu
   Future<void> _updateOpportunite(int idOpportunite, String nouveauLibelle) async {
     final url = '$baseUrl/update_opportunite/$idOpportunite';
     final response = await http.put(
@@ -537,89 +539,226 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
 
     if (response.statusCode == 200) {
       print('Opportunité mise à jour avec succès : $idOpportunite');
+      // Rafraîchir les données après la mise à jour
+      await fetchEnjeuxEtRisquesEtOpportunites(); // Récupérer à nouveau les risques après modification
     } else {
       print('Erreur lors de la mise à jour de l\'opportunité');
     }
   }
 
-  void _showDeleteConfirmationDialog(BuildContext context, int idOpportunite, String libelle) {
+
+  // Boîte de dialogue pour la modification d'une opportunité
+  void _showEditDialog(BuildContext context, Map<String, dynamic> opportunite, StateSetter setState) {
+    final TextEditingController _libelleController = TextEditingController(text: opportunite['libelle']);
+    bool _showSuccessAnimation = false;  // Initialize the animation flag
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Container(
-            width: 400, // Fixer la largeur de la boîte de dialogue
-            height: 300, // Fixer la hauteur de la boîte de dialogue
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Vous êtes sur le point de supprimer l\'élément suivant:',
-                  style: TextStyle(
-                    fontSize: 18,
-                    // fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  '$libelle',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 60),
-                Text(
-                  'Cliquez sur Supprier pour continuer',
-                  style: TextStyle(fontSize: 16),
-                ),
-                Spacer(), // Espacement flexible entre le texte et les boutons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+        return StatefulBuilder(
+          builder: (context, StateSetter dialogSetState) {  // Use StatefulBuilder for local dialog state management
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Container(
+                width: 400,
+                height: 350,  // Adjusted height for animation
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('Annuler'),
+                    Text(
+                      'Modifier le libelle',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    SizedBox(width: 8),
-                    TextButton(
-                      onPressed: () async {
-                        print('Suppression en cours...');  // Journalisation
-                        await _deleteOpportunite(idOpportunite);
-                        Navigator.of(context).pop(); // Fermer la boîte de dialogue de confirmation
-                        Navigator.of(context).pop(); // Fermer la boîte de dialogue principale si nécessaire
-                      },
-                      child: Text('Supprimer', style: TextStyle(color: Colors.red)),
+                    SizedBox(height: 40),
+                    TextField(
+                      controller: _libelleController,
+                      decoration: InputDecoration(
+                        hintText: "Nouveau libelle",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();  // Close the dialog
+                          },
+                          child: Text('Annuler'),
+                        ),
+                        SizedBox(width: 8),
+                        TextButton(
+                          onPressed: () async {
+                            print('Enregistrement en cours...');
+                            await _updateOpportunite(opportunite['id_opportunite'], _libelleController.text);
+                            dialogSetState(() {
+                              _showSuccessAnimation = true;  // Trigger the animation
+                            });
+                            Future.delayed(Duration(seconds: 2), () {
+                              Navigator.of(context).pop();  // Close the dialog after 2 seconds
+                            });
+                            setState(() {
+                              opportunite['libelle'] = _libelleController.text;
+                            });
+                          },
+                          child: Text('Enregistrer'),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    Visibility(
+                      visible: _showSuccessAnimation,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 16.0),
+                        child: Lottie.asset(
+                          'assets/animations/success.json',
+                          width: 150,
+                          height: 100,
+                          repeat: false,
+                        ),
+                      ),
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
   }
 
 
+  // Méthode d'ajout d'une opportunité
   Future<void> _deleteOpportunite(int idOpportunite) async {
     final url = '$baseUrl/delete_opportunite/$idOpportunite';
     final response = await http.delete(Uri.parse(url));
 
     if (response.statusCode == 200) {
       print('Opportunité supprimée avec succès : $idOpportunite');
+      // Rafraîchir les données après la mise à jour
+      await fetchEnjeuxEtRisquesEtOpportunites(); // Récupérer à nouveau les risques après modification
     } else {
       print('Erreur lors de la suppression de l\'opportunité');
     }
   }
 
+
+  // Boîte de dialogue pour la suppression d'une opportunité
+  void _showDeleteConfirmationDialog(BuildContext context, int idOpportunite, String libelle) {
+    bool _showSuccessAnimation = false;  // Initialize the animation flag
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, StateSetter dialogSetState) {  // Use StatefulBuilder for local dialog state management
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Container(
+                width: 400,
+                height: 400,  // Adjusted height for animation
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Vous êtes sur le point de supprimer l\'élément suivant:',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.red,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      '$libelle',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 60),
+                    Text(
+                      'Cliquez sur Supprimer pour continuer',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    Spacer(),  // Flexible spacing between text and buttons
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();  // Close the dialog
+                          },
+                          child: Text('Annuler'),
+                        ),
+                        SizedBox(width: 8),
+                        TextButton(
+                          onPressed: () async {
+                            print('Suppression en cours...');
+                            await _deleteOpportunite(idOpportunite);
+                            dialogSetState(() {
+                              _showSuccessAnimation = true;  // Trigger the animation
+                            });
+                            Future.delayed(Duration(seconds: 2), () {
+                              Navigator.of(context).pop();  // Close the confirmation dialog after 2 seconds
+                              Navigator.of(context).pop();  // Close the main dialog if necessary
+                            });
+                          },
+                          child: Text('Supprimer', style: TextStyle(color: Colors.red)),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    Visibility(
+                      visible: _showSuccessAnimation,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 16.0),
+                        child: Lottie.asset(
+                          'assets/animations/success.json',
+                          width: 150,
+                          height: 100,
+                          repeat: false,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+
+
+  // Fetch enjeux
+
+  Future<List<Map<String, dynamic>>> _fetchEnjeux() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/enjeux'),
+    );
+
+    if (response.statusCode == 200) {
+      return List<Map<String, dynamic>>.from(jsonDecode(response.body));
+    } else {
+      print('Erreur lors de la récupération des enjeux: ${response.statusCode}');
+      return [];
+    }
+  }
+
+  //Ajout d'un risque
 
   Future<void> _showAddRisqueDialog(BuildContext context) async {
     final TextEditingController _libelleController = TextEditingController();
@@ -628,19 +767,6 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
     String? _selectedEnjeuId;
     bool _showSuccessAnimation = false;
     bool _showFieldError = false;
-
-    Future<List<Map<String, dynamic>>> _fetchEnjeux() async {
-      final response = await http.get(
-        Uri.parse('$baseUrl/enjeux'),
-      );
-
-      if (response.statusCode == 200) {
-        return List<Map<String, dynamic>>.from(jsonDecode(response.body));
-      } else {
-        print('Erreur lors de la récupération des enjeux: ${response.statusCode}');
-        return [];
-      }
-    }
 
     Future<bool> _addRisque() async {
       final libelle = _libelleController.text;
@@ -663,6 +789,7 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
           _selectedGravite = null;
           _selectedFrequence = null;
           _selectedEnjeuId = null;
+          await fetchEnjeuxEtRisquesEtOpportunites();
           return true;
         } else {
           print('Erreur lors de l\'ajout du risque: ${response.statusCode}');
@@ -833,7 +960,8 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
                               _showFieldError = !success;
                             });
                             if (success) {
-                              await Future.delayed(Duration(seconds: 2));
+                              await Future.delayed(Duration(seconds: 2)); // Wait for the success animation to play
+                              await fetchEnjeuxEtRisquesEtOpportunites(); // Refresh the list of enjeux after successful addition
                               Navigator.of(context).pop();
                             }
                           },
@@ -853,6 +981,7 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
 
 
 
+  // Ajout d'une opportunité
 
   void _showAddOpportuniteDialog(BuildContext context) async {
     final TextEditingController _libelleController = TextEditingController();
@@ -861,19 +990,6 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
     String? _selectedFrequence;
     bool _showSuccessAnimation = false;
     bool _showFieldError = false;
-
-    Future<List<Map<String, dynamic>>> _fetchEnjeux() async {
-      final response = await http.get(
-        Uri.parse('$baseUrl/enjeux'),
-      );
-
-      if (response.statusCode == 200) {
-        return List<Map<String, dynamic>>.from(jsonDecode(response.body));
-      } else {
-        print('Erreur lors de la récupération des enjeux: ${response.statusCode}');
-        return [];
-      }
-    }
 
     Future<bool> _addOpportunite() async {
       final libelle = _libelleController.text;
@@ -903,6 +1019,7 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
           _selectedEnjeuId = null;
           _selectedGravite = null;
           _selectedFrequence = null;
+          await fetchEnjeuxEtRisquesEtOpportunites(); // Rafraîchir les données
           return true;
         } else {
           print('Erreur lors de l\'ajout de l\'opportunité: ${response.statusCode}');
