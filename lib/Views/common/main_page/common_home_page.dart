@@ -245,7 +245,7 @@ class _MainPageState extends State<MainPage> {
                                 onTap: () {
                                   checkAccesGestion();
                                 },
-                                imagePath: "assets/images/gestion.png",
+                                imagePath: "assets/images/aller_vers_gestion.png",
                                 titreCadre: "Gestion",
                               ),
                               CustomCadre(

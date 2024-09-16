@@ -2423,7 +2423,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
 
             // 7
             Positioned(
-              top: 295,
+              top: 360,
               right: 436,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
@@ -2493,7 +2493,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
 
             // 8
             Positioned(
-              top: 295,
+              top: 360,
               right: 205,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
@@ -2700,7 +2700,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
 
             // 11
             Positioned(
-              top: 360,
+              top: 295,
               right: 436,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
@@ -2769,7 +2769,7 @@ class _DashboardGestionState extends State<DashboardGestion> {
 
             // 12
             Positioned(
-              top: 360,
+              top: 295,
               right: 205,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
