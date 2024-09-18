@@ -1,4 +1,4 @@
-# Utiliser une image de base appropriée
+# Utiliser une image de base appropriée (exemple : Ubuntu ou une image spécifique à Flutter)
 FROM ubuntu:20.04
 
 # Installer les dépendances nécessaires
@@ -25,13 +25,23 @@ ENV PATH="$PATH:/usr/local/flutter/bin"
 RUN useradd -m flutteruser
 USER flutteruser
 
+# Ajouter le répertoire Flutter à la liste des répertoires sûrs de Git
+RUN git config --global --add safe.directory /usr/local/flutter
+
 # Activer le support Web dans Flutter
 RUN flutter config --enable-web
+
+# Vérifier l'installation Flutter et les devices
+RUN flutter doctor
 
 # Configurer le répertoire de travail de l'application
 WORKDIR /app
 
-# Copier les fichiers du projet
+
+# Copier les fichiers pubspec
+COPY pubspec.* ./
+
+# Copier tous les fichiers du projet
 COPY --chown=flutteruser:flutteruser . .
 
 # Installer les dépendances Flutter
