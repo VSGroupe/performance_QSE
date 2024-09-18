@@ -5,6 +5,10 @@ FROM cirrusci/flutter:stable AS build
 WORKDIR /app
 
 # Copier les fichiers du projet dans le conteneur
+COPY pubspec.* ./
+RUN flutter pub get
+
+# Copier le reste des fichiers du projet
 COPY . .
 
 # Activer la plateforme Web et construire l'application
