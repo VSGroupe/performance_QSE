@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
 import 'package:marquee_text/marquee_direction.dart';
 import 'package:marquee_text/marquee_text.dart';
@@ -11,7 +9,6 @@ import 'package:perfqse/Views/common/main_page/widget/header_main_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../widgets/copyright.dart';
 import '../../../helpers/helper_methods.dart';
-import '../../pilotage/home/pilotage_home.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -234,7 +231,7 @@ class _MainPageState extends State<MainPage> {
                         const SizedBox(
                           height:10,
                         ),
-                        Banniere(),
+                        const Banniere(),
                         Expanded(
                           flex:4,
                           child: Row(
