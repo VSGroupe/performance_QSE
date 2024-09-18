@@ -1,5 +1,14 @@
-# Utiliser une image officielle de Flutter avec la version 3.24.0
-FROM cirrusci/flutter:3.24.0 AS build
+# Utiliser l'image officielle de Flutter
+FROM google/dart:stable AS build
+
+# Installer Flutter
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    unzip
+
+RUN git clone https://github.com/flutter/flutter.git /flutter
+ENV PATH="/flutter/bin:${PATH}"
 
 # Définir le répertoire de travail
 WORKDIR /app
