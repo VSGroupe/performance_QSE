@@ -42,5 +42,5 @@ COPY . .
 # Exposer un port si nécessaire (par exemple, pour une application web Flutter)
 EXPOSE 8080
 
-# Commande d'exécution par défaut (à ajuster si nécessaire)
-CMD ["flutter", "run", "--release", "--web"]
+# Commande d'exécution par défaut (pour une application Web Flutter)
+CMD ["flutter", "build", "web", "--release"]
