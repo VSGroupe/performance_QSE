@@ -1,9 +1,0 @@
-{
-  "projects": {
-    "default": "projet-performanceqse-heberge",
-    "perfQSE": "projet-performanceqse-heberge"
-  },
-  "targets": {},
-  "etags": {},
-  "dataconnectEmulatorConfig": {}
-}
