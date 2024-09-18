@@ -27,6 +27,12 @@ ENV FLUTTER_ALLOW_ROOT=true
 # Ajouter le répertoire Flutter à la liste des répertoires sûrs de Git
 RUN git config --global --add safe.directory /usr/local/flutter
 
+# Activer le support Web dans Flutter
+RUN flutter config --enable-web
+
+# Vérifier l'installation Flutter et les devices
+RUN flutter doctor
+
 # Configurer le répertoire de travail de l'application
 WORKDIR /app
 
