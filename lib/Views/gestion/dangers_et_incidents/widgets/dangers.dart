@@ -16,7 +16,7 @@ class Dangers extends StatefulWidget {
 
 class _DangersState extends State<Dangers> {
 
-  final String baseUrl = "http://localhost:5000"; // URL de l'API Flask // https://api-performance-qse.onrender.com
+  final String baseUrl = "https://api-performance-qse.onrender.com"; // URL de l'API Flask // https://api-performance-qse.onrender.com
 
   late Future<List<Map<String, dynamic>>> dangersFuture;
 
