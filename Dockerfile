@@ -1,20 +1,16 @@
-# Utiliser une image Ubuntu de base pour la phase de construction
-FROM ubuntu:20.04 AS build
+# Utiliser une image de base appropriée (exemple : Ubuntu ou une image spécifique à Flutter)
+FROM ubuntu:20.04
 
-# Configurer le fuseau horaire par défaut et éviter les invites interactives
-ENV DEBIAN_FRONTEND=noninteractive
-RUN ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime && apt-get update && apt-get install -y \
-    tzdata
-
-# Installer les dépendances nécessaires en une seule couche
+# Installer les dépendances nécessaires
 RUN apt-get update && apt-get install -y \
     curl \
     git \
     unzip \
     xz-utils \
+    zip \
     libglu1-mesa \
-    openjdk-11-jdk \
-    && rm -rf /var/lib/apt/lists/*
+    ca-certificates \
+    && apt-get clean
 
 # Télécharger et installer Flutter
 RUN curl -LO https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.24.3-stable.tar.xz \
@@ -22,38 +18,29 @@ RUN curl -LO https://storage.googleapis.com/flutter_infra_release/releases/stabl
     && mv flutter /usr/local/flutter \
     && rm flutter_linux_3.24.3-stable.tar.xz
 
-
-
-
-
-
 # Ajouter Flutter au PATH
-ENV PATH="/usr/local/flutter/bin:${PATH}"
+ENV PATH="$PATH:/usr/local/flutter/bin"
 
-# Vérifier l'installation de Flutter
-RUN flutter --version
+# Autoriser l'exécution de Flutter en tant que root
+ENV FLUTTER_ALLOW_ROOT=true
 
-# Définir le répertoire de travail
+# Ajouter le répertoire Flutter à la liste des répertoires sûrs de Git
+RUN git config --global --add safe.directory /usr/local/flutter
+
+# Configurer le répertoire de travail de l'application
 WORKDIR /app
 
-# Copier les fichiers de configuration du projet
+# Copier les fichiers pubspec
 COPY pubspec.* ./
+
+# Installer les dépendances Flutter
 RUN flutter pub get
 
 # Copier le reste des fichiers du projet
 COPY . .
 
-# Activer la plateforme Web et construire l'application
-RUN flutter config --enable-web && flutter build web
+# Exposer un port si nécessaire (par exemple, pour une application web Flutter)
+EXPOSE 8080
 
-# Utiliser une image minimale pour servir l'application web
-FROM nginx:alpine
-
-# Copier les fichiers de build Flutter dans le répertoire Nginx
-COPY --from=build /app/build/web /usr/share/nginx/html
-
-# Exposer le port 80
-EXPOSE 80
-
-# Commande de démarrage Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Commande d'exécution par défaut (à ajuster si nécessaire)
+CMD ["flutter", "run", "--release", "--web"]
