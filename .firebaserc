@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "performance-qse",
+    "default": "projet-performanceqse-heberge",
     "perfQSE": "projet-performanceqse-heberge"
   },
   "targets": {},
