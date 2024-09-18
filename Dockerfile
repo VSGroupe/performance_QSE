@@ -1,14 +1,20 @@
 # Utiliser une image Ubuntu de base pour la phase de construction
 FROM ubuntu:20.04 AS build
 
-# Installer les dépendances nécessaires
+# Configurer le fuseau horaire par défaut et éviter les invites interactives
+ENV DEBIAN_FRONTEND=noninteractive
+RUN ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime && apt-get update && apt-get install -y \
+    tzdata
+
+# Installer les dépendances nécessaires en une seule couche
 RUN apt-get update && apt-get install -y \
     curl \
     git \
     unzip \
     xz-utils \
     libglu1-mesa \
-    openjdk-11-jdk
+    openjdk-11-jdk \
+    && rm -rf /var/lib/apt/lists/*
 
 # Télécharger et installer Flutter
 RUN curl -LO https://storage.googleapis.com/download.flutter.io/flutter_linux_3.24.0-stable.tar.xz \
