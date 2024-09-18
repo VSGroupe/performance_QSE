@@ -1,10 +1,10 @@
-# Utiliser une image officielle de Flutter
-FROM cirrusci/flutter:stable AS build
+# Utiliser une image officielle de Flutter avec la version 3.24.0
+FROM cirrusci/flutter:3.24.0 AS build
 
 # Définir le répertoire de travail
 WORKDIR /app
 
-# Copier les fichiers du projet dans le conteneur
+# Copier les fichiers de configuration du projet
 COPY pubspec.* ./
 RUN flutter pub get
 
