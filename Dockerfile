@@ -17,10 +17,16 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Télécharger et installer Flutter
-RUN curl -LO https://storage.googleapis.com/download.flutter.io/flutter_linux_3.24.0-stable.tar.xz \
-    && tar xf flutter_linux_3.24.0-stable.tar.xz \
+RUN curl -LO https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.24.3-stable.tar.xz \
+    && echo "LE_CHECKSUM flutter_linux_3.24.3-stable.tar.xz" | sha1sum -c - \
+    && tar xf flutter_linux_3.24.3-stable.tar.xz \
     && mv flutter /usr/local/flutter \
-    && rm flutter_linux_3.24.0-stable.tar.xz
+    && rm flutter_linux_3.24.3-stable.tar.xz
+
+
+
+
+
 
 # Ajouter Flutter au PATH
 ENV PATH="/usr/local/flutter/bin:${PATH}"
