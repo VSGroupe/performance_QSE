@@ -1,5 +1,5 @@
-# Utiliser une image Ubuntu de base
-FROM ubuntu:20.04
+# Utiliser une image Ubuntu de base pour la phase de construction
+FROM ubuntu:20.04 AS build
 
 # Installer les dépendances nécessaires
 RUN apt-get update && apt-get install -y \
