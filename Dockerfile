@@ -1,14 +1,26 @@
-# Utiliser l'image officielle de Flutter
-FROM google/dart:stable AS build
+# Utiliser une image Ubuntu de base
+FROM ubuntu:20.04
 
-# Installer Flutter
+# Installer les dépendances nécessaires
 RUN apt-get update && apt-get install -y \
-    git \
     curl \
-    unzip
+    git \
+    unzip \
+    xz-utils \
+    libglu1-mesa \
+    openjdk-11-jdk
 
-RUN git clone https://github.com/flutter/flutter.git /flutter
-ENV PATH="/flutter/bin:${PATH}"
+# Télécharger et installer Flutter
+RUN curl -LO https://storage.googleapis.com/download.flutter.io/flutter_linux_3.24.0-stable.tar.xz \
+    && tar xf flutter_linux_3.24.0-stable.tar.xz \
+    && mv flutter /usr/local/flutter \
+    && rm flutter_linux_3.24.0-stable.tar.xz
+
+# Ajouter Flutter au PATH
+ENV PATH="/usr/local/flutter/bin:${PATH}"
+
+# Vérifier l'installation de Flutter
+RUN flutter --version
 
 # Définir le répertoire de travail
 WORKDIR /app
