@@ -19,18 +19,17 @@ jobs:
         run: |
           git clone https://github.com/flutter/flutter.git -b stable --depth 1
           echo "$GITHUB_WORKSPACE/flutter/bin" >> $GITHUB_PATH
+          flutter --version
 
-      # Install Flutter dependencies
+      # Install dependencies
       - name: Install Flutter dependencies
         run: flutter pub get
 
       # Build Flutter web app
-      - name: Build Flutter web app
-        run: flutter build web --release
+      - run: flutter build web --release
 
       # Deploy to Firebase Hosting
-      - name: Deploy to Firebase Hosting
-        uses: FirebaseExtended/action-hosting-deploy@v0
+      - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PERFQSE }}
