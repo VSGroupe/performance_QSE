@@ -1,5 +1,4 @@
-import 'package:d_chart/commons/axis.dart';
-import 'package:d_chart/commons/data_model.dart';
+import 'package:d_chart/commons/data_model/data_model.dart';
 import 'package:d_chart/ordinal/bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
