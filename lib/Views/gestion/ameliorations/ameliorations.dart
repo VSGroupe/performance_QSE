@@ -79,7 +79,7 @@ class _AmeliorationsState extends State<Ameliorations> with SingleTickerProvider
                 ],
                 views: [
                   Container(child: NonConfEtActDeMaitrise(),),
-                  Container(child: RapportDuRisque(),),
+                  Container(child: PlanDAction(),),
                   //Container(child: WidgetReserve(),)
                 ],
               ),

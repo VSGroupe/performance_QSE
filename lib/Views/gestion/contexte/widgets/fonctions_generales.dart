@@ -15,8 +15,10 @@ class _FonctionsGeneralesState extends State<FonctionsGenerales> {
   bool _isEditing = false;
   int? _existingId;
 
+  final String baseUrl = "http://localhost:5000";
+
   Future<void> _fetchTextFromAPI() async {
-    final response = await http.get(Uri.parse('http://localhost:5000/get-text'));
+    final response = await http.get(Uri.parse('$baseUrl/get-text'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -33,7 +35,7 @@ class _FonctionsGeneralesState extends State<FonctionsGenerales> {
     if (_existingId == null) return;
 
     final response = await http.post(
-      Uri.parse('http://localhost:5000/update-text'),
+      Uri.parse('$baseUrl/update-text'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({'id': _existingId, 'libelle': newText}),
     );
