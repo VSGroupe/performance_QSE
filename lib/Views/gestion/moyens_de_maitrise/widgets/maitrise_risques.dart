@@ -76,107 +76,119 @@ class _MaitriseRisquesState extends State<MaitriseRisques> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Table(
-                border: TableBorder.all(),
-                columnWidths: const {
-                  0: FlexColumnWidth(1),
-                  1: FlexColumnWidth(2),
-                },
-                children: [
-                  const TableRow(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'Risques',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
+        child: Column(
+          children: [
+            // En-tête fixe
+            Table(
+              border: TableBorder.all(),
+              columnWidths: const {
+                0: FlexColumnWidth(1),
+                1: FlexColumnWidth(2),
+              },
+              children: [
+                TableRow(
+                  children: [
+                    Container(
+                      color: Colors.amber.shade300,
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'Risques',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'Maîtrise Risques',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ),
-                  for (var risque in risquesData)
-                    TableRow(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            risque['libelle'],
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Stack(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Use a TextField for editing the content
-                                  if (_isEditing[risque['id_risque'] as int] == true)
-                                    Container(
-                                      height: 150, // Augmentez la hauteur ici
-                                      child: TextField(
-                                        controller: _maitriseControllers[risque['id_risque'] as int],
-                                        maxLines: null, // Allow vertical scrolling
-                                        decoration: const InputDecoration(
-                                          labelText: 'Ajouter Maîtrise',
-                                          border: OutlineInputBorder(),
-                                        ),
-                                      ),
-                                    )
-                                  else
-                                    Container(
-                                      constraints: BoxConstraints(minHeight: 30),
-                                      child: SingleChildScrollView(
-                                        child: Text(
-                                          _maitriseControllers[risque['id_risque'] as int]?.text ?? 'Aucune maîtrise ajoutée',
-                                          style: const TextStyle(fontSize: 16),
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              ),
-                              // Icon for editing
-                              Positioned(
-                                top: 0,
-                                right: 0,
-                                child: IconButton(
-                                  icon: Icon(
-                                    _isEditing[risque['id_risque'] as int] == true ? Icons.save : Icons.edit,
-                                    size: 16, // Réduisez la taille de l'icône ici
-                                  ),
-                                  onPressed: () {
-                                    if (_isEditing[risque['id_risque'] as int] == true) {
-                                      // If in edit mode, save the mastery
-                                      addOrUpdateMaitrise(risque['id_risque'] as int);
-                                    } else {
-                                      // Switch to edit mode
-                                      setState(() {
-                                        _isEditing[risque['id_risque'] as int] = true;
-                                      });
-                                    }
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
                     ),
-                ],
+                    Container(
+                      color: Colors.green.shade300,
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'Maîtrise Risques',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            // Contenu défilant du tableau
+            Expanded(
+              child: SingleChildScrollView(
+                child: Table(
+                  border: TableBorder.all(),
+                  columnWidths: const {
+                    0: FlexColumnWidth(1),
+                    1: FlexColumnWidth(2),
+                  },
+                  children: [
+                    for (var risque in risquesData)
+                      TableRow(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              risque['libelle'],
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Stack(
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    if (_isEditing[risque['id_risque'] as int] == true)
+                                      Container(
+                                        height: 150,
+                                        child: TextField(
+                                          controller: _maitriseControllers[risque['id_risque'] as int],
+                                          maxLines: null,
+                                          decoration: const InputDecoration(
+                                            labelText: 'Ajouter Maîtrise',
+                                            border: OutlineInputBorder(),
+                                          ),
+                                        ),
+                                      )
+                                    else
+                                      Container(
+                                        constraints: const BoxConstraints(minHeight: 35, maxHeight: 100),
+                                        child: SingleChildScrollView(
+                                          child: Text(
+                                            _maitriseControllers[risque['id_risque'] as int]?.text ?? 'Aucune maîtrise ajoutée',
+                                            style: const TextStyle(fontSize: 16),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                                // Icone pour éditer
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: IconButton(
+                                    icon: Icon(
+                                      _isEditing[risque['id_risque'] as int] == true ? Icons.save : Icons.edit,
+                                      size: 18,
+                                    ),
+                                    onPressed: () {
+                                      if (_isEditing[risque['id_risque'] as int] == true) {
+                                        addOrUpdateMaitrise(risque['id_risque'] as int);
+                                      } else {
+                                        setState(() {
+                                          _isEditing[risque['id_risque'] as int] = true;
+                                        });
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
