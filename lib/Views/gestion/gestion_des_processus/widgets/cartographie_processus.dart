@@ -118,7 +118,7 @@ class _CartographieProcessusState extends State<CartographieProcessus> {
                   style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
                 ),
                 style: ButtonStyle(
-                  fixedSize: MaterialStateProperty.all(Size(200, 30)),
+                  fixedSize: MaterialStateProperty.all(Size(205, 45)),
                   backgroundColor: MaterialStateProperty.all(Colors.transparent),
                 ),
               ),

@@ -284,8 +284,8 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
 
             // 2
             Positioned(
-              top: 230,
-              right: 546,
+              top: 295,
+              right: 827,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
                   _isHoveringBox11 = true;
@@ -324,21 +324,21 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                       child: Stack(
                         children: [
                           Positioned(
-                            top: 7, // Positionner l'image en haut
+                            top: 2, // Positionner l'image en haut
                             left: 0,
                             right: 150, // Centrer horizontalement
                             child: SizedBox(
-                              height: 40,
-                              width: 50,
-                              child: Image.asset("assets/icons/usine1.png", fit: BoxFit.contain),
+                              height: 43,
+                              width: 53,
+                              child: Image.asset("assets/icons/consolidation_inter.png", fit: BoxFit.contain),
                             ),
                           ),
                           Positioned(
-                            bottom: 13, // Positionner le texte en bas avec un padding de 10
+                            bottom: 0, // Positionner le texte en bas avec un padding de 10
                             left: 50,
                             right: 0,
                             child: Text(
-                              "Usine Yopougon 1",
+                              "Consolidé Processus",
                               //textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.black,
@@ -398,13 +398,13 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                       child: Stack(
                         children: [
                           Positioned(
-                            top: 3, // Positionner l'image en haut
+                            top: 11, // Positionner l'image en haut
                             left: 0,
                             right: 145, // Centrer horizontalement
                             child: SizedBox(
-                              height: 42,
-                              width: 52,
-                              child: Image.asset("assets/icons/usine4.png", fit: BoxFit.contain),
+                              height: 30,
+                              width: 40,
+                              child: Image.asset("assets/icons/site1.png", fit: BoxFit.contain),
                             ),
                           ),
                           Positioned(
@@ -412,7 +412,7 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                             left: 55,
                             right: 0,
                             child: Text(
-                              'Usine Treichville',
+                              'Site 1',
                               //textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.black,
@@ -433,8 +433,8 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
 
             //4
             Positioned(
-              top: 295,
-              right: 827,
+              top: 230,
+              right: 546,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
                   _isHoveringBox5 = true;
@@ -553,7 +553,7 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                             child: SizedBox(
                               height: 40,
                               width: 50,
-                              child: Image.asset("assets/icons/usine3.png", fit: BoxFit.contain),
+                              child: Image.asset("assets/icons/usine1.png", fit: BoxFit.contain),
                             ),
                           ),
                           Positioned(
@@ -561,7 +561,7 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                             left: 50,
                             right: 0,
                             child: Text(
-                              "Usine Yopougon 2",
+                              "Site 2",
                               //textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.black,
@@ -622,13 +622,13 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                       child: Stack(
                         children: [
                           Positioned(
-                            top: 5, // Positionner l'image en haut
+                            top: 11,
                             left: 0,
-                            right: 150, // Centrer horizontalement
+                            right: 150,
                             child: SizedBox(
-                              height: 40,
-                              width: 50,
-                              child: Image.asset("assets/icons/usine5.png", fit: BoxFit.contain),
+                              height: 30,
+                              width: 40,
+                              child: Image.asset("assets/icons/site2.png", fit: BoxFit.contain),
                             ),
                           ),
                           Positioned(
@@ -636,7 +636,7 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                             left: 55,
                             right: 0,
                             child: Text(
-                              'Usine Bouaflé',
+                              'Site 3',
                               //textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.black,
