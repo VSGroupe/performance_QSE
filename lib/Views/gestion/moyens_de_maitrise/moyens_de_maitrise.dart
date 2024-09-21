@@ -1,7 +1,6 @@
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:perfqse/Views/gestion/moyens_de_maitrise/widgets/maitrise_dangers.dart';
 import 'package:perfqse/Views/gestion/moyens_de_maitrise/widgets/maitrise_ies.dart';
 import 'package:perfqse/Views/gestion/moyens_de_maitrise/widgets/maitrise_incidents.dart';
 import 'package:perfqse/Views/gestion/moyens_de_maitrise/widgets/maitrise_risques.dart';

@@ -14,6 +14,9 @@ class _MaitriseRisquesState extends State<MaitriseRisques> {
   final Map<int, TextEditingController> _maitriseControllers = {};
   final Map<int, bool> _isEditing = {};
 
+  bool isLoading = true;
+
+
   @override
   void initState() {
     super.initState();
@@ -21,25 +24,33 @@ class _MaitriseRisquesState extends State<MaitriseRisques> {
   }
 
   Future<void> fetchRisques() async {
-    final responseRisques = await supabase.from('Risques').select().execute();
-    if (responseRisques.data != null) {
-      risquesData = List<Map<String, dynamic>>.from(responseRisques.data);
-      for (var risque in risquesData) {
-        final responseMaitrises = await supabase
-            .from('MoyensMaitrise')
-            .select()
-            .eq('id_risque', risque['id_risque'])
-            .execute();
+    setState(() {
+      isLoading = true;
+    });
 
-        String maitrise = (responseMaitrises.data != null && responseMaitrises.data.isNotEmpty)
-            ? responseMaitrises.data[0]['maitrise']
+    final response = await supabase
+        .from('Risques')
+        .select('*, MoyensMaitrise(maitrise)')
+        .order('libelle', ascending: true)
+        .execute();
+
+    if (response.data != null) {
+      risquesData = List<Map<String, dynamic>>.from(response.data);
+      for (var risque in risquesData) {
+        final maitrise = risque['MoyensMaitrise'].isNotEmpty
+            ? risque['MoyensMaitrise'][0]['maitrise']
             : '';
         _maitriseControllers[risque['id_risque'] as int] = TextEditingController(text: maitrise);
         _isEditing[risque['id_risque'] as int] = false;
       }
-      setState(() {});
     }
+
+    setState(() {
+      isLoading = false;
+    });
   }
+
+
 
   Future<void> addOrUpdateMaitrise(int risqueId) async {
     final maitrise = _maitriseControllers[risqueId]?.text ?? '';
@@ -72,9 +83,11 @@ class _MaitriseRisquesState extends State<MaitriseRisques> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tableau des Risques et Maîtrises'),
+        title: const Text('Tableau de Maîtrise des Risques'),
       ),
-      body: Padding(
+      body: isLoading
+          ? Center(child: CircularProgressIndicator()) // Affiche le spinner pendant le chargement
+          : Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
@@ -89,7 +102,7 @@ class _MaitriseRisquesState extends State<MaitriseRisques> {
                 TableRow(
                   children: [
                     Container(
-                      color: Colors.amber.shade300,
+                      color: Colors.red.shade50,
                       padding: EdgeInsets.all(8.0),
                       child: Text(
                         'Risques',
@@ -97,10 +110,10 @@ class _MaitriseRisquesState extends State<MaitriseRisques> {
                       ),
                     ),
                     Container(
-                      color: Colors.green.shade300,
+                      color: Colors.green.shade200,
                       padding: EdgeInsets.all(8.0),
                       child: Text(
-                        'Maîtrise Risques',
+                        'Maîtrise des risques',
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                       ),
                     ),
@@ -149,7 +162,7 @@ class _MaitriseRisquesState extends State<MaitriseRisques> {
                                       )
                                     else
                                       Container(
-                                        constraints: const BoxConstraints(minHeight: 35, maxHeight: 100),
+                                        constraints: const BoxConstraints(minHeight: 35, maxHeight: 100, minWidth: 800),
                                         child: SingleChildScrollView(
                                           child: Text(
                                             _maitriseControllers[risque['id_risque'] as int]?.text ?? 'Aucune maîtrise ajoutée',
