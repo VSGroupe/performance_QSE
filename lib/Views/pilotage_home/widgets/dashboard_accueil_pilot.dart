@@ -26,10 +26,8 @@ class DashboardAccueilPilot extends StatefulWidget {
 
 class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
 
-  final AccueilPilotController accueilPilotController = Get.put(AccueilPilotController());
-
   late String _userEmail = 'No email available';
-  String _espaces_d_acces = "";
+  List<String> _espaces_d_acces = [];
 
   final String location = "/accueil_piotage";
 
@@ -95,7 +93,7 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
           return false;
         }
 
-        String espacesDacces = data['a_acces_a'] ?? '';
+        List<String> espacesDacces = List<String>.from(data['a_acces_a'] ?? []);
 
         setState(() {
           _espaces_d_acces = espacesDacces;
@@ -103,7 +101,7 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
 
         print('Espaces d\'accès: $_espaces_d_acces');
 
-        if (_espaces_d_acces == espace) {
+        if (_espaces_d_acces.contains(espace)) {
           print('Accès à l\'espace $espace autorisé.');
           return true;
         } else {
@@ -126,6 +124,29 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
     }
   }
 
+
+  Future<void> _updateDomaineClique(String domaineClique) async {
+    final user = Supabase.instance.client.auth.currentUser;
+
+    if (user != null) {
+      try {
+        print('Mise à jour du domaine cliqué pour $_userEmail');
+        final response = await Supabase.instance.client
+            .from('Users')
+            .update({'domaine_clique': domaineClique})
+            .eq('email', _userEmail)
+            .execute();
+
+        if (response.data == null) {
+          print('Erreur lors de la mise à jour : ${response.status}');
+        } else {
+
+        }
+      } catch (e) {
+        print('Exception lors de la mise à jour : $e');
+      }
+    }
+  }
 
 
 
@@ -222,11 +243,9 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                 }),
                 child: InkWell(
                   onTap: () async {
-                    if (await _getAccessEspace("Consolide")) {
+                    if (await _getAccessEspace("Consolidé général")) {
+                      await _updateDomaineClique("Consolide_general");
                       context.go("/pilotage");
-                      setState(() {
-                        accueilPilotController.aAfficher.value=0;
-                      });
                     } else {
                       _showNoAccess();
                     }
@@ -295,10 +314,8 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                 }),
                 child: InkWell(
                   onTap: () async {
-                    if (await _getAccessEspace("Usine")){
-                      setState(() {
-                        accueilPilotController.aAfficher.value=2;
-                      });
+                    if (await _getAccessEspace("Consolidé processus")){
+                      await _updateDomaineClique("Consolide_processus");
                       context.go("/pilotage");
                     } else{
                     _showNoAccess();
@@ -369,10 +386,8 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                 }),
                 child: InkWell(
                   onTap: () async {
-                    if (await _getAccessEspace("Usine")){
-                      setState(() {
-                      accueilPilotController.aAfficher.value=2;
-                      });
+                    if (await _getAccessEspace("Site 1")){
+                      await _updateDomaineClique("Site1");
                       context.go("/pilotage");
                     } else{
                       _showNoAccess();
@@ -444,10 +459,8 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                 }),
                 child: InkWell(
                   onTap: () async {
-                    if (await _getAccessEspace("Siege")){
-                    setState(() {
-                      accueilPilotController.aAfficher.value=1;
-                      });
+                    if (await _getAccessEspace("Siège")){
+                      await _updateDomaineClique("Siege");
                       context.go("/pilotage");
                     } else{
                       _showNoAccess();
@@ -518,10 +531,8 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                 }),
                 child: InkWell(
                   onTap: () async {
-                    if (await _getAccessEspace("Usine")){
-                      setState(() {
-                        accueilPilotController.aAfficher.value=2;
-                      });
+                    if (await _getAccessEspace("Site 2")){
+                      await _updateDomaineClique("Site2");
                       context.go("/pilotage");
                     } else{
                       _showNoAccess();
@@ -593,10 +604,8 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                 }),
                 child: InkWell(
                   onTap: () async {
-                    if (await _getAccessEspace("Usine")){
-                      setState(() {
-                        accueilPilotController.aAfficher.value=2;
-                      });
+                    if (await _getAccessEspace("Site 3")){
+                      await _updateDomaineClique("Site3");
                       context.go("/pilotage");
                     } else{
                       _showNoAccess();

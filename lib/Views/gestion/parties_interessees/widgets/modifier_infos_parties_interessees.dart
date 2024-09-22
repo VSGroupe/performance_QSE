@@ -34,10 +34,10 @@ class _ModifierInfosPartiesInteresseesState extends State<ModifierInfosPartiesIn
             ),
             columns: const [
               DataColumn(
-                label: Text('Parties intéressées'),
+                label: Text('Catégories'),
               ),
               DataColumn(
-                label: Text('Catégories'),
+                label: Text('Parties intéressées'),
               ),
               DataColumn(
                 label: Text('Attentes'),
@@ -51,29 +51,29 @@ class _ModifierInfosPartiesInteresseesState extends State<ModifierInfosPartiesIn
             ],
             rows: const [
               DataRow(cells: [
-                DataCell(Text('Acme Corp')),
                 DataCell(Text('Clients')),
+                DataCell(Text('Acme Corp')),
                 DataCell(Text('Livraison rapide')),
                 DataCell(Text('Service')),
                 DataCell(Text('Optimisation de la logistique')),
               ]),
               DataRow(cells: [
-                DataCell(Text('XYZ Inc.')),
                 DataCell(Text('Fournisseurs')),
+                DataCell(Text('XYZ Inc.')),
                 DataCell(Text('Paiement à temps')),
                 DataCell(Text('Financier')),
                 DataCell(Text('Respect des délais de paiement')),
               ]),
               DataRow(cells: [
-                DataCell(Text('John Doe')),
                 DataCell(Text('Actionnaires')),
+                DataCell(Text('John Doe')),
                 DataCell(Text('Retour sur investissement')),
                 DataCell(Text('Économique')),
                 DataCell(Text('Amélioration de la rentabilité')),
               ]),
               DataRow(cells: [
-                DataCell(Text('Jane Smith')),
                 DataCell(Text('Employés')),
+                DataCell(Text('Jane Smith')),
                 DataCell(Text('Conditions de travail')),
                 DataCell(Text('Social')),
                 DataCell(Text('Mise en place de formations')),

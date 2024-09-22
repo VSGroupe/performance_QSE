@@ -15,12 +15,14 @@ class ContentPilotageHome extends StatefulWidget {
 
 class _ContentPilotageHomeState extends State<ContentPilotageHome> {
   final AccueilPilotController accueilPilotController = Get.put(AccueilPilotController());
-  List<Map<String, dynamic>> _filliale = [];
+  List<Map<String, dynamic>> _support = [];
   List<Map<String, dynamic>> _management = [];
   List<Map<String, dynamic>> _operationnels = [];
+  final List<Map<String, dynamic>> _domaines = [{"domaine": "Siege"}, {"domaine": "Site1"}, {"domaine": "Site2"}, {"domaine": "Site3"}];
 
   late String _userEmail = 'No email available';
   String _espaces_d_acces = "";
+  String formated_clic_domaine = "";
 
   final Map<String, bool> _accessCache = {};
   late Future<void> _loadDataFuture;
@@ -30,17 +32,17 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
   void initState() {
     super.initState();
     _loadDataFuture = _loadData();
-    _accessFuture = _checkAccess(); // Assurez-vous que cette fonction est appelée une seule fois
+    _accessFuture = _checkAccess();
   }
 
   Future<void> _loadData() async {
     try {
-      final fillialeData = await getSupportProcessus();
+      final supportProcess = await getSupportProcessus();
       final managementProcess = await getManagementProcessus();
       final operationnelsProcess = await getOperationnelsProcessus();
 
       setState(() {
-        _filliale = fillialeData;
+        _support = supportProcess;
         _management = managementProcess;
         _operationnels = operationnelsProcess;
       });
@@ -51,11 +53,15 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
 
   Future<void> _checkAccess() async {
     await Future.wait([
-      _getAccessEspace("Consolide"),
+      _getAccessEspace("Consolide_general"),
+      _getAccessEspace("Consolide_processus"),
       _getAccessEspace("Siege"),
-      _getAccessEspace("Usine"),
+      _getAccessEspace("Site1"),
+      _getAccessEspace("Site2"),
+      _getAccessEspace("Site3"),
     ]);
   }
+
 
   Future<bool> _getAccessEspace(String espace) async {
     if (_accessCache.containsKey(espace)) {
@@ -71,7 +77,7 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
         print('Début de la requête pour l\'utilisateur $_userEmail');
         final response = await Supabase.instance.client
             .from('Users')
-            .select('a_acces_a')
+            .select('domaine_clique')
             .eq('email', _userEmail)
             .single()
             .execute();
@@ -85,10 +91,24 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
           return false;
         }
 
-        String espacesDacces = data['a_acces_a'] ?? '';
+        String espacesDacces = data['domaine_clique'] ?? '';
 
         setState(() {
           _espaces_d_acces = espacesDacces;
+          // Formater la donnée
+          if(espacesDacces == "Consolide_general"){
+            formated_clic_domaine = "CONSOLIDE GENERAL";
+          } else if (espacesDacces == "Consolide_processus"){
+            formated_clic_domaine = "Consolidé Processus";
+          } else if (espacesDacces == "Siege"){
+            formated_clic_domaine = "SIEGE";
+          } else if (espacesDacces == "Site1"){
+            formated_clic_domaine = "Site 1";
+          } else if (espacesDacces == "Site2"){
+            formated_clic_domaine = "Site 2";
+          } else if (espacesDacces == "Site3"){
+            formated_clic_domaine = "Site 3";
+          }
         });
 
         print('Espaces d\'accès: $_espaces_d_acces');
@@ -122,26 +142,53 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
 
   Future<List<Widget>> _buildContentBoxes() async {
     final List<Widget> children = [];
+    print(_management);
 
-    if (await _getAccessEspace("Consolide")) {
+    if (await _getAccessEspace("Consolide_general")) {
+      children.addAll([
+        _buildContentBox("PROCESSUS MANAGEMENT", _domaines, "domaine"),
+        const SizedBox(width: 10),
+        _buildContentBox("PROCESSUS OPÉRATIONNELS", _domaines, "domaine"),
+        const SizedBox(width: 10),
+        _buildContentBox("PROCESSUS SUPPORT", _domaines, "domaine"),
+      ]);
+    } else if (await _getAccessEspace("Consolide_processus")){
       children.addAll([
         _buildContentBox("PROCESSUS MANAGEMENT", _management, "management"),
         const SizedBox(width: 10),
         _buildContentBox("PROCESSUS OPÉRATIONNELS", _operationnels, "operationnels"),
         const SizedBox(width: 10),
-        _buildContentBox("PROCESSUS SUPPORT", _filliale, "support"),
+        _buildContentBox("PROCESSUS SUPPORT", _support, "support"),
       ]);
     } else if (await _getAccessEspace("Siege")) {
       children.addAll([
         _buildContentBox("PROCESSUS MANAGEMENT", _management, "management"),
         const SizedBox(width: 120),
-        _buildContentBox("PROCESSUS SUPPORT", _filliale, "support"),
+        _buildContentBox("PROCESSUS SUPPORT", _support, "support"),
       ]);
-    } else if (await _getAccessEspace("Usine")) {
+    } else if (await _getAccessEspace("Site1")) {
       children.addAll([
+        _buildContentBox("PROCESSUS MANAGEMENT", _management, "management"),
+        const SizedBox(width: 10),
         _buildContentBox("PROCESSUS OPÉRATIONNELS", _operationnels, "operationnels"),
-        const SizedBox(width: 120),
-        _buildContentBox("PROCESSUS SUPPORT", _filliale, "support"),
+        const SizedBox(width: 10),
+        _buildContentBox("PROCESSUS SUPPORT", _support, "support"),
+      ]);
+    } else if (await _getAccessEspace("Site2")) {
+      children.addAll([
+        _buildContentBox("PROCESSUS MANAGEMENT", _management, "management"),
+        const SizedBox(width: 10),
+        _buildContentBox("PROCESSUS OPÉRATIONNELS", _operationnels, "operationnels"),
+        const SizedBox(width: 10),
+        _buildContentBox("PROCESSUS SUPPORT", _support, "support"),
+      ]);
+    } else if (await _getAccessEspace("Site3")) {
+      children.addAll([
+        _buildContentBox("PROCESSUS MANAGEMENT", _management, "management"),
+        const SizedBox(width: 10),
+        _buildContentBox("PROCESSUS OPÉRATIONNELS", _operationnels, "operationnels"),
+        const SizedBox(width: 10),
+        _buildContentBox("PROCESSUS SUPPORT", _support, "support"),
       ]);
     } else {
       context.go("/accueil_pilotage");
@@ -157,7 +204,7 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          _buildTitle("Processus et Indicateurs"),
+          _buildTitle("Processus et Indicateurs :   ------ $formated_clic_domaine ------"),
           const SizedBox(height: 10),
           FutureBuilder<void>(
             future: Future.wait([_loadDataFuture, _accessFuture]),
