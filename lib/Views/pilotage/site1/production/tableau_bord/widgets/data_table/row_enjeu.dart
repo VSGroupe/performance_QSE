@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:perfqse/Views/pilotage/entity/tableau_bord/widgets/data_table/row_critNormatif.dart' as entity;
+import 'package:perfqse/Views/pilotage/entity/tableau_bord/widgets/data_table/row_critNormatif.dart';
 import 'package:perfqse/models/pilotage/critereModel.dart';
-import '../../../../../../models/pilotage/indicateur_model.dart';
-import '../../../../controllers/tableau_controller.dart';
 import '../../controller_tableau_bord/controller_tableau_bord.dart';
 import '../utils_TB.dart';
 import 'row_critNormatif.dart';
+import 'package:perfqse/Views/pilotage/site1/production/tableau_bord/widgets/data_table/row_critNormatif.dart' as production;
 
 class RowEnjeu extends StatefulWidget {
   final String numero;
@@ -28,8 +27,8 @@ class RowEnjeu extends StatefulWidget {
 }
 
 class _RowEnjeuState extends State<RowEnjeu> {
-bool _press=false;
-final ControllerTableauBord controllerTableauBord=Get.find();
+  bool _press=false;
+  final ControllerTableauBord controllerTableauBord=Get.find();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -74,12 +73,12 @@ final ControllerTableauBord controllerTableauBord=Get.find();
           ),
         ),
         Visibility(
-          visible: _press,
-          child:Obx(()
+            visible: _press,
+            child:Obx(()
             =>Column(
-                  children: getCritereNormatifWidget(widget.idEnjeu,controllerTableauBord.criteresTableauBord.toList())
-              ),
-          )
+                children: getCritereNormatifWidget(widget.idEnjeu,controllerTableauBord.criteresTableauBord.toList())
+            ),
+            )
         )
       ],
     );
@@ -89,7 +88,7 @@ final ControllerTableauBord controllerTableauBord=Get.find();
 
 List<Widget> getCritereNormatifWidget(String idEnjeu, List<CritereModel> criteres) {
   List<CritereModel> critereContainer = criteres.where((element) => element.idEnjeu == idEnjeu).toList();
-  return critereContainer.map((critere) => entity.RowCritereNormatif(
+  return critereContainer.map((critere) => production.RowCritereNormatif(
     idEnjeu: critere.idEnjeu,
     numero: critere.idCritere.length == 8 ? critere.idCritere.substring(7, 8) : critere.idCritere.substring(7, 9),
     idCritNormatif: critere.idCritere,

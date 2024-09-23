@@ -1,35 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:perfqse/Views/pilotage/entity/tableau_bord/widgets/data_table/row_critNormatif.dart' as entity;
-import 'package:perfqse/models/pilotage/critereModel.dart';
-import '../../../../../../models/pilotage/indicateur_model.dart';
-import '../../../../controllers/tableau_controller.dart';
+import '../../../../../../../models/pilotage/indicateur_model.dart';
+import '../../../../../../../models/pilotage/indicateur_row_model.dart';
 import '../../controller_tableau_bord/controller_tableau_bord.dart';
 import '../utils_TB.dart';
-import 'row_critNormatif.dart';
+import 'row_indicateur.dart';
 
-class RowEnjeu extends StatefulWidget {
-  final String numero;
-  final String idAxe;
+class RowCritereNormatif extends StatefulWidget {
+  final String? numero;
   final String idEnjeu;
-  final String EnjeuTitle;
+  final String idCritNormatif;
+  final String CritNormatifTitle;
   final Color color;
-  const RowEnjeu(
+  const RowCritereNormatif(
       {Key? key,
-        required this.EnjeuTitle,
+        required this.CritNormatifTitle,
         required this.idEnjeu,
+        required this.idCritNormatif,
         required this.color,
-        required this.idAxe,
-        required this.numero})
+         this.numero})
       : super(key: key);
 
   @override
-  State<RowEnjeu> createState() => _RowEnjeuState();
+  State<RowCritereNormatif> createState() => _RowCritereNormatifState();
 }
 
-class _RowEnjeuState extends State<RowEnjeu> {
+class _RowCritereNormatifState extends State<RowCritereNormatif> {
 bool _press=false;
 final ControllerTableauBord controllerTableauBord=Get.find();
+late final IndicateurModel indicateur;
+
+@override
+  void initState() {
+
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -46,13 +51,13 @@ final ControllerTableauBord controllerTableauBord=Get.find();
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "${widget.numero}. ${widget.EnjeuTitle}",
+                "${widget.numero}. ${widget.CritNormatifTitle}",
                 style: const TextStyle(
                     color: Colors.white, fontWeight: FontWeight.bold),
               ),
               Expanded(child: Container()),
               RotatedBox(
-                quarterTurns:_press ? 1 : 3,
+                quarterTurns: _press ? 1 : 3,
                 child: IconButton(
                   splashRadius: 10,
                   icon: const Icon(
@@ -75,10 +80,10 @@ final ControllerTableauBord controllerTableauBord=Get.find();
         ),
         Visibility(
           visible: _press,
-          child:Obx(()
-            =>Column(
-                  children: getCritereNormatifWidget(widget.idEnjeu,controllerTableauBord.criteresTableauBord.toList())
-              ),
+          child: Obx(()
+            => Column(
+                children: getIndicateurWidget(widget.CritNormatifTitle,controllerTableauBord.moisSelectFiltre.value,controllerTableauBord.indicateurRowTableauBord)
+            ),
           )
         )
       ],
@@ -87,13 +92,9 @@ final ControllerTableauBord controllerTableauBord=Get.find();
 }
 
 
-List<Widget> getCritereNormatifWidget(String idEnjeu, List<CritereModel> criteres) {
-  List<CritereModel> critereContainer = criteres.where((element) => element.idEnjeu == idEnjeu).toList();
-  return critereContainer.map((critere) => entity.RowCritereNormatif(
-    idEnjeu: critere.idEnjeu,
-    numero: critere.idCritere.length == 8 ? critere.idCritere.substring(7, 8) : critere.idCritere.substring(7, 9),
-    idCritNormatif: critere.idCritere,
-    CritNormatifTitle: critere.libelle,
-    color: Colors.lightBlue,
-  )).toList();
+  List<Widget> getIndicateurWidget(String CritNormatifTitle,String moisSelected,List<IndicateurRowTableauBordModel>indicateurRowTableauBord){
+    List<String>ListStringMois=["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Decembre"];
+  final int intMois = DateTime.now().month;
+  List<IndicateurRowTableauBordModel> containerIndicateurRowTB=indicateurRowTableauBord.where((element) =>element.critereNormatif==CritNormatifTitle).toList();
+  return containerIndicateurRowTB.map((indicateur) => RowIndicateur(indicateur: indicateur,mois:moisSelected,)).toList();
 }
