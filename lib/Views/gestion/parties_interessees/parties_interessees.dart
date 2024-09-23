@@ -19,7 +19,7 @@ class _PartiesInteresseesState extends State<PartiesInteressees> with SingleTick
   static const List<Tab> myTabs = <Tab>[
     Tab(text: 'Cartographie des parties intéressées'),
     Tab(text: 'Attentes des parties intéressées'),
-    //Tab(text: 'Modifier mon mot de passe'),
+    Tab(text: 'Ajouter une partie intéressées'),
   ];
 
   late TabController _tabController;
@@ -72,15 +72,15 @@ class _PartiesInteresseesState extends State<PartiesInteressees> with SingleTick
                     text: "Attentes des parties intéressées",
                     size: 15,
                   ),
-                  // CustomText(
-                  //   text: "Modifier mon mot de passe",
-                  //   size: 15,
-                  // ),
+                  CustomText(
+                    text: "Ajouter une partie intéressées",
+                    size: 15,
+                  ),
                 ],
                 views: [
                   Container(child: ApercuPartiesInteressees(),),
-                  Container(child: ModifierInfosPartiesInteressees(),),
-                  //Container(child: Password(),)
+                  Container(child: AttentesPartiesInteressees(),),
+                  Container(child: AjouterPartiesInteressees(),)
                 ],
               ),
             ),
