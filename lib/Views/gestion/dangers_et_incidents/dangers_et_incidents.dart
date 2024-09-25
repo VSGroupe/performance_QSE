@@ -58,9 +58,9 @@ class _DangersEtIncidentsState extends State<DangersEtIncidents> with SingleTick
                     labelColor: Colors.black,
                     labelPadding:
                     const EdgeInsets.only(left: 0, right: 30),
-                    unselectedLabelColor: Colors.amber,
+                    unselectedLabelColor: Colors.red.shade800,
                     indicator: MaterialIndicator(
-                      color: Colors.amber,
+                      color: Colors.red.shade800,
                       paintingStyle: PaintingStyle.fill,
                     )),
                 tabs: const [

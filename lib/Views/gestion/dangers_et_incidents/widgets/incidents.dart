@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:perfqse/Views/gestion/dangers_et_incidents/widgets/fleche_incidents.dart';
 import 'dart:convert';
 
 import '../../../../widgets/customtext.dart';
-import 'fleche_dangers_et_incidents.dart'; // Importation du fichier fleche.dart
+import 'fleche_dangers.dart'; // Importation du fichier fleche.dart
 
 const double defaultPadding = 16.0;
 
@@ -216,7 +217,7 @@ class _IncidentsState extends State<Incidents> {
           // Flèche dessinée à gauche
           CustomPaint(
             size: const Size(20, double.infinity),
-            painter: ArrowPainter(), // Utilisation de ArrowPainter importé
+            painter: ArrowPainterIncident(), // Utilisation de ArrowPainter importé
           ),
           const SizedBox(width: 10), // Espace entre la flèche et la liste
           Expanded(

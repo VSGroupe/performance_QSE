@@ -226,7 +226,7 @@ class _ImpactsEnvironnementauxState extends State<ImpactsEnvironnementaux> {
                   text: 'Les impacts environnementaux',
                   size: 20,
                   weight: FontWeight.bold,
-                  color: Color(0xFFF6871A),
+                  color: Color(0xFF4CAF50),
                 ),
                 const SizedBox(height: 16.0),
                 Expanded(

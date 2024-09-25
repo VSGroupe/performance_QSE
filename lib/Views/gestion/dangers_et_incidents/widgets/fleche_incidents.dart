@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class ArrowPainter extends CustomPainter {
+class ArrowPainterIncident extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final gradient = LinearGradient(
-      colors: [Colors.green.shade500, Colors.green.shade100],
+      colors: [Colors.yellow.shade900, Colors.yellow.shade500],
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
     );

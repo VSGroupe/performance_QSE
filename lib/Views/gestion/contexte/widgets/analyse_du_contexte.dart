@@ -15,17 +15,14 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
 
   final String baseUrl = "http://localhost:5000"; // URL de votre API Flask
 
-  final TextEditingController _idEnjeuController = TextEditingController();
   final TextEditingController _libelleController = TextEditingController();
-  String? _selectedAxeId;
   String? _selectedType;
-  bool _idEnjeuExists = false;
   bool _showSuccessAnimation = false;
   bool _showFieldError = false;
 
   List<Map<String, dynamic>> _interneEnjeux = [];
   List<Map<String, dynamic>> _externeEnjeux = [];
-  Map<String, String> libellesEnjeux = {};// Créer une liste associative pour stocker les libellés avec leur id_enjeu comme clé
+  Map<int, String> libellesEnjeux = {};// Créer une liste associative pour stocker les libellés avec leur id_enjeu comme clé
 
   @override
   void initState() {
@@ -40,6 +37,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
 
     // Récupérer les enjeux
     final enjeuxResponse = await http.get(Uri.parse('$baseUrl/enjeux'));
+    _showSuccessAnimation = false;
 
     if (enjeuxResponse.statusCode == 200) {
       final List<dynamic> enjeuxData = json.decode(enjeuxResponse.body);
@@ -48,13 +46,13 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
 
       // Remplir la liste associative
       for (var item in enjeuxList) {
-        String idEnjeu = item['id_enjeu'];
+        int idEnjeu = item['id'];
         String libelle = item['libelle'];
         libellesEnjeux[idEnjeu] = libelle;
       }
 
-      _interneEnjeux = enjeuxList.where((item) => item['type_enjeu'] == 'interne').toList();
-      _externeEnjeux = enjeuxList.where((item) => item['type_enjeu'] == 'externe').toList();
+      _interneEnjeux = enjeuxList.where((item) => item['type'] == 'interne').toList();
+      _externeEnjeux = enjeuxList.where((item) => item['type'] == 'externe').toList();
 
       setState(() {});
     } else {
@@ -62,76 +60,25 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
     }
   }
 
-  Future<bool> checkIdEnjeuExists(String idEnjeu) async {
-    try {
-      final response = await http.get(Uri.parse('$baseUrl/check_id_enjeu_exists?id_enjeu=$idEnjeu'));
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-
-        if (data != null && data is Map<String, dynamic> && data.containsKey('exists')) {
-          _idEnjeuExists = data['exists'] == true;
-          return _idEnjeuExists;
-        } else {
-          throw Exception("Format de réponse inattendu.");
-        }
-      } else {
-        throw Exception('Erreur lors de la vérification de l\'id enjeu: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Erreur réseau: $e');
-      return false; // Retourne `false` en cas d'erreur.
-    }
-  }
-
-
-  // Les récupération des axes.
-
-  Future<List<Map<String, dynamic>>> fetchAxes() async {
-    try {
-      final response = await http.get(Uri.parse('$baseUrl/get_axes'));
-      if (response.statusCode == 200) {
-        return List<Map<String, dynamic>>.from(jsonDecode(response.body));
-      } else {
-        print('Erreur lors de la récupération des axes: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Erreur réseau: $e');
-    }
-    return [];
-  }
-
   // Ajout de l'enjeu
 
   Future<void> addEnjeu() async {
-    final idEnjeu = _idEnjeuController.text.trim();
     final libelle = _libelleController.text.trim();
 
-    await checkIdEnjeuExists(idEnjeu);
-
-    if (_idEnjeuExists) {
-      print('L\'ID de l\'enjeu existe déjà, ajout annulé.');
-      return;
-    }
-
-    if (idEnjeu.isNotEmpty && libelle.isNotEmpty && _selectedAxeId != null && _selectedType != null) {
+    if (libelle.isNotEmpty && _selectedType != null) {
       try {
         final response = await http.post(
           Uri.parse('$baseUrl/add_enjeu'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({
-            'id_enjeu': idEnjeu,
             'libelle': libelle,
-            'id_axe': _selectedAxeId,
-            'type_enjeu': _selectedType,
+            'type': _selectedType,
           }),
         );
 
         if (response.statusCode == 201) {
           print('Enjeu ajouté avec succès');
-          _idEnjeuController.clear();
           _libelleController.clear();
-          _selectedAxeId = null;
           _selectedType = null;
 
           setState(() {
@@ -170,8 +117,8 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Container(
-                width: 600,
-                height: 500,
+                width: 500,
+                height: 400,
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -186,27 +133,10 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildTextField(
-                              controller: _idEnjeuController,
-                              labelText: "Identifiant de l'enjeu (Ex: enjeu1, enjeu2, enjeu15, ...)",
-                              errorText: _idEnjeuExists ? 'Cet identifiant existe déjà' : null,
-                            ),
                             const SizedBox(height: 16),
                             _buildTextField(
                               controller: _libelleController,
                               labelText: "Nom de l'enjeu",
-                            ),
-                            const SizedBox(height: 16),
-                            _buildDropdown(
-                              labelText: "Sélectionner l'axe associé",
-                              value: _selectedAxeId,
-                              onChanged: (newValue) {
-                                setState(() {
-                                  _selectedAxeId = newValue;
-                                });
-                              },
-                              itemsFuture: fetchAxes,
-                              itemLabel: (axe) => '${axe['libelle']}',
                             ),
                             const SizedBox(height: 16),
                             _buildDropdown(
@@ -218,9 +148,9 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                                 });
                               },
                               itemsFuture: () async => ['interne', 'externe']
-                                  .map((type) => {'type_enjeu': type})
+                                  .map((type) => {'type': type})
                                   .toList(),
-                              itemLabel: (item) => item['type_enjeu']!,
+                              itemLabel: (item) => item['type']!,
                             ),
                             const SizedBox(height: 16),
                             if (_showFieldError)
@@ -261,7 +191,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                           onPressed: () async {
                             await addEnjeu();
 
-                            if (!_idEnjeuExists && !_showFieldError) {
+                            if (!_showFieldError) {
                               setState(() {
                                 _showSuccessAnimation = true;
                               });
@@ -361,7 +291,7 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
             onChanged: onChanged,
             items: items.map((item) {
               return DropdownMenuItem<T>(
-                value: item['id_axe'] ?? item['type_enjeu'] as T?,
+                value: item['id_axe'] ?? item['type'] as T?,
                 child: Text(itemLabel(item)),
               );
             }).toList(),
@@ -479,9 +409,12 @@ class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
                 textAlign: TextAlign.center,
               ),
             ),
-            IconButton(
-              icon: const Icon(Icons.add, color: Colors.white),
-              onPressed: onPressed,
+            Tooltip(
+              message: "Ajouter un enjeu",
+              child: IconButton(
+                icon: const Icon(Icons.add, color: Colors.white),
+                onPressed: onPressed,
+              ),
             ),
           ],
         ),

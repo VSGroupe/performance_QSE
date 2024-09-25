@@ -4,7 +4,7 @@ class ArrowPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final gradient = LinearGradient(
-      colors: [Colors.yellow.shade900, Colors.yellow.shade500],
+      colors: [Colors.green.shade500, Colors.green.shade100],
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
     );

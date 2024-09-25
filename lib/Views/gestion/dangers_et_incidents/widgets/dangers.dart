@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../../../../widgets/customtext.dart';
-import 'fleche_dangers_et_incidents.dart'; // Importation du fichier fleche.dart
+import 'fleche_dangers.dart'; // Importation du fichier fleche.dart
 
 const double defaultPadding = 16.0;
 
@@ -227,7 +227,7 @@ class _DangersState extends State<Dangers> {
                   text: 'Les dangers',
                   size: 20,
                   weight: FontWeight.bold,
-                  color: Color(0xFFF6871A),
+                  color: Color(0xFFC62828),
                 ),
                 const SizedBox(height: 16.0),
                 Expanded(

@@ -170,11 +170,11 @@ class _CartographieProcessusState extends State<CartographieProcessus> {
                     height: 100,
                     width: 1200,
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
+                      color: Colors.blue.shade50,
                       borderRadius: BorderRadius.circular(20), // Arrondi des bords
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
+                          color: Colors.blue.withOpacity(0.5),
                           spreadRadius: 5,
                           blurRadius: 7,
                           offset: const Offset(0, 3), // décalage de l'ombre
@@ -205,11 +205,11 @@ class _CartographieProcessusState extends State<CartographieProcessus> {
                     height: 100,
                     width: 1200,
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
+                      color: Colors.orange.shade50,
                       borderRadius: BorderRadius.circular(20), // Arrondi des bords
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
+                          color: Colors.orange.withOpacity(0.5),
                           spreadRadius: 5,
                           blurRadius: 7,
                           offset: const Offset(0, 3), // décalage de l'ombre
@@ -239,11 +239,11 @@ class _CartographieProcessusState extends State<CartographieProcessus> {
                     height: 100,
                     width: 1200,
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
+                      color: Colors.green.shade50,
                       borderRadius: BorderRadius.circular(20), // Arrondi des bords
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
+                          color: Colors.green.withOpacity(0.5),
                           spreadRadius: 5,
                           blurRadius: 7,
                           offset: const Offset(0, 3), // décalage de l'ombre

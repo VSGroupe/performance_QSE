@@ -17,9 +17,9 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
 
   List<Map<String, dynamic>> _interneEnjeux = [];
   List<Map<String, dynamic>> _externeEnjeux = [];
-  Map<String, List<Map<String, dynamic>>> _risquesParEnjeu = {};
-  Map<String, List<Map<String, dynamic>>> _opportunitesParEnjeu = {};
-  Map<String, String> libellesEnjeux = {};// Créer une liste associative pour stocker les libellés avec leur id_enjeu comme clé
+  Map<int, List<Map<String, dynamic>>> _risquesParEnjeu = {};
+  Map<int, List<Map<String, dynamic>>> _opportunitesParEnjeu = {};
+  Map<int, String> libellesEnjeux = {};// Créer une liste associative pour stocker les libellés avec leur id_enjeu comme clé
 
   @override
   void initState() {
@@ -50,13 +50,13 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
 
       // Remplir la liste associative
       for (var item in enjeuxList) {
-        String idEnjeu = item['id_enjeu'];
+        int idEnjeu = item['id'];
         String libelle = item['libelle'];
         libellesEnjeux[idEnjeu] = libelle;
       }
 
-      _interneEnjeux = enjeuxList.where((item) => item['type_enjeu'] == 'interne').toList();
-      _externeEnjeux = enjeuxList.where((item) => item['type_enjeu'] == 'externe').toList();
+      _interneEnjeux = enjeuxList.where((item) => item['type'] == 'interne').toList();
+      _externeEnjeux = enjeuxList.where((item) => item['type'] == 'externe').toList();
 
       // Traitement de la réponse sur la récupération des risques
       if (risquesResponse.statusCode == 200) {
@@ -65,7 +65,7 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
         risquesData.map((item) => item as Map<String, dynamic>).toList();
 
         for (var risque in risquesList) {
-          String idEnjeu = risque['id_enjeu'];
+          int idEnjeu = risque['id'];
           if (_risquesParEnjeu.containsKey(idEnjeu)) {
             _risquesParEnjeu[idEnjeu]?.add(risque);
           } else {
@@ -83,7 +83,7 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
         opportunitesData.map((item) => item as Map<String, dynamic>).toList();
 
         for (var opportunite in opportunitesList) {
-          String idEnjeu = opportunite['id_enjeu'];
+          int idEnjeu = opportunite['id'];
           if (_opportunitesParEnjeu.containsKey(idEnjeu)) {
             _opportunitesParEnjeu[idEnjeu]?.add(opportunite);
           } else {
@@ -148,13 +148,19 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
                               ),
                             ),
                           ),
-                          IconButton(
-                            icon: const Icon(Icons.edit, color: Colors.blue),
-                            onPressed: () => _showEditRisqueDialog(context, risque, setState),
+                          Tooltip(
+                            message: "Modifier",
+                            child: IconButton(
+                              icon: const Icon(Icons.edit, color: Colors.blue),
+                              onPressed: () => _showEditRisqueDialog(context, risque, setState),
+                            ),
                           ),
-                          IconButton(
-                            icon: const Icon(Icons.close, color: Colors.red),
-                            onPressed: () => _showDeleteRisqueConfirmationDialog(context, risque['id_risque'], risque['libelle']),
+                          Tooltip(
+                            message: "Supprimer ce risque",
+                            child: IconButton(
+                              icon: const Icon(Icons.close, color: Colors.red),
+                              onPressed: () => _showDeleteRisqueConfirmationDialog(context, risque['id_risque'], risque['libelle']),
+                            ),
                           ),
                         ],
                       ),
@@ -165,19 +171,49 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "Poids du risque: ${risque['gravite'] ?? 'N/A'}",
-                              style: TextStyle(fontSize: 16),
+                            RichText(
+                              text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: "Poids du risque : ",
+                                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 15),
+                                    ),
+                                    TextSpan(
+                                      text: "${risque['gravite'] ?? 'N/A'}",
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ]
+                              ),
                             ),
                             SizedBox(height: 10),
-                            Text(
-                              "Fréquence: ${risque['frequence'] ?? 'N/A'}",
-                              style: TextStyle(fontSize: 16),
+                            RichText(
+                              text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: "Fréquence : ",
+                                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 15),
+                                    ),
+                                    TextSpan(
+                                      text: "${risque['frequence'] ?? 'N/A'}",
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ]
+                              ),
                             ),
                             SizedBox(height: 10),
-                            Text(
-                              "Enjeu associé: ${libellesEnjeux[risque['id_enjeu']]}",
-                              style: TextStyle(fontSize: 16),
+                            RichText(
+                              text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: "Enjeu associé : ",
+                                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 15),
+                                    ),
+                                    TextSpan(
+                                      text: "${libellesEnjeux[risque['id']]}",
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ]
+                              ),
                             ),
                           ],
                         ),
@@ -470,13 +506,19 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
                               ),
                             ),
                           ),
-                          IconButton(
-                            icon: const Icon(Icons.edit, color: Colors.blue),
-                            onPressed: () => _showEditDialog(context, opportunite, setState),
+                          Tooltip(
+                            message: "Modifier",
+                            child: IconButton(
+                              icon: const Icon(Icons.edit, color: Colors.blue),
+                              onPressed: () => _showEditDialog(context, opportunite, setState),
+                            ),
                           ),
-                          IconButton(
-                            icon: const Icon(Icons.close, color: Colors.red),
-                            onPressed: () => _showDeleteConfirmationDialog(context, opportunite['id_opportunite'], opportunite['libelle']),
+                          Tooltip(
+                            message: "Supprimer cette opportunité",
+                            child: IconButton(
+                              icon: const Icon(Icons.close, color: Colors.red),
+                              onPressed: () => _showDeleteConfirmationDialog(context, opportunite['id_opportunite'], opportunite['libelle']),
+                            ),
                           ),
                         ],
                       ),
@@ -487,19 +529,49 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "Poids de l'opportunité: ${opportunite['gravite'] ?? 'N/A'}",
-                              style: TextStyle(fontSize: 16),
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: "Poids de l'opportunité : ",
+                                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 15),
+                                  ),
+                                  TextSpan(
+                                    text: "${opportunite['gravite'] ?? 'N/A'}",
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ]
+                              ),
                             ),
                             SizedBox(height: 10),
-                            Text(
-                              "Fréquence: ${opportunite['frequence'] ?? 'N/A'}",
-                              style: TextStyle(fontSize: 16),
+                            RichText(
+                              text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: "Fréquence : ",
+                                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 15),
+                                    ),
+                                    TextSpan(
+                                      text: "${opportunite['frequence'] ?? 'N/A'}",
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ]
+                              ),
                             ),
                             SizedBox(height: 10),
-                            Text(
-                              "Enjeu associé: ${libellesEnjeux[opportunite['id_enjeu']]}",
-                              style: TextStyle(fontSize: 16),
+                            RichText(
+                              text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: "Enjeu associé : ",
+                                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 15),
+                                    ),
+                                    TextSpan(
+                                      text: "${libellesEnjeux[opportunite['id']]}",
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ]
+                              ),
                             ),
                           ],
                         ),
@@ -779,7 +851,7 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
             'libelle': libelle,
             'gravite': _selectedGravite,
             'frequence': _selectedFrequence,
-            'id_enjeu': _selectedEnjeuId,
+            'id': _selectedEnjeuId,
           }),
         );
 
@@ -850,7 +922,7 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
                                     ),
                                     items: enjeux.map((enjeu) {
                                       return DropdownMenuItem<String>(
-                                        value: enjeu['id_enjeu'],
+                                        value: enjeu['id'].toString(),
                                         child: Text('${enjeu['libelle']}'),
                                       );
                                     }).toList(),
@@ -996,18 +1068,13 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
       final gravite = int.tryParse(_selectedGravite ?? '');
       final frequence = double.tryParse(_selectedFrequence ?? '');
 
-      print('Libellé: $libelle');
-      print('ID Enjeu: $_selectedEnjeuId');
-      print('Gravité: $gravite');
-      print('Fréquence: $frequence');
-
       if (libelle.isNotEmpty && _selectedEnjeuId != null && gravite != null && frequence != null) {
         final response = await http.post(
           Uri.parse('$baseUrl/add_opportunite'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({
             'libelle': libelle,
-            'id_enjeu': _selectedEnjeuId,
+            'id': _selectedEnjeuId,
             'gravite': gravite,
             'frequence': frequence,
           }),
@@ -1079,7 +1146,7 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
                                     ),
                                     items: enjeux.map((enjeu) {
                                       return DropdownMenuItem<String>(
-                                        value: enjeu['id_enjeu'],
+                                        value: enjeu['id'].toString(),
                                         child: Text('${enjeu['libelle']}'),
                                       );
                                     }).toList(),
@@ -1256,7 +1323,7 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: _interneEnjeux
                             .map((enjeu) {
-                          final risques = _risquesParEnjeu[enjeu['id_enjeu']];
+                          final risques = _risquesParEnjeu[enjeu['id']];
                           if (risques != null) {
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1285,7 +1352,7 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: _interneEnjeux
                             .map((enjeu) {
-                          final opportunites = _opportunitesParEnjeu[enjeu['id_enjeu']];
+                          final opportunites = _opportunitesParEnjeu[enjeu['id']];
                           if (opportunites != null) {
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1333,7 +1400,7 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: _externeEnjeux
                             .map((enjeu) {
-                          final risques = _risquesParEnjeu[enjeu['id_enjeu']];
+                          final risques = _risquesParEnjeu[enjeu['id']];
                           if (risques != null) {
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1362,7 +1429,7 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: _externeEnjeux
                             .map((enjeu) {
-                          final opportunites = _opportunitesParEnjeu[enjeu['id_enjeu']];
+                          final opportunites = _opportunitesParEnjeu[enjeu['id']];
                           if (opportunites != null) {
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1434,9 +1501,12 @@ class _RapportDuRisqueState extends State<RapportDuRisque> {
                 textAlign: TextAlign.center,
               ),
             ),
-            IconButton(
-              icon: const Icon(Icons.add, color: Colors.white),
-              onPressed: onPressed,
+            Tooltip(
+              message: "Ajouter un élément",
+              child: IconButton(
+                icon: const Icon(Icons.add, color: Colors.white),
+                onPressed: onPressed,
+              ),
             ),
           ],
         ),
