@@ -1,7 +1,5 @@
-
-
 import 'package:flutter/material.dart';
-import 'package:perfqse/Views/pilotage/entity/archive/BoxText/pie_chart.dart';
+import 'package:perfqse/Views/pilotage/site1/production/archive/BoxText/pie_chart.dart';
 
 class BoxAxe extends StatefulWidget {
   final String firsttitle;

@@ -7,7 +7,8 @@ import '../../../../helpers/helper_methods.dart';
 import '../../../../models/common/user_model.dart';
 import '../../../../models/pilotage/acces_pilotage_model.dart';
 import '../../../../utils/pilotage_utils.dart';
-import '../../pilotage/entity/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
+import '../../pilotage/site1/commercial/tableau_bord/controller_tableau_bord/com_controller_tableau_bord.dart';
+import '../../pilotage/site1/production/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
 import 'controller/profil_pilotage_controller.dart';
 import 'profil_pilotage.dart';
 

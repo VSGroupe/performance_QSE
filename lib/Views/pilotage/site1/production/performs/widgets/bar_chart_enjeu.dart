@@ -3,7 +3,7 @@ import 'package:d_chart/ordinal/bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:perfqse/Views/pilotage/entity/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
+import 'package:perfqse/Views/pilotage/site1/production/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
 
 class BarChartEnjeu extends StatefulWidget {
   const BarChartEnjeu({super.key});

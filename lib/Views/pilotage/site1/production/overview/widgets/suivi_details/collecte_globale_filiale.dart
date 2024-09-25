@@ -1,7 +1,7 @@
 import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
-import 'package:perfqse/Views/pilotage/entity/archive/BoxText/boxprocess.dart';
+import 'package:perfqse/Views/pilotage/site1/production/archive/BoxText/boxprocess.dart';
 import 'package:perfqse/module/styled_scrollview.dart';
 
 import '../../../../../../../constants/colors.dart';

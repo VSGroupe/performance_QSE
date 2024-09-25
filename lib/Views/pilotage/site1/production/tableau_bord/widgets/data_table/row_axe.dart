@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:perfqse/Views/pilotage/entity/tableau_bord/widgets/data_table/row_enjeu.dart';
+import 'package:perfqse/Views/pilotage/site1/production/tableau_bord/widgets/data_table/row_enjeu.dart';
 import '../../../../../../../models/pilotage/enjeuModel.dart';
 import '../../controller_tableau_bord/controller_tableau_bord.dart';
 import '../utils_TB.dart';

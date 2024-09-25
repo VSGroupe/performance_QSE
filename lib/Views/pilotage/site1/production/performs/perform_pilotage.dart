@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:perfqse/Views/pilotage/entity/performs/widgets/bar_chart_enjeu.dart';
+import 'package:perfqse/Views/pilotage/site1/production/performs/widgets/bar_chart_enjeu.dart';
 import 'package:styled_widget/styled_widget.dart';
 import '../../../../../constants/colors.dart';
 import '../../../../../module/styled_scrollview.dart';

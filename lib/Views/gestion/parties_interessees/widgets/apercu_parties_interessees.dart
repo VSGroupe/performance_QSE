@@ -71,7 +71,7 @@ class _ApercuPartiesInteresseesState extends State<ApercuPartiesInteressees> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    color: Colors.blue,
+                    color: Colors.blueGrey.shade400,
                     padding: EdgeInsets.all(16.0),
                     width: double.infinity,
                     child: Text(
@@ -133,7 +133,7 @@ class _ApercuPartiesInteresseesState extends State<ApercuPartiesInteressees> {
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 30),
-                          foregroundColor: Colors.white, backgroundColor: Colors.blue,
+                          foregroundColor: Colors.white, backgroundColor: Colors.blueGrey.shade400,
                         ),
                         onPressed: () {
                           Navigator.of(context).pop();
@@ -180,7 +180,7 @@ class _ApercuPartiesInteresseesState extends State<ApercuPartiesInteressees> {
                       height: 140,
                       child: Container(
                         color: Colors.red.withOpacity(0.0),
-                        child: buildPartiesList(internes, "Parties prenantes internes"),
+                        child: buildPartiesList(internes, "Parties intéressées internes"),
                       ),
                     ),
                     // Quadrant 2 - Partenaires économiques
@@ -291,10 +291,10 @@ class _ApercuPartiesInteresseesState extends State<ApercuPartiesInteressees> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        buildLegendItem('Parties prenantes internes', Colors.red),
-        buildLegendItem('Partenaires économiques', Colors.green),
-        buildLegendItem('Régulateurs', Colors.blue),
-        buildLegendItem('Influenceurs sociétaux', Colors.blueGrey),
+        buildLegendItem('Parties intéressées internes', Colors.orange.shade400),
+        buildLegendItem('Partenaires économiques', Colors.green.shade400),
+        buildLegendItem('Régulateurs', Colors.blue.shade400),
+        buildLegendItem('Influenceurs sociétaux', Colors.blueGrey.shade400),
       ],
     );
   }
@@ -326,19 +326,19 @@ class QuadrantPainter extends CustomPainter {
     final rect = Rect.fromCircle(center: Offset(size.width / 2, size.height / 2), radius: size.width / 2);
 
     // Quadrant 1 - Haut Gauche (Influenceurs sociétaux)
-    paint.color = Colors.red;
+    paint.color = Colors.orange.shade400;
     canvas.drawArc(rect, pi, pi / 2, true, paint);
 
     // Quadrant 2 - Haut Droit (Partenaires économiques)
-    paint.color = Colors.green;
+    paint.color = Colors.green.shade400;
     canvas.drawArc(rect, 3 * pi / 2, pi / 2, true, paint);
 
     // Quadrant 3 - Bas Gauche (Régulateurs)
-    paint.color = Colors.blue;
+    paint.color = Colors.blue.shade400;
     canvas.drawArc(rect, pi / 2, pi / 2, true, paint);
 
     // Quadrant 4 - Bas Droit (Parties prenantes internes)
-    paint.color = Colors.blueGrey;
+    paint.color = Colors.blueGrey.shade400;
     canvas.drawArc(rect, 0, pi / 2, true, paint);
   }
 

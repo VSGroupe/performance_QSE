@@ -5,14 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:perfqse/Views/pilotage/entity/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
-import 'package:perfqse/Views/pilotage/entity/tableau_bord/widgets/processus.dart';
+import 'package:perfqse/Views/pilotage/site1/production/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
+import 'package:perfqse/Views/pilotage/site1/production/tableau_bord/widgets/processus.dart';
 import 'package:selector_wheel/selector_wheel/models/selector_wheel_value.dart';
 import 'package:selector_wheel/selector_wheel/selector_wheel.dart';
 import 'package:stylish_dialog/stylish_dialog.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:perfqse/Views/pilotage/entity/tableau_bord/widgets/utils_TB.dart';
 
 import '../../../../../../helpers/helper_methods.dart';
 import '../../../../../../models/pilotage/axeModel.dart';
@@ -29,7 +28,7 @@ class EnteteTableauBord extends StatefulWidget {
 
 class _EntityWidgetWidgetState extends State<EnteteTableauBord> {
   final storage =FlutterSecureStorage();
-  final Location="/pilotage/espace/Bouafle/tableau-de-bord/transite-tableau-bord/indicateurs";
+  final Location="/pilotage/espace/Com/tableau-de-bord/transite-tableau-bord/indicateurs";
   int year = DateTime.now().year;
   final ControllerTableauBord controllerTb=Get.find();
   late TextEditingController mois_controller = TextEditingController();

@@ -225,7 +225,7 @@ class _AjouterPartiesInteresseesState extends State<AjouterPartiesInteressees> {
                         SizedBox(height: 12),
                         _buildTextField(_typeAttenteController, 'Type d\'attente'),
                         SizedBox(height: 12),
-                        _buildTextField(_modeReponseController, 'Mode de réponse'),
+                        _buildTextField(_modeReponseController, 'Mode de dialogue'),
                         SizedBox(height: 20),
                         ElevatedButton.icon(
                           onPressed: () {
@@ -234,7 +234,7 @@ class _AjouterPartiesInteresseesState extends State<AjouterPartiesInteressees> {
                           },
                           icon: Icon(Icons.save, color: Colors.white),
                           label: Text(
-                            'Enregistrer Partie Intéressée',
+                            'Enregistrer',
                             style: TextStyle(color: Colors.white),
                           ),
                           style: ElevatedButton.styleFrom(

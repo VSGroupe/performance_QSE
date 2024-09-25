@@ -9,8 +9,9 @@ import '../../../../models/pilotage/acces_pilotage_model.dart';
 import '../../../../utils/pilotage_utils.dart';
 import '../../../audit/autre/widgets/evaluation_utils.dart';
 import '../../../audit/constant/constants.dart';
-import '../../../pilotage/entity/profil/controller/profil_pilotage_controller.dart';
-import '../../../pilotage/entity/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
+import '../../../gestion/profil/controller/profil_pilotage_controller.dart';
+import '../../../pilotage/site1/commercial/tableau_bord/controller_tableau_bord/com_controller_tableau_bord.dart';
+import '../../../pilotage/site1/production/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
 import 'admin.dart';
 
 class ScreenAdmin extends StatefulWidget {

@@ -27,9 +27,9 @@ class _EnteteSuiviState extends State<EnteteSuivi> {
         const SizedBox(width: 5,),
         MenuDeroulant(
           indication: "",
-          items: ["Bouafle","Trechville"],
+          items: ["Com","Trechville"],
           width: 200,
-          initValue: "Bouafle",
+          initValue: "Com",
           onChanged: (value){
           },
         ),

@@ -1,3 +1,4 @@
+import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -23,6 +24,7 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
   late String _userEmail = 'No email available';
   String _espaces_d_acces = "";
   String formated_clic_domaine = "";
+  List<String> _acces_processus = [];
 
   final Map<String, bool> _accessCache = {};
   late Future<void> _loadDataFuture;
@@ -61,6 +63,75 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
       _getAccessEspace("Site3"),
     ]);
   }
+
+  Future<bool> _getAccessProcessus(String site, String processus) async {
+    final user = Supabase.instance.client.auth.currentUser;
+
+    if (user != null) {
+      _userEmail = user.email ?? 'No email available';
+
+      try {
+        print('Début de la requête pour l\'utilisateur $_userEmail');
+        final response = await Supabase.instance.client
+            .from('AccesPilotage')
+            .select('espace')
+            .eq('email', _userEmail)
+            .single()
+            .execute();
+
+        print('Réponse obtenue: ${response.data}');
+        final data = response.data;
+
+        if (data == null) {
+          print('Votre processus ou site n\'est pas spécifié dans la base de données');
+          return false;
+        }
+
+        List<dynamic> espaceList = List<dynamic>.from(data['espace'] ?? []);
+
+        // Parcours de la liste pour trouver le site spécifié
+        for (var espaceItem in espaceList) {
+          Map<String, dynamic> espace = Map<String, dynamic>.from(espaceItem);
+
+          if (espace['site'] == site) {
+            List<String> processusList = List<String>.from(espace['processus'] ?? []);
+
+            setState(() {
+              _acces_processus = processusList;
+            });
+
+            print('Processus disponibles pour le site $site: $_acces_processus');
+
+            if (_acces_processus.contains(processus)) {
+              print('Accès au processus $processus sur le site $site autorisé.');
+              return true;
+            } else {
+              print("Vous n'avez pas accès au processus: $processus sur le site $site.");
+              return false;
+            }
+          }
+        }
+
+        print("Le site $site ne correspond à aucun site dans la base de données.");
+        return false;
+
+      } catch (e) {
+        print('Exception lors de la requête: $e');
+        return false;
+      }
+
+    } else {
+      print('Utilisateur non authentifié.');
+      setState(() {
+        _userEmail = 'No email available';
+      });
+      context.go("/");
+      return false;
+    }
+  }
+
+
+
 
 
   Future<bool> _getAccessEspace(String espace) async {
@@ -140,6 +211,33 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
     }
   }
 
+  Future<void> _showNoAccess() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Accès refusé'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text("Vous n'avez pas accès à cet espace."),
+                SizedBox(
+                  height: 20,
+                ),
+                Image.asset(
+                  "assets/images/forbidden.png",
+                  width: 50,
+                  height: 50,
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Future<List<Widget>> _buildContentBoxes() async {
     final List<Widget> children = [];
     print(_management);
@@ -204,7 +302,7 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          _buildTitle("Processus et Indicateurs :   ------ $formated_clic_domaine ------"),
+          _buildTitle("Processus et Indicateurs   ------ $formated_clic_domaine ------"),
           const SizedBox(height: 10),
           FutureBuilder<void>(
             future: Future.wait([_loadDataFuture, _accessFuture]),
@@ -279,14 +377,25 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
       ),
       width: 250,
       height: 211,
+
       children: items.map((item) {
+        // Remplace les espaces par des underscores et retire les accents
+        String process = removeDiacritics(item[key]!).replaceAll(' ', '_');
+
         return TextButton(
-          onPressed: () {
-            context.go("/pilotage/espace/Com/accueil");
-            print("\nitems:\n");
-            print(items);
-            print("\nitem:\n");
-            print(item[key]);
+          onPressed: () async {
+
+            if(await _getAccessProcessus(_espaces_d_acces, item[key])){
+              context.go("/pilotage/$_espaces_d_acces/$process/accueil");
+            } else{
+              _showNoAccess();
+            }
+            // print("\nitems:\n");
+            // print(items);
+            // print("\nitem:\n");
+            // print(item[key]);
+            // print("\nprocess:\n");
+            // print(process); // Affiche la chaîne formatée
           },
           child: Align(
             alignment: Alignment.centerLeft,

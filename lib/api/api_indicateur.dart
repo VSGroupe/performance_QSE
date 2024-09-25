@@ -7,8 +7,7 @@ import 'package:perfqse/Views/pilotage/controllers/tableau_controller.dart';
 import 'package:perfqse/models/common/user_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-import '../Views/pilotage/entity/tableau_bord/widgets/utils_TB.dart';
+import '../Views/pilotage/site1/commercial/tableau_bord/widgets/utils_TB.dart';
 import '../helpers/helper_methods.dart';
 import '../models/pilotage/axeModel.dart';
 import '../models/pilotage/critereModel.dart';

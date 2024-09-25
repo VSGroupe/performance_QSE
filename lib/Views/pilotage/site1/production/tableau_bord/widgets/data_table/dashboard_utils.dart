@@ -3,8 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
-import 'package:perfqse/Views/pilotage/entity/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
-import 'package:perfqse/Views/pilotage/entity/tableau_bord/widgets/data_table/row_critNormatif.dart';
+import 'package:perfqse/Views/pilotage/site1/production/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
 import '../../../../../../../models/pilotage/indicateur_row_model.dart';
 import '../utils_TB.dart';
 

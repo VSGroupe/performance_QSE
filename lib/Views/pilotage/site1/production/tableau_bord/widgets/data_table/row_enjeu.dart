@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:perfqse/Views/pilotage/entity/tableau_bord/widgets/data_table/row_critNormatif.dart';
 import 'package:perfqse/models/pilotage/critereModel.dart';
 import '../../controller_tableau_bord/controller_tableau_bord.dart';
 import '../utils_TB.dart';

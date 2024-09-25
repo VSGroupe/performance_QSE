@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:perfqse/Views/pilotage/entity/tableau_bord/widgets/data_table/dashboard_list_view.dart';
+import 'package:perfqse/Views/pilotage/site1/production/tableau_bord/widgets/data_table/dashboard_list_view.dart';
 
 import '../../../../../helpers/helper_methods.dart';
 import '../../../controllers/tableau_controller.dart';

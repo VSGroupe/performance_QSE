@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:perfqse/Views/pilotage/entity/widgets/get_info_espace.dart';
 import '../../../../../utils/utils.dart';
 import '../../../../../widgets/customtext.dart';
 import '../../../controllers/side_menu_controller.dart';

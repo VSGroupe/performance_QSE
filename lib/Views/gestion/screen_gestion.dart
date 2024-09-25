@@ -4,12 +4,13 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
 import 'package:perfqse/Views/gestion/widgets/app_bar_gestion.dart';
-import 'package:perfqse/Views/pilotage/entity/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../helpers/helper_methods.dart';
 import '../audit/autre/widgets/drawer_audit.dart';
 import '../audit/autre/widgets/evaluation_utils.dart';
 import '../audit/widget/app_bar_audit.dart';
+import '../pilotage/site1/commercial/tableau_bord/controller_tableau_bord/com_controller_tableau_bord.dart';
+import '../pilotage/site1/production/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
 import 'home_gestion.dart';
 
 class ScreenGestion extends StatefulWidget {

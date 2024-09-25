@@ -41,18 +41,18 @@ import '../Views/gestion/politique_qse/politique_qse.dart';
 import '../Views/gestion/ressources_et_responsabilites/screen_ressources_et_responsabilites.dart';
 import '../Views/gestion/situations_d_urgence/screen_situations_d_urgence.dart';
 import '../Views/gestion/widgets/dashboard_gestion.dart';
-import '../Views/pilotage/entity/admin/screen_admin_pilotage.dart';
-import '../Views/pilotage/entity/entity_piloatage_main.dart';
-import '../Views/pilotage/entity/overview/screen_overview_pilotage.dart';
-import '../Views/pilotage/entity/performs/screen_pilotage_perform.dart';
-import '../Views/pilotage/entity/profil/screen_pilotage_profil.dart';
-import '../Views/pilotage/entity/suivi/screen_suivi_pilotage.dart';
-import '../Views/pilotage/entity/support_client/screen_support_client.dart';
-import '../Views/pilotage/entity/tableau_bord/indicateur_screen.dart';
-import '../Views/pilotage/entity/tableau_bord/screen_tableau_bord_pilotage.dart';
-import '../Views/pilotage/entity/tableau_bord/transite_tableau_bord.dart';
-import '../Views/pilotage/entity/widgets/get_info_espace.dart';
 import '../Views/pilotage/home/pilotage_home.dart';
+import '../Views/pilotage/site1/commercial/admin/screen_admin_pilotage.dart';
+import '../Views/pilotage/site1/commercial/entity_piloatage_main.dart';
+import '../Views/pilotage/site1/commercial/overview/screen_overview_pilotage.dart';
+import '../Views/pilotage/site1/commercial/performs/screen_pilotage_perform.dart';
+import '../Views/pilotage/site1/commercial/profil/screen_pilotage_profil.dart';
+import '../Views/pilotage/site1/commercial/suivi/screen_suivi_pilotage.dart';
+import '../Views/pilotage/site1/commercial/support_client/screen_support_client.dart';
+import '../Views/pilotage/site1/commercial/tableau_bord/indicateur_screen.dart';
+import '../Views/pilotage/site1/commercial/tableau_bord/screen_tableau_bord_pilotage.dart';
+import '../Views/pilotage/site1/commercial/tableau_bord/transite_tableau_bord.dart';
+import '../Views/pilotage/site1/commercial/widgets/get_info_espace.dart';
 import '../Views/pilotage_home/screen_home_accueil_pilot.dart';
 import '../Views/pilotage_home/widgets/dashboard_accueil_pilot.dart';
 import '../helpers/helper_methods.dart';
@@ -104,8 +104,8 @@ class RouteClass {
           ),
           routes: [
             GoRoute(
-                path: 'espace/Com',
-                name: "Com",
+                path: 'Site1/Commercial',
+                name: "Commercial",
                 pageBuilder: (context, state) => NoTransitionPage<void>(
                     key: state.pageKey,
                     restorationId: state.pageKey.value,
@@ -136,20 +136,11 @@ class RouteClass {
                               child: const ScreenTableauBordPilotage(),),
                       routes:[
                       GoRoute(
-                        path: 'transite-tableau-bord',
+                        path: 'indicateurs',
                         pageBuilder: (context, state) => NoTransitionPage<void>(
                             key: state.pageKey,
-                            child:  NewTableauBord()
+                            child: IndicateurScreen()
                         ),
-                        routes: [
-                          GoRoute(
-                              path: 'indicateurs',
-                              pageBuilder: (context, state) => NoTransitionPage<void>(
-                                  key: state.pageKey,
-                                  child: IndicateurScreen()
-                              ),
-                          )
-                        ]
                       ),]),
                       GoRoute(
                         path: 'profil',

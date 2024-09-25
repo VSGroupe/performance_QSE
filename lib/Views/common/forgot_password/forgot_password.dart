@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../widgets/customtext.dart';
-import '../../pilotage/entity/widgets/privacy_widget.dart';
 import '../../../constants/colors.dart';
+import '../../pilotage/site1/commercial/widgets/privacy_widget.dart';
 import 'controller/reset_password_controller.dart';
 import 'widgets/ask_mail.dart';
 import 'widgets/change_password.dart';
