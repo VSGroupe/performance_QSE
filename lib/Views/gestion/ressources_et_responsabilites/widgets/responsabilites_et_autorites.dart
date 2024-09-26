@@ -127,7 +127,7 @@ class ResponsabilitesEtAutorites extends StatefulWidget {
 class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites> {
   late List<List<TextEditingController>> _controllers;
   late List<List<FocusNode>> _focusNodes;
-  int _rowCount = 15; // Nombre initial de lignes
+  int _rowCount = 14; // Nombre initial de lignes
   final ScrollController _firstColumnScrollController = ScrollController();
   final ScrollController _otherColumnsScrollController = ScrollController();
 
@@ -139,7 +139,7 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
     _controllers = List.generate(
       _rowCount,
           (i) => List.generate(
-        19,
+        18,
             (j) => TextEditingController(),
       ),
     );
@@ -147,7 +147,7 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
     _focusNodes = List.generate(
       _rowCount,
           (i) => List.generate(
-        19,
+        18,
             (j) => FocusNode(),
       ),
     );
@@ -178,7 +178,7 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
       _controllers = List.generate(
         _rowCount, // Nombre de lignes, ajustez selon votre structure
             (i) => List.generate(
-          19, // Nombre de colonnes
+          18, // Nombre de colonnes
               (j) {
             final cellValue = provider.getCellValue(i, j);
             return TextEditingController(text: cellValue ?? '');
@@ -267,11 +267,19 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
             color: Colors.white,
             padding: const EdgeInsets.all(16.0),
             child: ExpansionTile(
-              title: const Text(
-                'Responsabilités et Autorités',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
+              title: Tooltip(
+                message: 'LEGENDE',
+                child: Container(
+                  // color: Colors.blue,
+                  padding: const EdgeInsets.all(5.0),
+                  child: const Text(
+                    'LEGENDE',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
               ),
               initiallyExpanded: true, // Dérouler automatiquement au chargement
@@ -279,7 +287,7 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
                 const SizedBox(height: 0), // Espace entre le titre et le tableau
                 Table(
                   columnWidths: const {
-                    0: FlexColumnWidth(0.522),
+                    0: FlexColumnWidth(0.990),
                     1: FlexColumnWidth(2),
                   },
                   border: TableBorder.all(), // Ajout de bordures au tableau
@@ -378,113 +386,179 @@ class _ResponsabilitesEtAutoritesState extends State<ResponsabilitesEtAutorites>
               ],
             ),
           ),
+          SizedBox(height: 5,),
+          Text(
+            "Responsabilités et autorités",
+            style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+            )
+          ),
+          SizedBox(height: 5,),
           // Contenu principal
           Expanded(
             child: Row(
               children: [
                 // Première colonne fixe
-                SingleChildScrollView(
-                  controller: _firstColumnScrollController,
-                  scrollDirection: Axis.vertical,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Table(
-                      border: TableBorder.all(color: Colors.black),
-                      columnWidths: const {
-                        0: FixedColumnWidth(250.0),
-                      },
-                      children: [
-                        // Ligne d'en-tête pour la première colonne
-                        TableRow(
-                          children: [
-                            tableCell('ACTIVITES', isHeader: true),
-                          ],
-                        ),
-                        // Les données pour la première colonne
-                        for (var i = 0; i < _rowCount; i++)
+                Column(
+                  children: [
+                    // Table pour l'en-tête (non scrollable)
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Table(
+                        border: TableBorder.all(color: Colors.black),
+                        columnWidths: const {
+                          0: FixedColumnWidth(400.0),
+                        },
+                        children: [
                           TableRow(
                             children: [
-                              TableCell(
-                                child: _buildEditableCell(i, 0, provider),
-                              ),
+                              tableCell('ACTIVITES\n', isHeader: true),
                             ],
                           ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
+                    // Table avec les données qui peuvent défiler verticalement
+                    Expanded(
+                      child: SingleChildScrollView(
+                        controller: _firstColumnScrollController,
+                        scrollDirection: Axis.vertical,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Table(
+                            border: TableBorder.all(color: Colors.black),
+                            columnWidths: const {
+                              0: FixedColumnWidth(400.0),
+                            },
+                            children: [
+                              // Les données pour la première colonne
+                              for (var i = 0; i < _rowCount; i++)
+                                TableRow(
+                                  children: [
+                                    TableCell(
+                                      child: _buildEditableCell(i, 0, provider),
+                                    ),
+                                  ],
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+
 
                 // Autres colonnes défilables horizontalement et verticalement
                 Expanded(
                   child: SingleChildScrollView(
-                    controller: _otherColumnsScrollController,
-                    scrollDirection: Axis.vertical,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Table(
-                          border: TableBorder.all(color: Colors.black),
-                          columnWidths: const {
-                            0: FixedColumnWidth(200.0),
-                            1: FixedColumnWidth(250.0),
-                            2: FixedColumnWidth(250.0),
-                            3: FixedColumnWidth(250.0),
-                            4: FixedColumnWidth(250.0),
-                            5: FixedColumnWidth(250.0),
-                            6: FixedColumnWidth(250.0),
-                            7: FixedColumnWidth(250.0),
-                            8: FixedColumnWidth(250.0),
-                            9: FixedColumnWidth(250.0),
-                            10: FixedColumnWidth(250.0),
-                            11: FixedColumnWidth(250.0),
-                            12: FixedColumnWidth(250.0),
-                            13: FixedColumnWidth(250.0),
-                            14: FixedColumnWidth(50.0),
-                            15: FixedColumnWidth(250.0),
-                            16: FixedColumnWidth(250.0),
-                            17: FixedColumnWidth(250.0),
-                          },
-                          children: [
-                            // En-têtes des autres colonnes
-                            TableRow(
+                    scrollDirection: Axis.horizontal,
+                    child: Column(
+                      children: [
+                        // En-tête des colonnes (fixe en vertical mais scrollable en horizontal)
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Table(
+                              border: TableBorder.all(color: Colors.black),
+                              columnWidths: const {
+                                0: FixedColumnWidth(150.0),
+                                1: FixedColumnWidth(150.0),
+                                2: FixedColumnWidth(150.0),
+                                3: FixedColumnWidth(150.0),
+                                4: FixedColumnWidth(150.0),
+                                5: FixedColumnWidth(150.0),
+                                6: FixedColumnWidth(150.0),
+                                7: FixedColumnWidth(150.0),
+                                8: FixedColumnWidth(150.0),
+                                9: FixedColumnWidth(150.0),
+                                10: FixedColumnWidth(150.0),
+                                11: FixedColumnWidth(150.0),
+                                12: FixedColumnWidth(150.0),
+                                13: FixedColumnWidth(50.0),
+                                14: FixedColumnWidth(150.0),
+                                15: FixedColumnWidth(150.0),
+                                16: FixedColumnWidth(150.0),
+                              },
                               children: [
-                                tableCell('Chef de département C&GR', isHeader: true),
-                                tableCell('Chargé Qualité', isHeader: true),
-                                tableCell('DT', isHeader: true),
-                                tableCell('Chef de service MIT', isHeader: true),
-                                tableCell('Chef de service MI', isHeader: true),
-                                tableCell('Chargé Electrotech', isHeader: true),
-                                tableCell('Chef de service Etude et projet', isHeader: true),
-                                tableCell('Responsable RH', isHeader: true),
-                                tableCell('Responsable Comm', isHeader: true),
-                                tableCell('Chargé Achat', isHeader: true),
-                                tableCell('Chargé électroméca.', isHeader: true),
-                                tableCell('Chargé Matériel et Logistique', isHeader: true),
-                                tableCell('Chargé Audit et Méthodes', isHeader: true),
-                                tableCell('DG/DGA', isHeader: true),
-                                tableCell('', isHeader: true),
-                                tableCell('DELAI', isHeader: true),
-                                tableCell('TAUX DE REALISATION', isHeader: true),
-                                tableCell('OBSERVATION', isHeader: true),
+                                TableRow(
+                                  children: [
+                                    tableCell('Chef de département C&GR', isHeader: true),
+                                    tableCell('Responsable Qualité', isHeader: true),
+                                    tableCell('Directeur Technique', isHeader: true),
+                                    tableCell('Responsable maintenance', isHeader: true),
+                                    tableCell('Responsable production', isHeader: true),
+                                    tableCell('Chargé Electrotechnique', isHeader: true),
+                                    tableCell('Chef de service Etude et projet', isHeader: true),
+                                    tableCell('Responsable RH', isHeader: true),
+                                    tableCell('Responsable Communication', isHeader: true),
+                                    tableCell('Responsable Achat', isHeader: true),
+                                    tableCell('Responsable électromécanique.', isHeader: true),
+                                    tableCell('Responsable Logistique', isHeader: true),
+                                    tableCell('DG/DGA', isHeader: true),
+                                    tableCell('', isHeader: true),
+                                    tableCell('DELAI', isHeader: true),
+                                    tableCell('TAUX DE REALISATION', isHeader: true),
+                                    tableCell('OBSERVATION', isHeader: true),
+                                  ],
+                                ),
                               ],
                             ),
-                            // Lignes de données pour les autres colonnes
-                            for (var i = 0; i < _rowCount; i++)
-                              TableRow(
-                                children: [
-                                  for (var j = 1; j < 19; j++)
-                                    TableCell(
-                                      child: _buildEditableCell(i, j, provider),
-                                    ),
-                                ],
-                              ),
-                          ],
+                          ),
                         ),
-                      ),
+                        // Table scrollable verticalement et horizontalement pour les données
+                        Expanded(
+                          child: SingleChildScrollView(
+                            controller: _otherColumnsScrollController,
+                            scrollDirection: Axis.vertical,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Table(
+                                  border: TableBorder.all(color: Colors.black),
+                                  columnWidths: const {
+                                    0: FixedColumnWidth(150.0),
+                                    1: FixedColumnWidth(150.0),
+                                    2: FixedColumnWidth(150.0),
+                                    3: FixedColumnWidth(150.0),
+                                    4: FixedColumnWidth(150.0),
+                                    5: FixedColumnWidth(150.0),
+                                    6: FixedColumnWidth(150.0),
+                                    7: FixedColumnWidth(150.0),
+                                    8: FixedColumnWidth(150.0),
+                                    9: FixedColumnWidth(150.0),
+                                    10: FixedColumnWidth(150.0),
+                                    11: FixedColumnWidth(150.0),
+                                    12: FixedColumnWidth(150.0),
+                                    13: FixedColumnWidth(50.0),
+                                    14: FixedColumnWidth(150.0),
+                                    15: FixedColumnWidth(150.0),
+                                    16: FixedColumnWidth(150.0),
+                                  },
+                                  children: [
+                                    // Lignes de données
+                                    for (var i = 0; i < _rowCount; i++)
+                                      TableRow(
+                                        children: [
+                                          for (var j = 1; j < 18; j++)
+                                            TableCell(
+                                              child: _buildEditableCell(i, j, provider),
+                                            ),
+                                        ],
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
+                )
               ],
             ),
           )
