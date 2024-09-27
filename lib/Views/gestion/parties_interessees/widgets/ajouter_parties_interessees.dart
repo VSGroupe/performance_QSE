@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:lottie/lottie.dart'; // Import the Lottie package
+import 'package:lottie/lottie.dart';
+
+import '../../../../common.dart'; // Import the Lottie package
 
 class AjouterPartiesInteressees extends StatefulWidget {
   @override
@@ -22,8 +24,6 @@ class _AjouterPartiesInteresseesState extends State<AjouterPartiesInteressees> {
   final TextEditingController _modeReponseController = TextEditingController();
 
   final List<Map<String, String>> _attentes = [];
-
-  String baseUrl = "http://127.0.0.1:5000";
 
   // bool _showSuccessAnimation = false;
 

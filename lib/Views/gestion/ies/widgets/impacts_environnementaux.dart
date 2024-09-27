@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../../../../common.dart';
 import '../../../../widgets/customtext.dart';
 import 'fleche_impacts.dart'; // Importation du fichier fleche.dart
 
@@ -15,8 +16,6 @@ class ImpactsEnvironnementaux extends StatefulWidget {
 }
 
 class _ImpactsEnvironnementauxState extends State<ImpactsEnvironnementaux> {
-
-  final String baseUrl = "http://localhost:5000"; // URL de l'API Flask
 
   late Future<List<Map<String, dynamic>>> impactsEnvironnementauxFuture;
 

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../../../../common.dart';
+
 class ExclusionsEtJustifications extends StatefulWidget {
   const ExclusionsEtJustifications({Key? key}) : super(key: key);
 
@@ -10,8 +12,6 @@ class ExclusionsEtJustifications extends StatefulWidget {
 }
 
 class _ExclusionsEtJustificationsState extends State<ExclusionsEtJustifications> {
-
-  final String baseUrl = "http://localhost:5000"; // URL de votre API Flask
 
   final _textControllerExclusionDomaine = TextEditingController();
   final _textControllerExclusionPerimetre = TextEditingController();

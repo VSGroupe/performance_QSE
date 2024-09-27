@@ -104,7 +104,7 @@ class RouteClass {
           ),
           routes: [
             GoRoute(
-                path: 'Site1/Commercial',
+                path: ':Site/Commercial',
                 name: "Commercial",
                 pageBuilder: (context, state) => NoTransitionPage<void>(
                     key: state.pageKey,

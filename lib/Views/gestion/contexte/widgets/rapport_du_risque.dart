@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:lottie/lottie.dart';
 
+import '../../../../common.dart';
+
 
 class RapportDuRisque extends StatefulWidget {
   const RapportDuRisque({Key? key}) : super(key: key);
@@ -12,8 +14,6 @@ class RapportDuRisque extends StatefulWidget {
 }
 
 class _RapportDuRisqueState extends State<RapportDuRisque> {
-
-  final String baseUrl = "http://localhost:5000"; // URL de votre API Flask
 
   List<Map<String, dynamic>> _interneEnjeux = [];
   List<Map<String, dynamic>> _externeEnjeux = [];

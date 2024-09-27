@@ -92,8 +92,8 @@ late final IndicateurModel indicateur;
 }
 
 
-  List<Widget> getIndicateurWidget(String CritNormatifTitle,String moisSelected,List<IndicateurRowTableauBordModel>indicateurRowTableauBord){
-    List<String>ListStringMois=["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Decembre"];
+List<Widget> getIndicateurWidget(String CritNormatifTitle,String moisSelected,List<IndicateurRowTableauBordModel>indicateurRowTableauBord){
+  List<String>ListStringMois=["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Decembre"];
   final int intMois = DateTime.now().month;
   List<IndicateurRowTableauBordModel> containerIndicateurRowTB=indicateurRowTableauBord.where((element) =>element.critereNormatif==CritNormatifTitle).toList();
   return containerIndicateurRowTB.map((indicateur) => RowIndicateur(indicateur: indicateur,mois:moisSelected,)).toList();

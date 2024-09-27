@@ -54,7 +54,7 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
               Text("Tableau de bord",style: TextStyle(fontSize: 24,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
               Spacer(flex:4),
               ElevatedButton(onPressed: (){
-                context.go("/pilotage/Site1/Commercial/tableau-de-bord/transite-tableau-bord");
+                context.go("/pilotage/Site1/Commercial/tableau-de-bord");
               },style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
               ) ,child: Text("Generale",style:TextStyle(

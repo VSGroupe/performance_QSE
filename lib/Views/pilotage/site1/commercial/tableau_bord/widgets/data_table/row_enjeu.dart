@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:perfqse/Views/pilotage/site1/commercial/tableau_bord/widgets/data_table/row_indicateur.dart';
 import 'package:perfqse/Views/pilotage/site1/production/tableau_bord/widgets/data_table/row_critNormatif.dart' as commercial;
 import 'package:perfqse/models/pilotage/critereModel.dart';
+import '../../../../../../../models/pilotage/indicateur_row_model.dart';
 import '../../controller_tableau_bord/com_controller_tableau_bord.dart';
 import '../utils_TB.dart';
 import 'row_critNormatif.dart';
@@ -26,8 +28,8 @@ class RowEnjeu extends StatefulWidget {
 }
 
 class _RowEnjeuState extends State<RowEnjeu> {
-bool _press=false;
-final ComControllerTableauBord controllerTableauBord=Get.find();
+  bool _press=false;
+  final ComControllerTableauBord controllerTableauBord=Get.find();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -75,7 +77,7 @@ final ComControllerTableauBord controllerTableauBord=Get.find();
           visible: _press,
           child:Obx(()
             =>Column(
-                  children: getCritereNormatifWidget(widget.idEnjeu,controllerTableauBord.criteresTableauBord.toList())
+                children: getIndicateurWidget(widget.EnjeuTitle,controllerTableauBord.moisSelectFiltre.value,controllerTableauBord.indicateurRowTableauBord)
               ),
           )
         )
@@ -85,13 +87,21 @@ final ComControllerTableauBord controllerTableauBord=Get.find();
 }
 
 
-List<Widget> getCritereNormatifWidget(String idEnjeu, List<CritereModel> criteres) {
-  List<CritereModel> critereContainer = criteres.where((element) => element.idEnjeu == idEnjeu).toList();
-  return critereContainer.map((critere) => commercial.RowCritereNormatif(
-    idEnjeu: critere.idEnjeu,
-    numero: critere.idCritere.length == 8 ? critere.idCritere.substring(7, 8) : critere.idCritere.substring(7, 9),
-    idCritNormatif: critere.idCritere,
-    CritNormatifTitle: critere.libelle,
-    color: Colors.lightBlue,
-  )).toList();
+List<Widget> getIndicateurWidget(String EnjeuTitle,String moisSelected,List<IndicateurRowTableauBordModel>indicateurRowTableauBord){
+  List<String>ListStringMois=["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Decembre"];
+  final int intMois = DateTime.now().month;
+  List<IndicateurRowTableauBordModel> containerIndicateurRowTB=indicateurRowTableauBord.where((element) =>element.critereNormatif==EnjeuTitle).toList();
+  return containerIndicateurRowTB.map((indicateur) => RowIndicateur(indicateur: indicateur,mois:moisSelected,)).toList();
 }
+
+
+// List<Widget> getCritereNormatifWidget(String idEnjeu, List<CritereModel> criteres) {
+//   List<CritereModel> critereContainer = criteres.where((element) => element.idEnjeu == idEnjeu).toList();
+//   return critereContainer.map((critere) => commercial.RowCritereNormatif(
+//     idEnjeu: critere.idEnjeu,
+//     numero: critere.idCritere.length == 8 ? critere.idCritere.substring(7, 8) : critere.idCritere.substring(7, 9),
+//     idCritNormatif: critere.idCritere,
+//     CritNormatifTitle: critere.libelle,
+//     color: Colors.lightBlue,
+//   )).toList();
+// }

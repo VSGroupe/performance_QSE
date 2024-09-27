@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
+import '../../../../common.dart';
+
 class ApercuPartiesInteressees extends StatefulWidget {
   const ApercuPartiesInteressees({Key? key}) : super(key: key);
 
@@ -12,8 +14,6 @@ class ApercuPartiesInteressees extends StatefulWidget {
 }
 
 class _ApercuPartiesInteresseesState extends State<ApercuPartiesInteressees> {
-
-  final String baseUrl = "http://localhost:5000";
 
   // Listes pour stocker les parties intéressées en fonction du type
   List<Map<String, dynamic>> internes = [];

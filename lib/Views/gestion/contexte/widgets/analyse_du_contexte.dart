@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:lottie/lottie.dart';
 
+import '../../../../common.dart';
+
 
 class AnalyseDuContexte extends StatefulWidget {
   const AnalyseDuContexte({Key? key}) : super(key: key);
@@ -12,8 +14,6 @@ class AnalyseDuContexte extends StatefulWidget {
 }
 
 class _AnalyseDuContexteState extends State<AnalyseDuContexte> {
-
-  final String baseUrl = "http://localhost:5000"; // URL de votre API Flask
 
   final TextEditingController _libelleController = TextEditingController();
   String? _selectedType;

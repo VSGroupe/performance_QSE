@@ -168,7 +168,7 @@ class _SectionSuiviState extends State<SectionSuivi> with TickerProviderStateMix
         SizedBox(height: defaultPadding),
         Container(
           width: double.infinity,
-          height: 100,
+          height: 130,
           child: LiveList(
             showItemInterval: Duration(milliseconds: 500),
             showItemDuration: Duration(seconds: 1),
@@ -202,39 +202,39 @@ class _SectionSuiviState extends State<SectionSuivi> with TickerProviderStateMix
   Widget _buildCard(index) {
     dynamic AxeInfos = [
       {
-        "firsttitle":"ALIGNEMENT",
-        "secondtitle":"STRATEGIQUE",
+        "firsttitle":"MANAGEMENT",
+        "secondtitle":"du QSE",
         "subtitle":"${data[0]["numberIndicateurValidate"]} indicateur(s) sur ${data[0]["numberIndicateur"]}",
         "numfull":data[0]["pourcentage"],
         "width_1":280,
-        "width_2":130,
+        "width_2":135,
         "color":Color.fromRGBO(172,28,12,1)
       },
       {
-        "firsttitle":"MAITRISE",
-        "secondtitle":"OPERATIONNELLE",
+        "firsttitle":"MAITRISE DES IMPACTS  ",
+        "secondtitle":"et EFFETS INDERISABLES",
         "subtitle":"${data[1]["numberIndicateurValidate"]} indicateur(s) sur ${data[1]["numberIndicateur"]}",
         "numfull":data[1]["pourcentage"],
-        "width_1":306,
-        "width_2":160,
+        "width_1":345,
+        "width_2":200,
         "color":Color.fromRGBO(172,28,12,1)
       },
       {
-        "firsttitle":"PERF & INTEGRITE",
-        "secondtitle":"DU SYSTEME",
+        "firsttitle":"EFFICACITE                 ",
+        "secondtitle":"et CONFORMITE du SM-QSE",
+        "subtitle":"${data[2]["numberIndicateurValidate"]} indicateur(s) sur ${data[2]["numberIndicateur"]}",
+        "numfull":data[2]["pourcentage"],
+        "width_1":290,
+        "width_2":140,
+        "color":Color.fromRGBO(172,28,12,1)
+      },
+      {
+        "firsttitle":"AMELIORATION",
+        "secondtitle":"CONTINUE",
         "subtitle":"${data[2]["numberIndicateurValidate"]} indicateur(s) sur ${data[2]["numberIndicateur"]}",
         "numfull":data[2]["pourcentage"],
         "width_1":310,
-        "width_2":170,
-        "color":Color.fromRGBO(172,28,12,1)
-      },
-      {
-        "firsttitle":"RESILIENCE",
-        "secondtitle":"DU SYSTEME",
-        "subtitle":"${data[3]["numberIndicateurValidate"]} indicateur(s) sur ${data[3]["numberIndicateur"]}",
-        "numfull":data[3]["pourcentage"],
-        "width_1":270,
-        "width_2":130,
+        "width_2":160,
         "color":Color.fromRGBO(172,28,12,1)
       },
     ];

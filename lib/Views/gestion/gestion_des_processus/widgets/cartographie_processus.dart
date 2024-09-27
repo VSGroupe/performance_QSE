@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../../../../common.dart';
+
 class CartographieProcessus extends StatefulWidget {
   const CartographieProcessus({Key? key}) : super(key: key);
 
@@ -10,8 +12,6 @@ class CartographieProcessus extends StatefulWidget {
 }
 
 class _CartographieProcessusState extends State<CartographieProcessus> {
-
-  final String baseUrl = "http://127.0.0.1:5000";
 
   List<dynamic> processusManagement = [];
   List<dynamic> processusOperationnels = [];

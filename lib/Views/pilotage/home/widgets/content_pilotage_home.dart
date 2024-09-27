@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../../../common.dart';
 import '../../../pilotage_home/controller/accueil_pilot_controller.dart';
 import 'contentbox.dart';
 import 'listeProcessus.dart';
@@ -35,7 +36,18 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
     super.initState();
     _loadDataFuture = _loadData();
     _accessFuture = _checkAccess();
+    _initializeSite(); // Appelle la méthode pour initialiser Site
   }
+
+// Nouvelle méthode pour initialiser Site
+  Future<void> _initializeSite() async {
+    try {
+      Site = await getCurrentSite(); // j'utilise await pour obtenir le résultat, afin de m'assuer qu'il s'agit bien d'une chaîne de caractère.
+    } catch (e) {
+      print('Erreur lors de l\'initialisation du site : $e'); // Gère les exceptions
+    }
+  }
+
 
   Future<void> _loadData() async {
     try {
@@ -244,10 +256,10 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
 
     if (await _getAccessEspace("Consolide_general")) {
       children.addAll([
-        _buildContentBox("PROCESSUS MANAGEMENT", _domaines, "domaine"),
-        const SizedBox(width: 10),
-        _buildContentBox("PROCESSUS OPÉRATIONNELS", _domaines, "domaine"),
-        const SizedBox(width: 10),
+        // _buildContentBox("PROCESSUS MANAGEMENT", _domaines, "domaine"),
+        // const SizedBox(width: 10),
+        // _buildContentBox("PROCESSUS OPÉRATIONNELS", _domaines, "domaine"),
+        // const SizedBox(width: 10),
         _buildContentBox("PROCESSUS SUPPORT", _domaines, "domaine"),
       ]);
     } else if (await _getAccessEspace("Consolide_processus")){
@@ -390,6 +402,9 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
             } else{
               _showNoAccess();
             }
+
+            print("Processus cliqué: $process, Site: $Site");
+            print("\n\n/pilotage/$_espaces_d_acces/$process/accueil\n\n");
             // print("\nitems:\n");
             // print(items);
             // print("\nitem:\n");

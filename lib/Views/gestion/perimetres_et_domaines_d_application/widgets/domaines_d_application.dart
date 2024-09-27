@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../../../../common.dart';
+
 class DomainesDApplication extends StatefulWidget {
   const DomainesDApplication({Key? key}) : super(key: key);
 
@@ -10,8 +12,6 @@ class DomainesDApplication extends StatefulWidget {
 }
 
 class _DomainesDApplicationState extends State<DomainesDApplication> {
-
-  final String baseUrl = "http://localhost:5000"; // URL de votre API Flask
 
   final _textDomainesController = TextEditingController();
   final _textPerimetresController = TextEditingController();

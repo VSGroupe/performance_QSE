@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:perfqse/Views/gestion/dangers_et_incidents/widgets/fleche_incidents.dart';
 import 'dart:convert';
 
+import '../../../../common.dart';
 import '../../../../widgets/customtext.dart';
 import 'fleche_dangers.dart'; // Importation du fichier fleche.dart
 
@@ -16,8 +17,6 @@ class Incidents extends StatefulWidget {
 }
 
 class _IncidentsState extends State<Incidents> {
-
-  final String baseUrl = "http://localhost:5000"; // URL de l'API Flask
 
   late Future<List<Map<String, dynamic>>> incidentsFuture;
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../../../../common.dart';
 import '../../../../widgets/customtext.dart';
 import 'fleche_dangers.dart'; // Importation du fichier fleche.dart
 
@@ -15,8 +16,6 @@ class Dangers extends StatefulWidget {
 }
 
 class _DangersState extends State<Dangers> {
-
-  final String baseUrl = "https://api-performance-qse.onrender.com"; // URL de l'API Flask // https://api-performance-qse.onrender.com
 
   late Future<List<Map<String, dynamic>>> dangersFuture;
 

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../../../../common.dart';
+
 class Budget extends StatefulWidget {
   const Budget({Key? key}) : super(key: key);
 
@@ -10,8 +12,6 @@ class Budget extends StatefulWidget {
 }
 
 class _BudgetState extends State<Budget> {
-
-  final String baseUrl = "http://localhost:5000"; // URL de l'API Flask
 
   final _textController = TextEditingController();
   final _focusNode = FocusNode();

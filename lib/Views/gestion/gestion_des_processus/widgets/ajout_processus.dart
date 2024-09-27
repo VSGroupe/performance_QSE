@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert'; // Pour encoder/décoder les données JSON
-import 'package:lottie/lottie.dart'; // Assurez-vous d'ajouter lottie dans vos dépendances pubspec.yaml
+import 'package:lottie/lottie.dart';
+
+import '../../../../common.dart'; // Assurez-vous d'ajouter lottie dans vos dépendances pubspec.yaml
 
 class AjoutProcessus extends StatefulWidget {
   const AjoutProcessus({Key? key}) : super(key: key);
@@ -11,8 +13,6 @@ class AjoutProcessus extends StatefulWidget {
 }
 
 class _AjoutProcessusState extends State<AjoutProcessus> {
-
-  final String baseUrl = "http://localhost:5000";
 
   final _formKey = GlobalKey<FormState>();
 

@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
 import 'dart:convert';
 
+import '../../../../common.dart';
+
 class Ajouter extends StatefulWidget {
   const Ajouter({Key? key}) : super(key: key);
 
@@ -11,8 +13,6 @@ class Ajouter extends StatefulWidget {
 }
 
 class _AjouterState extends State<Ajouter> {
-
-  final String baseUrl = "http://localhost:5000"; // URL de l'API Flask
 
   final TextEditingController nomController = TextEditingController();
   final TextEditingController poidsController = TextEditingController();

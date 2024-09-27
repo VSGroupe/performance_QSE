@@ -3,6 +3,8 @@ import 'package:lottie/lottie.dart'; // Assurez-vous d'ajouter lottie dans vos d
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../../../../common.dart';
+
 
 class ModifierDangerOuIncident extends StatefulWidget {
   const ModifierDangerOuIncident({Key? key}) : super(key: key);
@@ -12,8 +14,6 @@ class ModifierDangerOuIncident extends StatefulWidget {
 }
 
 class _ModifierDangerOuIncidentState extends State<ModifierDangerOuIncident> {
-
-  final String baseUrl = "http://localhost:5000"; // URL de l'API Flask
 
   final TextEditingController nomController = TextEditingController();
   final _formKey = GlobalKey<FormState>();

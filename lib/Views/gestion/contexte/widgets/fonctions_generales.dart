@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../../../../common.dart';
+
 class FonctionsGenerales extends StatefulWidget {
   const FonctionsGenerales({Key? key}) : super(key: key);
 
@@ -14,8 +16,6 @@ class _FonctionsGeneralesState extends State<FonctionsGenerales> {
   final _focusNode = FocusNode();
   bool _isEditing = false;
   int? _existingId;
-
-  final String baseUrl = "http://localhost:5000";
 
   Future<void> _fetchTextFromAPI() async {
     final response = await http.get(Uri.parse('$baseUrl/get-text'));
