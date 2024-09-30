@@ -59,7 +59,7 @@ class ControllerTableauBord extends GetxController{
   // Mettre au niveau de l'OverviewPage/l'SuiviPage/PerformancePage/
   void assemblyIndicateurWithDataIndicateur()async{
     String?  espace = Processus;
-    indicateurRowTableauBord.value=await dbController.getIndicateurWithDataIndicateur(espace!, annee);
+    indicateurRowTableauBord.value=await dbController.getIndicateurWithDataIndicateur(espace, annee);
     getAxes();
     getCritere();
     getEnjeu();

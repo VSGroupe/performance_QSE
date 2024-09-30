@@ -357,7 +357,7 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
 
   Widget _buildTitle(String title) {
     return Container(
-      width: 775,
+      width: 890,
       padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(60),
@@ -393,7 +393,7 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
           color: Colors.white,
         ),
       ),
-      width: 250,
+      width: 290,
       height: 211,
 
       children: items.map((item) {

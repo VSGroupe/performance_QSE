@@ -200,38 +200,43 @@ class _SectionSuiviState extends State<SectionSuivi> with TickerProviderStateMix
       );
 
   Widget _buildCard(index) {
+
     dynamic AxeInfos = [
       {
+        //"subtitle":"${data[0]["numberIndicateurValidate"]} indicateur(s) sur ${data[0]["numberIndicateur"]}",
         "firsttitle":"MANAGEMENT",
         "secondtitle":"du QSE",
-        "subtitle":"${data[0]["numberIndicateurValidate"]} indicateur(s) sur ${data[0]["numberIndicateur"]}",
+        "subtitle":"${data[0]["numberIndicateurValidate"]} indicateur(s) sur ${1}",
         "numfull":data[0]["pourcentage"],
         "width_1":280,
         "width_2":135,
         "color":Color.fromRGBO(172,28,12,1)
       },
       {
+        //"subtitle":"${data[1]["numberIndicateurValidate"]} indicateur(s) sur ${data[1]["numberIndicateur"]}",
         "firsttitle":"MAITRISE DES IMPACTS  ",
         "secondtitle":"et EFFETS INDERISABLES",
-        "subtitle":"${data[1]["numberIndicateurValidate"]} indicateur(s) sur ${data[1]["numberIndicateur"]}",
+        "subtitle":"${data[1]["numberIndicateurValidate"]} indicateur(s) sur ${19}",
         "numfull":data[1]["pourcentage"],
         "width_1":345,
         "width_2":200,
         "color":Color.fromRGBO(172,28,12,1)
       },
       {
+        //"subtitle":"${data[2]["numberIndicateurValidate"]} indicateur(s) sur ${data[2]["numberIndicateur"]}",
         "firsttitle":"EFFICACITE                 ",
         "secondtitle":"et CONFORMITE du SM-QSE",
-        "subtitle":"${data[2]["numberIndicateurValidate"]} indicateur(s) sur ${data[2]["numberIndicateur"]}",
+        "subtitle":"${data[2]["numberIndicateurValidate"]} indicateur(s) sur ${2}",
         "numfull":data[2]["pourcentage"],
         "width_1":290,
         "width_2":140,
         "color":Color.fromRGBO(172,28,12,1)
       },
       {
+        //"subtitle":"${data[2]["numberIndicateurValidate"]} indicateur(s) sur ${data[2]["numberIndicateur"]}",
         "firsttitle":"AMELIORATION",
         "secondtitle":"CONTINUE",
-        "subtitle":"${data[2]["numberIndicateurValidate"]} indicateur(s) sur ${data[2]["numberIndicateur"]}",
+        "subtitle":"${data[2]["numberIndicateurValidate"]} indicateur(s) sur ${3}",
         "numfull":data[2]["pourcentage"],
         "width_1":310,
         "width_2":160,

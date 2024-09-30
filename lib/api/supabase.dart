@@ -67,7 +67,7 @@ class DataBaseController {
           Ind=indicateur;
           Ind.addAll(dataInd);
           indicateurRowTableauBord.add(IndicateurRowTableauBordModel.fromJson(Ind));
-          print(indicateurRowTableauBord);
+          print("indicateurRowTableauBord :\n$indicateurRowTableauBord");
         }
       });
     });

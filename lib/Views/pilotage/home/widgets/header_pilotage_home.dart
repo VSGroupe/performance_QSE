@@ -37,7 +37,7 @@ class _HeaderPilotageHomeState extends State<HeaderPilotageHome> {
         ),
         //const SizedBox(height:15,),
         Container(
-          width: 780,
+          width: 890,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
