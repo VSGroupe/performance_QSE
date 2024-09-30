@@ -1,0 +1,30 @@
+{
+  "name": "performance_qse",
+  "version": "1.0.0",
+  "description": "A new Flutter project.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eke333/performance_QSE.git"
+  },
+  "keywords": [
+    "flutter",
+    "performance"
+  ],
+  "author": "AKA",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/eke333/performance_QSE/issues"
+  },
+  "homepage": "https://github.com/eke333/performance_QSE#readme",
+  "dependencies": {
+    "firebase": "^10.13.2"
+  }
+}
