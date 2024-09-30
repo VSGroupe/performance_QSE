@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../pilotage/site1/commercial/tableau_bord/controller_tableau_bord/com_controller_tableau_bord.dart';
-import '../../../../pilotage/site1/production/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
+import '../../../../pilotage/processus/tableau_bord/controller_tableau_bord/controller_tableau_bord.dart';
 
 class AdminDataTableHeader extends StatefulWidget {
   const AdminDataTableHeader({Key? key}) : super(key: key);

@@ -1,16 +1,18 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+// Récupération des processus Support par Site
 
-// Récupération des processus Support
-Future<List<Map<String, String>>> getSupportProcessus() async {
+Future<List<Map<String, String>>> getSupportProcessus(String site) async {
   final supabase = Supabase.instance.client;
 
   final response = await supabase
       .from('Processus')
       .select('libelle_processus')
       .eq('type_processus', 'Support')
+      .contains('sites', [site])
       .order('libelle_processus', ascending: true)
       .execute();
+
 
   if (response.data == null) {
     print('Erreur lors de la récupération des processus: ${response.data!.message}');
@@ -24,14 +26,16 @@ Future<List<Map<String, String>>> getSupportProcessus() async {
   return filliale;
 }
 
-// Récupération des processus Management
-Future<List<Map<String, String>>> getManagementProcessus() async {
+
+// Récupération des processus Management par Site
+Future<List<Map<String, String>>> getManagementProcessus(String site) async {
   final supabase = Supabase.instance.client;
 
   final response = await supabase
       .from('Processus')
       .select('libelle_processus')
       .eq('type_processus', 'Management')
+      .contains('sites', [site])
       .order('libelle_processus', ascending: true)
       .execute();
 
@@ -48,14 +52,15 @@ Future<List<Map<String, String>>> getManagementProcessus() async {
 }
 
 
-// Récupération des processus Operationnels
-Future<List<Map<String, String>>> getOperationnelsProcessus() async {
+// Récupération des processus Operationnels par Site
+Future<List<Map<String, String>>> getOperationnelsProcessus(String site) async {
   final supabase = Supabase.instance.client;
 
   final response = await supabase
       .from('Processus')
       .select('libelle_processus')
       .eq('type_processus', 'Operationnels')
+      .contains('sites', [site])
       .order('libelle_processus', ascending: true)
       .execute();
 

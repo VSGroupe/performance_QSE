@@ -34,10 +34,15 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
   @override
   void initState() {
     super.initState();
-    _loadDataFuture = _loadData();
+    _initializeSite();
     _accessFuture = _checkAccess();
-    _initializeSite(); // Appelle la méthode pour initialiser Site
+
+    Future.delayed(Duration(seconds: 1), () {
+      _loadDataFuture = _loadData();
+      print("\n\nProcessus dans initSate: $Processus\n");
+    });
   }
+
 
 // Nouvelle méthode pour initialiser Site
   Future<void> _initializeSite() async {
@@ -51,9 +56,9 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
 
   Future<void> _loadData() async {
     try {
-      final supportProcess = await getSupportProcessus();
-      final managementProcess = await getManagementProcessus();
-      final operationnelsProcess = await getOperationnelsProcessus();
+      final supportProcess = await getSupportProcessus(Site);
+      final managementProcess = await getManagementProcessus(Site);
+      final operationnelsProcess = await getOperationnelsProcessus(Site);
 
       setState(() {
         _support = supportProcess;
@@ -69,12 +74,14 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
     await Future.wait([
       _getAccessEspace("Consolide_general"),
       _getAccessEspace("Consolide_processus"),
-      _getAccessEspace("Siege"),
+      _getAccessEspace("Administration"),
       _getAccessEspace("Site1"),
       _getAccessEspace("Site2"),
-      _getAccessEspace("Site3"),
+      _getAccessEspace("Usine"),
     ]);
   }
+
+
 
   Future<bool> _getAccessProcessus(String site, String processus) async {
     final user = Supabase.instance.client.auth.currentUser;
@@ -183,14 +190,14 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
             formated_clic_domaine = "CONSOLIDE GENERAL";
           } else if (espacesDacces == "Consolide_processus"){
             formated_clic_domaine = "Consolidé Processus";
-          } else if (espacesDacces == "Siege"){
-            formated_clic_domaine = "SIEGE";
+          } else if (espacesDacces == "Administration"){
+            formated_clic_domaine = "ADMINISTRATION";
           } else if (espacesDacces == "Site1"){
             formated_clic_domaine = "Site 1";
           } else if (espacesDacces == "Site2"){
             formated_clic_domaine = "Site 2";
-          } else if (espacesDacces == "Site3"){
-            formated_clic_domaine = "Site 3";
+          } else if (espacesDacces == "Usine"){
+            formated_clic_domaine = "Usine";
           }
         });
 
@@ -256,10 +263,6 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
 
     if (await _getAccessEspace("Consolide_general")) {
       children.addAll([
-        // _buildContentBox("PROCESSUS MANAGEMENT", _domaines, "domaine"),
-        // const SizedBox(width: 10),
-        // _buildContentBox("PROCESSUS OPÉRATIONNELS", _domaines, "domaine"),
-        // const SizedBox(width: 10),
         _buildContentBox("PROCESSUS SUPPORT", _domaines, "domaine"),
       ]);
     } else if (await _getAccessEspace("Consolide_processus")){
@@ -270,7 +273,7 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
         const SizedBox(width: 10),
         _buildContentBox("PROCESSUS SUPPORT", _support, "support"),
       ]);
-    } else if (await _getAccessEspace("Siege")) {
+    } else if (await _getAccessEspace("Administration")) {
       children.addAll([
         _buildContentBox("PROCESSUS MANAGEMENT", _management, "management"),
         const SizedBox(width: 120),
@@ -292,7 +295,7 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
         const SizedBox(width: 10),
         _buildContentBox("PROCESSUS SUPPORT", _support, "support"),
       ]);
-    } else if (await _getAccessEspace("Site3")) {
+    } else if (await _getAccessEspace("Usine")) {
       children.addAll([
         _buildContentBox("PROCESSUS MANAGEMENT", _management, "management"),
         const SizedBox(width: 10),
@@ -317,7 +320,9 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
           _buildTitle("Processus et Indicateurs   ------ $formated_clic_domaine ------"),
           const SizedBox(height: 10),
           FutureBuilder<void>(
-            future: Future.wait([_loadDataFuture, _accessFuture]),
+            future: Future.delayed(Duration(seconds: 1), () {
+              return Future.wait([_loadDataFuture, _accessFuture]);
+            }),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());
@@ -348,6 +353,7 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
       ),
     );
   }
+
 
   Widget _buildTitle(String title) {
     return Container(
@@ -396,22 +402,34 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
 
         return TextButton(
           onPressed: () async {
+            // Vérification de l'accès au processus
+            if (await _getAccessProcessus(_espaces_d_acces, item[key])) {
+              print("process = $process");
+              // Mise à jour de l'état avec le processus cliqué
+              String processusClique;
+              try {
+                // Appel à updateProcessusClique
+                await updateProcessusClique(process);
+                processusClique = await getProcessusClique();
+                setState(() {
+                  Processus = processusClique;
+                });
 
-            if(await _getAccessProcessus(_espaces_d_acces, item[key])){
-              context.go("/pilotage/$_espaces_d_acces/$process/accueil");
-            } else{
+                // Redirection vers la route avec le processus et le site
+                context.go("/pilotage/$_espaces_d_acces/$Processus/accueil");
+              } catch (e) {
+                print('Erreur lors de la récupération du processus cliqué: $e');
+              }
+            } else {
+              // Afficher le message d'absence d'accès si nécessaire
               _showNoAccess();
             }
 
-            print("Processus cliqué: $process, Site: $Site");
-            print("\n\n/pilotage/$_espaces_d_acces/$process/accueil\n\n");
-            // print("\nitems:\n");
-            // print(items);
-            // print("\nitem:\n");
-            // print(item[key]);
-            // print("\nprocess:\n");
-            // print(process); // Affiche la chaîne formatée
+            // Affichage pour débogage
+            print("Processus cliqué: $Processus, Site: $Site");
+            print("\n\n/pilotage/$_espaces_d_acces/$Processus/accueil\n\n");
           },
+
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(

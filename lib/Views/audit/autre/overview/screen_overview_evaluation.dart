@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../helpers/helper_methods.dart';
-import '../../../pilotage/site1/commercial/widgets/privacy_widget.dart';
+import '../../../pilotage/processus/widgets/privacy_widget.dart';
 import 'overview_evaluation.dart';
 
 class ScreenOverviewEvaluation extends StatefulWidget {

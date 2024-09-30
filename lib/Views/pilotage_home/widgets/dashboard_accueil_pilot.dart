@@ -138,12 +138,12 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
             .execute();
 
         if (response.data == null) {
-          print('Erreur lors de la mise à jour : ${response.status}');
+          print('Erreur lors de la mise à jour de domaine_clique: ${response.status}');
         } else {
 
         }
       } catch (e) {
-        print('Exception lors de la mise à jour : $e');
+        print('Exception lors de la mise à jour du domaine clique: $e');
       }
     }
   }
@@ -303,22 +303,22 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
 
             // 2
             Positioned(
-              top: 295,
-              right: 827,
+              top: 230,
+              right: 546,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
-                  _isHoveringBox11 = true;
+                  _isHoveringBox5 = true;
                 }),
                 onExit: (_) => setState(() {
-                  _isHoveringBox11 = false;
+                  _isHoveringBox5 = false;
                 }),
                 child: InkWell(
                   onTap: () async {
-                    if (await _getAccessEspace("Consolidé processus")){
-                      await _updateDomaineClique("Consolide_processus");
+                    if (await _getAccessEspace("Administration")){
+                      await _updateDomaineClique("Administration");
                       context.go("/pilotage");
                     } else{
-                    _showNoAccess();
+                      _showNoAccess();
                     }
                   },
                   child: SizedBox(
@@ -326,7 +326,7 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                     width: 200,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: _isHoveringBox11 ? Colors.white38 : Colors.white, // Change la couleur de fond lorsqu'on survole
+                        color: _isHoveringBox5 ? Colors.white38 : Colors.white, // Change la couleur de fond lorsqu'on survole
                         border: Border.all(color: Colors.grey, width: 0), // Bordure grise
                         borderRadius: BorderRadius.circular(20), // Bordure circulaire
                         boxShadow: [
@@ -341,25 +341,25 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                       child: Stack(
                         children: [
                           Positioned(
-                            top: 2, // Positionner l'image en haut
+                            top: 9, // Positionner l'image en haut
                             left: 0,
                             right: 150, // Centrer horizontalement
                             child: SizedBox(
-                              height: 43,
-                              width: 53,
-                              child: Image.asset("assets/icons/consolidation_inter.png", fit: BoxFit.contain),
+                              height: 35,
+                              width: 45,
+                              child: Image.asset("assets/icons/siege1.png", fit: BoxFit.contain),
                             ),
                           ),
                           Positioned(
-                            bottom: 0, // Positionner le texte en bas avec un padding de 10
-                            left: 50,
+                            bottom: 11, // Positionner le texte en bas avec un padding de 10
+                            left: 52,
                             right: 0,
                             child: Text(
-                              "Consolidé Processus",
+                              "ADMINISTRATION",
                               //textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 17,
+                                fontSize: 16,
                                 //fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -448,19 +448,19 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
 
             //4
             Positioned(
-              top: 230,
-              right: 546,
+              top: 295,
+              right: 827,
               child: MouseRegion(
                 onEnter: (_) => setState(() {
-                  _isHoveringBox5 = true;
+                  _isHoveringBox11 = true;
                 }),
                 onExit: (_) => setState(() {
-                  _isHoveringBox5 = false;
+                  _isHoveringBox11 = false;
                 }),
                 child: InkWell(
                   onTap: () async {
-                    if (await _getAccessEspace("Siège")){
-                      await _updateDomaineClique("Siege");
+                    if (await _getAccessEspace("Consolidé processus")){
+                      await _updateDomaineClique("Consolide_processus");
                       context.go("/pilotage");
                     } else{
                       _showNoAccess();
@@ -471,7 +471,7 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                     width: 200,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: _isHoveringBox5 ? Colors.white38 : Colors.white, // Change la couleur de fond lorsqu'on survole
+                        color: _isHoveringBox11 ? Colors.white38 : Colors.white, // Change la couleur de fond lorsqu'on survole
                         border: Border.all(color: Colors.grey, width: 0), // Bordure grise
                         borderRadius: BorderRadius.circular(20), // Bordure circulaire
                         boxShadow: [
@@ -486,25 +486,25 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                       child: Stack(
                         children: [
                           Positioned(
-                            top: 9, // Positionner l'image en haut
+                            top: 2, // Positionner l'image en haut
                             left: 0,
                             right: 150, // Centrer horizontalement
                             child: SizedBox(
-                              height: 35,
-                              width: 45,
-                              child: Image.asset("assets/icons/siege1.png", fit: BoxFit.contain),
+                              height: 43,
+                              width: 53,
+                              child: Image.asset("assets/icons/consolidation_inter.png", fit: BoxFit.contain),
                             ),
                           ),
                           Positioned(
-                            bottom: 11, // Positionner le texte en bas avec un padding de 10
-                            left: 52,
+                            bottom: 0, // Positionner le texte en bas avec un padding de 10
+                            left: 50,
                             right: 0,
                             child: Text(
-                              "SIEGE",
+                              "Consolidé Processus",
                               //textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 16,
+                                fontSize: 17,
                                 //fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -531,8 +531,8 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                 }),
                 child: InkWell(
                   onTap: () async {
-                    if (await _getAccessEspace("Site 2")){
-                      await _updateDomaineClique("Site2");
+                    if (await _getAccessEspace("Usine")){
+                      await _updateDomaineClique("Usine");
                       context.go("/pilotage");
                     } else{
                       _showNoAccess();
@@ -572,7 +572,7 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                             left: 50,
                             right: 0,
                             child: Text(
-                              "Site 2",
+                              "Usine",
                               //textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.black,
@@ -604,8 +604,8 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                 }),
                 child: InkWell(
                   onTap: () async {
-                    if (await _getAccessEspace("Site 3")){
-                      await _updateDomaineClique("Site3");
+                    if (await _getAccessEspace("Site 2")){
+                      await _updateDomaineClique("Site2");
                       context.go("/pilotage");
                     } else{
                       _showNoAccess();
@@ -645,7 +645,7 @@ class _DashboardAccueilPilotState extends State<DashboardAccueilPilot> {
                             left: 55,
                             right: 0,
                             child: Text(
-                              'Site 3',
+                              'Site 2',
                               //textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.black,

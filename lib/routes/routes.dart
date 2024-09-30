@@ -42,17 +42,16 @@ import '../Views/gestion/ressources_et_responsabilites/screen_ressources_et_resp
 import '../Views/gestion/situations_d_urgence/screen_situations_d_urgence.dart';
 import '../Views/gestion/widgets/dashboard_gestion.dart';
 import '../Views/pilotage/home/pilotage_home.dart';
-import '../Views/pilotage/site1/commercial/admin/screen_admin_pilotage.dart';
-import '../Views/pilotage/site1/commercial/entity_piloatage_main.dart';
-import '../Views/pilotage/site1/commercial/overview/screen_overview_pilotage.dart';
-import '../Views/pilotage/site1/commercial/performs/screen_pilotage_perform.dart';
-import '../Views/pilotage/site1/commercial/profil/screen_pilotage_profil.dart';
-import '../Views/pilotage/site1/commercial/suivi/screen_suivi_pilotage.dart';
-import '../Views/pilotage/site1/commercial/support_client/screen_support_client.dart';
-import '../Views/pilotage/site1/commercial/tableau_bord/indicateur_screen.dart';
-import '../Views/pilotage/site1/commercial/tableau_bord/screen_tableau_bord_pilotage.dart';
-import '../Views/pilotage/site1/commercial/tableau_bord/transite_tableau_bord.dart';
-import '../Views/pilotage/site1/commercial/widgets/get_info_espace.dart';
+import '../Views/pilotage/processus/admin/screen_admin_pilotage.dart';
+import '../Views/pilotage/processus/entity_piloatage_main.dart';
+import '../Views/pilotage/processus/overview/screen_overview_pilotage.dart';
+import '../Views/pilotage/processus/performs/screen_pilotage_perform.dart';
+import '../Views/pilotage/processus/profil/screen_pilotage_profil.dart';
+import '../Views/pilotage/processus/suivi/screen_suivi_pilotage.dart';
+import '../Views/pilotage/processus/support_client/screen_support_client.dart';
+import '../Views/pilotage/processus/tableau_bord/indicateur_screen.dart';
+import '../Views/pilotage/processus/tableau_bord/screen_tableau_bord_pilotage.dart';
+import '../Views/pilotage/processus/widgets/get_info_espace.dart';
 import '../Views/pilotage_home/screen_home_accueil_pilot.dart';
 import '../Views/pilotage_home/widgets/dashboard_accueil_pilot.dart';
 import '../helpers/helper_methods.dart';
@@ -104,7 +103,7 @@ class RouteClass {
           ),
           routes: [
             GoRoute(
-                path: ':Site/Commercial',
+                path: ':Site/:Processus',
                 name: "Commercial",
                 pageBuilder: (context, state) => NoTransitionPage<void>(
                     key: state.pageKey,
