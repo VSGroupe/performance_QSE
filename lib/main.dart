@@ -15,7 +15,6 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Get.put(ResetPassWordController());
   await Get.put(ControllerTbQSE());
-  WidgetsFlutterBinding.ensureInitialized();
   final storage = FlutterSecureStorage();
   await Future.delayed(Duration(seconds: 3));
   await Supabase.initialize(
